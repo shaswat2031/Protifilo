@@ -1,0 +1,55 @@
+/* Main Layout Styles */
+body {
+  overflow-x: hidden;
+}
+
+/* Ensure proper sidebar and content layout */
+.md\:pl-64 {
+  padding-left: 16rem;
+}
+
+/* Custom scrollbar for better UX */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Ensure images don't break layout */
+img {
+  max-width: 100%;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .home-container, 
+  .projects-page,
+  .certificates-page,
+  .contact-page {
+    padding-top: 6rem;
+  }
+}
+
+/* Ensure content doesn't get hidden beneath fixed navbar on mobile */
+@media (max-width: 768px) {
+  .md\:pl-64 {
+    padding-left: 0;
+  }
+}
+
+/* Smooth transitions for layout changes */
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
