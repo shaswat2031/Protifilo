@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { motion } from "framer-motion";
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   FaGithub,
   FaLinkedin,
@@ -8,6 +8,8 @@ import {
   FaMapMarkerAlt,
   FaPhone,
   FaPaperPlane,
+  FaExclamationTriangle,
+  FaCheckCircle,
 } from "react-icons/fa";
 
 const Contact = () => {
@@ -18,31 +20,114 @@ const Contact = () => {
     message: "",
   });
 
+  const [formErrors, setFormErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
+  const [toast, setToast] = useState({ show: false, type: "", message: "" });
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+  useEffect(() => {
+    if (toast.show) {
+      const timer = setTimeout(() => {
+        setToast({ ...toast, show: false });
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [toast]);
+
+  const showToast = (type, message) => {
+    setToast({ show: true, type, message });
   };
 
-  const handleSubmit = (e) => {
+  const validateForm = () => {
+    const errors = {};
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!formData.name.trim()) {
+      errors.name = "Name is required";
+    }
+
+    if (!formData.email.trim()) {
+      errors.email = "Email is required";
+    } else if (!emailRegex.test(formData.email)) {
+      errors.email = "Please enter a valid email address";
+    }
+
+    if (!formData.subject.trim()) {
+      errors.subject = "Subject is required";
+    }
+
+    if (!formData.message.trim()) {
+      errors.message = "Message is required";
+    } else if (formData.message.trim().length < 20) {
+      errors.message = "Message should be at least 20 characters";
+    }
+
+    return errors;
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+
+    if (formErrors[name]) {
+      setFormErrors({
+        ...formErrors,
+        [name]: "",
+      });
+    }
+  };
+
+  const handleBlur = (e) => {
+    const { name } = e.target;
+    const validationErrors = validateForm();
+
+    if (validationErrors[name]) {
+      setFormErrors((prev) => ({
+        ...prev,
+        [name]: validationErrors[name],
+      }));
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length > 0) {
+      setFormErrors(validationErrors);
+      showToast("error", "Please fix the errors in the form");
+      return;
+    }
+
     setIsSubmitting(true);
-    // Simulating form submission with a timeout
-    setTimeout(() => {
+
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
       console.log(formData);
-      setIsSubmitting(false);
       setSubmitSuccess(true);
       setFormData({ name: "", email: "", subject: "", message: "" });
+      showToast("success", "Your message has been sent successfully!");
 
-      // Reset success message after 3 seconds
       setTimeout(() => {
         setSubmitSuccess(false);
-      }, 3000);
-    }, 1500);
+      }, 4000);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      setSubmitError(true);
+      showToast("error", "Failed to send message. Please try again later.");
+
+      setTimeout(() => {
+        setSubmitError(false);
+      }, 4000);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -78,29 +163,29 @@ const Contact = () => {
             Send Me a Message
           </h2>
 
-          {submitSuccess && (
-            <motion.div
-              className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-            >
-              <p className="flex items-center">
-                <svg
-                  className="w-5 h-5 mr-2"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                Thank you! Your message has been sent. I'll get back to you
-                soon.
-              </p>
-            </motion.div>
-          )}
+          <AnimatePresence>
+            {toast.show && (
+              <motion.div
+                className={`p-4 mb-6 rounded ${
+                  toast.type === "success"
+                    ? "bg-green-100 border-l-4 border-green-500 text-green-700"
+                    : "bg-red-100 border-l-4 border-red-500 text-red-700"
+                }`}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+              >
+                <p className="flex items-center">
+                  {toast.type === "success" ? (
+                    <FaCheckCircle className="mr-2" />
+                  ) : (
+                    <FaExclamationTriangle className="mr-2" />
+                  )}
+                  {toast.message}
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <form onSubmit={handleSubmit}>
             <div className="mb-5">
@@ -117,9 +202,17 @@ const Contact = () => {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                onBlur={handleBlur}
+                className={`w-full px-4 py-3 border ${
+                  formErrors.name
+                    ? "border-red-500 focus:ring-red-500"
+                    : "border-gray-300 focus:ring-purple-500"
+                } rounded-lg focus:outline-none transition-all`}
                 required
               />
+              {formErrors.name && (
+                <p className="text-red-500 text-sm mt-1">{formErrors.name}</p>
+              )}
             </div>
             <div className="mb-5">
               <label
@@ -135,9 +228,17 @@ const Contact = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                onBlur={handleBlur}
+                className={`w-full px-4 py-3 border ${
+                  formErrors.email
+                    ? "border-red-500 focus:ring-red-500"
+                    : "border-gray-300 focus:ring-purple-500"
+                } rounded-lg focus:outline-none transition-all`}
                 required
               />
+              {formErrors.email && (
+                <p className="text-red-500 text-sm mt-1">{formErrors.email}</p>
+              )}
             </div>
             <div className="mb-5">
               <label
@@ -153,9 +254,19 @@ const Contact = () => {
                 name="subject"
                 value={formData.subject}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                onBlur={handleBlur}
+                className={`w-full px-4 py-3 border ${
+                  formErrors.subject
+                    ? "border-red-500 focus:ring-red-500"
+                    : "border-gray-300 focus:ring-purple-500"
+                } rounded-lg focus:outline-none transition-all`}
                 required
               />
+              {formErrors.subject && (
+                <p className="text-red-500 text-sm mt-1">
+                  {formErrors.subject}
+                </p>
+              )}
             </div>
             <div className="mb-5">
               <label
@@ -170,10 +281,20 @@ const Contact = () => {
                 name="message"
                 value={formData.message}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 rows="6"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none transition-all"
+                className={`w-full px-4 py-3 border ${
+                  formErrors.message
+                    ? "border-red-500 focus:ring-red-500"
+                    : "border-gray-300 focus:ring-purple-500"
+                } rounded-lg focus:outline-none resize-none transition-all`}
                 required
               ></motion.textarea>
+              {formErrors.message && (
+                <p className="text-red-500 text-sm mt-1">
+                  {formErrors.message}
+                </p>
+              )}
             </div>
             <motion.button
               type="submit"

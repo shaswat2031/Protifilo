@@ -1,23 +1,55 @@
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useEffect } from "react";
+import { motion, useAnimation, useInView } from "framer-motion";
+import { useRef } from "react";
 
 const Certificates = () => {
+  const containerRef = useRef(null);
+  const isInView = useInView(containerRef, { once: false, amount: 0.1 });
+  const controls = useAnimation();
+
+  useEffect(() => {
+    if (isInView) {
+      controls.start("visible");
+    }
+  }, [isInView, controls]);
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
         staggerChildren: 0.15,
+        delayChildren: 0.3,
+        duration: 0.6,
+        ease: "easeOut",
       },
     },
   };
 
   const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
+    hidden: { y: 50, opacity: 0, scale: 0.95 },
     visible: {
       y: 0,
       opacity: 1,
-      transition: { duration: 0.5 },
+      scale: 1,
+      transition: {
+        duration: 0.7,
+        type: "spring",
+        stiffness: 100,
+        damping: 12,
+      },
+    },
+  };
+
+  const titleVariants = {
+    hidden: { y: -30, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.8,
+        ease: [0.6, 0.01, -0.05, 0.95],
+      },
     },
   };
 
@@ -86,15 +118,16 @@ const Certificates = () => {
 
   return (
     <motion.div
+      ref={containerRef}
       className="certificates-page px-6 sm:px-10 py-12 w-full"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
+      initial="hidden"
+      animate={controls}
+      variants={containerVariants}
     >
       <motion.div
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6 }}
+        initial="hidden"
+        animate={controls}
+        variants={titleVariants}
         className="text-center mb-16"
       >
         <h1 className="text-4xl font-bold text-gray-800 mb-3">
@@ -112,14 +145,14 @@ const Certificates = () => {
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto"
         variants={containerVariants}
         initial="hidden"
-        animate="visible"
+        animate={controls}
       >
         {certificates.map((certificate) => (
           <motion.div
             key={certificate.id}
             className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
             variants={itemVariants}
-            whileHover={{ y: -8, transition: { duration: 0.3 } }}
+            whileHover={{ y: -8, scale: 1.05, transition: { duration: 0.3 } }}
           >
             <div className="h-36 bg-gradient-to-r from-purple-400 to-blue-500 relative overflow-hidden">
               <div className="absolute inset-0 flex items-center justify-center">

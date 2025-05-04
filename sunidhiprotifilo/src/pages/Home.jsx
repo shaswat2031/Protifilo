@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { FaGithub, FaLinkedin, FaEnvelope, FaTwitter } from "react-icons/fa";
 import { Link as ScrollLink } from "react-scroll";
@@ -44,9 +44,16 @@ const Home = () => {
   });
 
   useEffect(() => {
-    if (aboutInView) aboutControls.start("visible");
-    if (skillsInView) skillsControls.start("visible");
-    if (contactInView) contactControls.start("visible");
+    // Enhanced animation sequence with delay for smoother appearance
+    if (aboutInView) {
+      aboutControls.start("visible");
+    }
+    if (skillsInView) {
+      skillsControls.start("visible");
+    }
+    if (contactInView) {
+      contactControls.start("visible");
+    }
   }, [
     aboutControls,
     aboutInView,
@@ -56,22 +63,105 @@ const Home = () => {
     contactInView,
   ]);
 
+  // Custom typing animation logic
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [text, setText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const roles = [
+    "Web Developer",
+    "Frontend Engineer",
+    "UI/UX Designer",
+    "React Specialist",
+  ];
+
+  useEffect(() => {
+    const typeSpeed = isDeleting ? 80 : 150;
+    const currentRole = roles[roleIndex];
+
+    const timer = setTimeout(() => {
+      setText(
+        currentRole.substring(0, isDeleting ? text.length - 1 : text.length + 1)
+      );
+
+      if (!isDeleting && text === currentRole) {
+        // Start deleting after a pause
+        setTimeout(() => setIsDeleting(true), 1500);
+      } else if (isDeleting && text === "") {
+        setIsDeleting(false);
+        // Move to next role
+        setRoleIndex((roleIndex + 1) % roles.length);
+      }
+    }, typeSpeed);
+
+    return () => clearTimeout(timer);
+  }, [text, isDeleting, roleIndex, roles]);
+
+  // Mouse parallax effect hook
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      const { clientX, clientY } = e;
+      const { innerWidth, innerHeight } = window;
+      // Convert mouse position to percentage (-0.5 to 0.5)
+      const x = (clientX / innerWidth - 0.5) * 2;
+      const y = (clientY / innerHeight - 0.5) * 2;
+      setMousePosition({ x, y });
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
   return (
-    <div className="home-container bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen w-full">
-      {/* Hero Section */}
+    <div className="home-container relative bg-gradient-to-br from-gray-50 via-purple-50 to-blue-50 min-h-screen w-full overflow-hidden">
+      {/* Enhanced animated background elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
+        <div className="absolute top-40 -left-20 w-80 h-80 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+        <div className="absolute bottom-40 right-20 w-80 h-80 bg-pink-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
+
+        {/* Additional floating elements */}
+        <div className="absolute top-1/4 left-1/4 w-24 h-24 border-2 border-purple-300 rounded-full animate-float"></div>
+        <div className="absolute bottom-1/4 right-1/3 w-16 h-16 border-2 border-blue-300 rounded-md rotate-45 animate-float animation-delay-1000"></div>
+        <div className="absolute top-1/3 right-1/4 w-12 h-12 border-2 border-pink-300 rounded-lg animate-float animation-delay-3000"></div>
+
+        {/* Code-like decoration */}
+        <div className="absolute left-10 top-32 text-purple-200 opacity-20 text-xs font-mono">
+          &lt;div className="developer"&gt;
+          <br />
+          &nbsp;&nbsp;&#123; creativity + logic &#125;
+          <br />
+          &lt;/div&gt;
+        </div>
+      </div>
+
+      {/* Enhanced Hero Section with Parallax Effect */}
       <motion.section
-        className="hero-section h-screen flex items-center justify-center px-10"
+        className="hero-section relative h-screen flex items-center justify-center px-10 overflow-hidden"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
         id="hero"
       >
         <motion.div
-          className="hero-content max-w-3xl mx-auto text-center"
+          className="absolute inset-0 pattern-dots pattern-blue-500 pattern-bg-white pattern-size-4 pattern-opacity-5 z-0"
+          style={{
+            x: mousePosition.x * -15,
+            y: mousePosition.y * -15,
+          }}
+        />
+
+        <motion.div
+          className="hero-content relative z-10 max-w-3xl mx-auto text-center backdrop-blur-sm bg-white bg-opacity-20 p-12 rounded-xl border border-white border-opacity-20 shadow-2xl"
           variants={itemVariants}
+          style={{
+            x: mousePosition.x * 20,
+            y: mousePosition.y * 20,
+          }}
         >
           <motion.h1
-            className="text-5xl font-bold mb-4 text-gray-800"
+            className="text-5xl sm:text-6xl font-bold mb-4 text-gray-800"
             variants={itemVariants}
           >
             Hello, I'm{" "}
@@ -79,21 +169,31 @@ const Home = () => {
               Sunidhi Chaudhary
             </span>
           </motion.h1>
-          <motion.h2
-            className="text-2xl font-medium mb-6 text-gray-600"
+
+          {/* Typing animation */}
+          <motion.div
+            className="h-12 flex justify-center items-center mb-6"
             variants={itemVariants}
           >
-            Web Developer & Designer
-          </motion.h2>
+            <h2 className="text-2xl sm:text-3xl font-medium text-gray-600">
+              <span className="mr-2">I am a</span>
+              <span className="bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent font-bold">
+                {text}
+              </span>
+              <span className="animate-blink ml-1">|</span>
+            </h2>
+          </motion.div>
+
           <motion.p
-            className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto"
+            className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed"
             variants={itemVariants}
           >
             I create beautiful, responsive, and user-friendly websites that help
             businesses grow and succeed online.
           </motion.p>
+
           <motion.div
-            className="flex gap-4 justify-center"
+            className="flex flex-wrap gap-4 justify-center"
             variants={itemVariants}
           >
             <ScrollLink to="contact" smooth={true} duration={800} offset={-100}>
@@ -113,41 +213,6 @@ const Home = () => {
               >
                 View My Skills
               </motion.button>
-            </ScrollLink>
-          </motion.div>
-
-          {/* Scroll down indicator */}
-          <motion.div
-            className="absolute bottom-10 left-1/2 transform -translate-x-1/2"
-            initial={{ y: -10, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{
-              delay: 1,
-              duration: 1,
-              repeat: Infinity,
-              repeatType: "reverse",
-            }}
-          >
-            <ScrollLink
-              to="about"
-              smooth={true}
-              duration={800}
-              className="cursor-pointer"
-            >
-              <div className="flex flex-col items-center">
-                <span className="text-gray-500 mb-2">Scroll Down</span>
-                <svg
-                  className="w-6 h-6 text-purple-500"
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-                </svg>
-              </div>
             </ScrollLink>
           </motion.div>
         </motion.div>

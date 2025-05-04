@@ -58,7 +58,7 @@ const Layout = () => {
       <div
         className={`fixed left-0 top-0 h-full md:block z-40 ${
           isMobileMenuOpen ? "block" : "hidden"
-        }`}
+        } shadow-2xl bg-gradient-to-b from-gray-900 to-purple-900`}
       >
         <Navbar />
       </div>
@@ -67,14 +67,14 @@ const Layout = () => {
       <AnimatePresence mode="wait">
         <motion.main
           key={location.pathname}
-          className="flex-grow w-full md:pl-64 transition-all duration-300"
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -20 }}
-          transition={{ duration: 0.3 }}
+          className="flex-grow w-full md:pl-64 transition-all duration-300 bg-gray-50 bg-opacity-90 backdrop-blur-sm bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.4, ease: "easeInOut" }}
         >
           <ScrollToTop />
-          <div className="w-full">
+          <div className="w-full max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
             <Outlet />
           </div>
         </motion.main>
