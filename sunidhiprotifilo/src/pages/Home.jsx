@@ -1,6 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { motion, useAnimation } from "framer-motion";
-import { FaGithub, FaLinkedin, FaEnvelope, FaTwitter } from "react-icons/fa";
+import {
+  FaGithub,
+  FaLinkedin,
+  FaEnvelope,
+  FaTwitter,
+  FaReact,
+  FaCode,
+  FaLaptopCode,
+  FaDatabase,
+  FaBrain,
+} from "react-icons/fa";
+import { SiJavascript, SiCss3, SiHtml5, SiPython } from "react-icons/si";
 import { Link as ScrollLink } from "react-scroll";
 import { useInView } from "react-intersection-observer";
 
@@ -134,6 +145,99 @@ const Home = () => {
           <br />
           &lt;/div&gt;
         </div>
+
+        {/* Tech Icons */}
+        <motion.div
+          className="absolute top-[15%] left-[10%] text-purple-400 opacity-20"
+          animate={{
+            rotate: [0, 10, -10, 0],
+            y: [0, -10, 0],
+          }}
+          transition={{ repeat: Infinity, duration: 10, ease: "easeInOut" }}
+        >
+          <FaReact size={48} />
+        </motion.div>
+
+        <motion.div
+          className="absolute top-[30%] right-[15%] text-blue-400 opacity-20"
+          animate={{
+            rotate: 360,
+          }}
+          transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
+        >
+          <FaCode size={36} />
+        </motion.div>
+
+        <motion.div
+          className="absolute bottom-[25%] left-[20%] text-green-400 opacity-20"
+          animate={{
+            scale: [1, 1.1, 1],
+          }}
+          transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
+        >
+          <FaLaptopCode size={42} />
+        </motion.div>
+
+        <motion.div
+          className="absolute top-[55%] right-[8%] text-yellow-500 opacity-20"
+          animate={{
+            y: [0, -15, 0],
+          }}
+          transition={{ repeat: Infinity, duration: 7, ease: "easeInOut" }}
+        >
+          <SiJavascript size={32} />
+        </motion.div>
+
+        <motion.div
+          className="absolute top-[70%] left-[8%] text-blue-600 opacity-20"
+          animate={{
+            rotate: [-10, 10, -10],
+          }}
+          transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
+        >
+          <SiCss3 size={40} />
+        </motion.div>
+
+        <motion.div
+          className="absolute top-[10%] right-[30%] text-orange-500 opacity-20"
+          animate={{
+            scale: [1, 1.2, 1],
+          }}
+          transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
+        >
+          <SiHtml5 size={38} />
+        </motion.div>
+
+        <motion.div
+          className="absolute bottom-[15%] right-[25%] text-red-400 opacity-20"
+          animate={{
+            rotate: [0, 15, 0, -15, 0],
+          }}
+          transition={{ repeat: Infinity, duration: 9, ease: "easeInOut" }}
+        >
+          <FaDatabase size={34} />
+        </motion.div>
+
+        <motion.div
+          className="absolute bottom-[40%] left-[15%] text-blue-500 opacity-20"
+          animate={{
+            y: [0, -10, 0],
+            x: [0, 10, 0],
+          }}
+          transition={{ repeat: Infinity, duration: 12, ease: "easeInOut" }}
+        >
+          <SiPython size={36} />
+        </motion.div>
+
+        <motion.div
+          className="absolute top-[40%] left-[30%] text-purple-600 opacity-20"
+          animate={{
+            scale: [1, 0.9, 1.1, 1],
+          }}
+          transition={{ repeat: Infinity, duration: 10, ease: "easeInOut" }}
+        >
+          <FaBrain size={40} />
+        </motion.div>
       </div>
 
       {/* Enhanced Hero Section with Parallax Effect */}
