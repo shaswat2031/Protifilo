@@ -14,11 +14,14 @@ const Layout = () => {
 
   return (
     <div className="flex flex-col md:flex-row bg-gray-50 min-h-screen w-full">
-      {/* Mobile menu button */}
+      {/* Mobile menu button with improved animation */}
       <div className="md:hidden fixed top-4 left-4 z-50">
-        <button
+        <motion.button
           onClick={toggleMobileMenu}
-          className="p-3 rounded-lg bg-purple-600 text-white shadow-lg"
+          className="p-3 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg"
+          whileTap={{ scale: 0.9 }}
+          whileHover={{ scale: 1.05 }}
+          aria-label="Toggle menu"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -43,16 +46,22 @@ const Layout = () => {
               />
             )}
           </svg>
-        </button>
+        </motion.button>
       </div>
 
-      {/* Mobile Menu Overlay */}
-      <div
-        className={`md:hidden fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300 ${
-          isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-        }`}
-        onClick={() => setIsMobileMenuOpen(false)}
-      />
+      {/* Mobile Menu Overlay with blur effect */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            className="md:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+        )}
+      </AnimatePresence>
 
       {/* Sidebar Navigation - Fixed position */}
       <div
@@ -60,7 +69,7 @@ const Layout = () => {
           isMobileMenuOpen ? "block" : "hidden"
         } shadow-2xl bg-gradient-to-b from-gray-900 to-purple-900`}
       >
-        <Navbar />
+        <Navbar setMobileMenuOpen={setIsMobileMenuOpen} />
       </div>
 
       {/* Main content with proper padding for sidebar */}
@@ -75,7 +84,14 @@ const Layout = () => {
         >
           <ScrollToTop />
           <div className="w-full max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
-            <Outlet />
+            {/* Project specific class for dynamic styling */}
+            <div
+              className={`${
+                location.pathname === "/projects" ? "projects-container" : ""
+              }`}
+            >
+              <Outlet />
+            </div>
           </div>
         </motion.main>
       </AnimatePresence>

@@ -14,6 +14,7 @@ import {
 import { SiJavascript, SiCss3, SiHtml5, SiPython } from "react-icons/si";
 import { Link as ScrollLink } from "react-scroll";
 import { useInView } from "react-intersection-observer";
+import Projects from "./Projects"; // Import Projects component
 
 const Home = () => {
   // Animation variants
@@ -39,6 +40,7 @@ const Home = () => {
   // Setup animations for each section
   const aboutControls = useAnimation();
   const skillsControls = useAnimation();
+  const projectsControls = useAnimation(); // Add projects controls
   const contactControls = useAnimation();
 
   const [aboutRef, aboutInView] = useInView({
@@ -46,6 +48,11 @@ const Home = () => {
     triggerOnce: true,
   });
   const [skillsRef, skillsInView] = useInView({
+    threshold: 0.2,
+    triggerOnce: true,
+  });
+  const [projectsRef, projectsInView] = useInView({
+    // Add projects ref
     threshold: 0.2,
     triggerOnce: true,
   });
@@ -62,6 +69,10 @@ const Home = () => {
     if (skillsInView) {
       skillsControls.start("visible");
     }
+    if (projectsInView) {
+      // Add projects controls
+      projectsControls.start("visible");
+    }
     if (contactInView) {
       contactControls.start("visible");
     }
@@ -70,6 +81,8 @@ const Home = () => {
     aboutInView,
     skillsControls,
     skillsInView,
+    projectsControls, // Add projects controls to dependencies
+    projectsInView,
     contactControls,
     contactInView,
   ]);
@@ -465,6 +478,11 @@ const Home = () => {
           ))}
         </div>
       </motion.section>
+
+      {/* Projects Section */}
+      <section id="projects" ref={projectsRef} className="py-16">
+        <Projects />
+      </section>
 
       {/* Contact Section */}
       <motion.section

@@ -20,7 +20,7 @@ const Navbar = () => {
         const progress = (window.scrollY / totalHeight) * 100;
         setScrollProgress(progress);
 
-        const sections = ["hero", "about", "skills", "contact"];
+        const sections = ["hero", "about", "skills", "projects", "contact"];
         const currentSection = sections.find((section) => {
           const element = document.getElementById(section);
           if (element) {
@@ -51,6 +51,7 @@ const Navbar = () => {
     { to: "hero", label: "Home", icon: "🏠" },
     { to: "about", label: "About", icon: "👤" },
     { to: "skills", label: "Skills", icon: "🔧" },
+    { to: "projects", label: "Projects", icon: "📂" },
     { to: "contact", label: "Contact", icon: "✉️" },
   ];
 
