@@ -1,12 +1,27 @@
-# React + Vite
+# ✨ Sunidhi Chaudhary | Frontend Developer ✨
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<div align="center">
+  <img src="https://via.placeholder.com/150" alt="Sunidhi Chaudhary" style="border-radius: 50%;">
+  <br>
+  <em>{ creativity + logic }</em>
+</div>
 
-Currently, two official plugins are available:
+## 👋 Hello World!
+I'm Sunidhi Chaudhary, a passionate web developer with expertise in creating modern, responsive websites. With a strong background in both frontend and backend technologies, I bring creative designs to life with clean, efficient code.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+> "I create beautiful, responsive, and user-friendly websites that help businesses grow and succeed online."
 
-## Expanding the ESLint configuration
+## 💻 Skills
+- **Frontend Development**: HTML5, CSS3, JavaScript, React
+- **UI/UX Design**: Figma, Adobe XD, Responsive Design
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+
+
+---
+
+<div align="center">
+  © 2025 Sunidhi Chaudhary. All Rights Reserved.
+  <br>
+  <em>Ready to bring your digital vision to life? <a href="mailto:sunidhi.chaudhary@example.com">Let's connect!</a></em>
+</div>
