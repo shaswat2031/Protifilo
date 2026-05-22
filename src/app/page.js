@@ -469,9 +469,9 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex flex-col justify-between pt-28 pb-12 overflow-hidden premium-glow-bg select-text" id="intro">
+      <section className="relative min-h-[100svh] md:min-h-screen flex flex-col justify-between pt-24 md:pt-28 pb-8 md:pb-12 overflow-hidden premium-glow-bg select-text" id="intro">
         {/* Background Italic Text "Hey, there" */}
-        <div className="absolute inset-x-0 top-[28%] md:top-[12%] text-center z-0 pointer-events-none select-none flex justify-center items-center gap-[10rem] md:gap-[26rem] xl:gap-[36rem]">
+        <div className="absolute inset-x-0 top-[18%] md:top-[12%] text-center z-0 pointer-events-none select-none flex justify-center items-center gap-[12vw] md:gap-[26rem] xl:gap-[36rem]">
           <h2 className="hero-bg-text font-serif-italic text-[26vw] md:text-[16vw] font-light text-charcoal leading-none tracking-tight">Hey,</h2>
           <h2 className="hero-bg-text font-serif-italic text-[26vw] md:text-[16vw] font-light text-charcoal leading-none tracking-tight">there</h2>
         </div>
@@ -480,26 +480,26 @@ export default function Home() {
         <div className="relative w-full max-w-5xl mx-auto flex flex-col items-center justify-center flex-grow z-10 px-6 py-4">
           
           {/* Left badge */}
-          <div className="hero-badge-left absolute left-4 md:left-12 top-[60%] md:top-[65%] -translate-y-1/2 z-20">
-            <div className="glassmorphism-premium border border-charcoal/10 rounded-full px-5 py-2.5 flex items-center gap-2.5 text-xs font-semibold shadow-xs transition-all duration-500 hover:scale-105">
+          <div className="hero-badge-left absolute left-4 md:left-12 top-[40%] md:top-[65%] -translate-y-1/2 z-20">
+            <div className="glassmorphism-premium border border-charcoal/10 rounded-full px-4 py-2 md:px-5 md:py-2.5 flex items-center gap-2 md:gap-2.5 text-[10px] md:text-xs font-semibold shadow-xs transition-all duration-500 hover:scale-105">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping-slow absolute inline-flex h-full w-full rounded-full bg-amber-500 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500 glow-dot-amber"></span>
               </span>
-              <span className="text-charcoal-light font-medium tracking-wide">Available for collaborations</span>
+              <span className="text-charcoal-light font-medium tracking-wide whitespace-nowrap">Available for collaborations</span>
             </div>
           </div>
 
           {/* Right small desc */}
-          <div className="hero-desc-right absolute right-4 md:right-12 top-[60%] md:top-[65%] -translate-y-1/2 z-20 max-w-[160px] md:max-w-[200px] text-right md:text-left">
-            <p className="text-xs md:text-sm font-semibold leading-relaxed text-charcoal-light tracking-wide">
+          <div className="hero-desc-right absolute right-4 md:right-12 top-[55%] md:top-[65%] -translate-y-1/2 z-20 max-w-[130px] md:max-w-[200px] text-right md:text-left">
+            <p className="text-[10px] md:text-sm font-semibold leading-relaxed text-charcoal-light tracking-wide">
               Specialized in Political Ecology, Green Governance, and Sustainable Development.
             </p>
           </div>
         </div>
 
         {/* Centered Image - Positioned at Bottom Center */}
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[350px] md:max-w-[500px] xl:max-w-[650px] z-10 pointer-events-none flex items-end" id="portrait-wrapper">
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[280px] sm:max-w-[340px] md:max-w-[500px] xl:max-w-[650px] z-10 pointer-events-none flex items-end mb-[4.5rem] md:mb-0" id="portrait-wrapper">
           <img 
             alt="Profile" 
             className="w-full h-auto object-contain object-bottom pointer-events-auto transition-transform duration-700 hover:scale-[1.02]" 
@@ -510,11 +510,11 @@ export default function Home() {
         </div>
 
         {/* Bottom stylized typography */}
-        <div className="w-full max-w-[95rem] mx-auto px-4 md:px-8 xl:px-12 flex flex-col md:flex-row justify-between items-end gap-4 z-50 select-none pb-6 relative pointer-events-none">
-          <h1 className="hero-bottom-title font-sans-ultra-bold text-[4.2rem] md:text-[6.5rem] xl:text-[7.5rem] uppercase leading-[0.85] text-charcoal tracking-tighter whitespace-nowrap relative pointer-events-auto md:-translate-x-12 xl:-translate-x-24">
+        <div className="w-full max-w-[95rem] mx-auto px-4 md:px-8 xl:px-12 flex flex-col md:flex-row justify-between items-center md:items-end gap-2 md:gap-4 z-50 select-none pb-2 md:pb-6 relative pointer-events-none">
+          <h1 className="hero-bottom-title font-sans-ultra-bold text-[14vw] sm:text-[12vw] md:text-[6.5rem] xl:text-[7.5rem] uppercase leading-[0.85] text-charcoal text-center md:text-left tracking-tighter whitespace-nowrap relative pointer-events-auto w-full md:w-auto md:-translate-x-12 xl:-translate-x-24">
             I AM <span className="block">{profile?.name || "JAHNVI"}</span>
           </h1>
-          <h2 className="hero-bottom-title font-sans-ultra-bold text-4xl md:text-[4rem] xl:text-[5.5rem] uppercase leading-[0.85] text-charcoal text-left md:text-right tracking-tighter whitespace-nowrap relative pointer-events-auto md:translate-x-16 xl:translate-x-32">
+          <h2 className="hero-bottom-title font-sans-ultra-bold text-[9vw] sm:text-[7vw] md:text-[4rem] xl:text-[5.5rem] uppercase leading-[0.85] text-charcoal text-center md:text-right tracking-tighter whitespace-nowrap relative pointer-events-auto w-full md:w-auto md:translate-x-16 xl:translate-x-32 mt-2 md:mt-0">
             RESEARCHER <span className="block">AND WRITER</span>
           </h2>
         </div>
