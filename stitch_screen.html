@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Jahnvi | Rarefied Researcher &amp; Political Ecologist</title>
+<meta content="Academic portfolio of Jahnvi - Exploring Political Ecology, Green Governance &amp; Sustainable Development." name="description"/>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&amp;family=Playfair+Display:ital,wght@0,600;0,700;1,600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Scripts -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "background": "#FBF5E8",
+                    "on-secondary": "#ffffff",
+                    "tertiary-fixed-dim": "#cbc6ba",
+                    "on-primary-fixed-variant": "#354d2e",
+                    "surface-dim": "#dcd9d9",
+                    "secondary-fixed-dim": "#ffb68d",
+                    "surface-variant": "#e4e2e1",
+                    "on-tertiary-fixed-variant": "#49473d",
+                    "surface-tint": "#4c6544",
+                    "surface-container-high": "#eae7e7",
+                    "outline-variant": "#c3c8bd",
+                    "surface-container-low": "#f6f3f2",
+                    "surface-container-highest": "#e4e2e1",
+                    "tertiary-container": "#716e64",
+                    "on-surface": "#1b1c1c",
+                    "tertiary-fixed": "#e8e2d5",
+                    "inverse-surface": "#303030",
+                    "primary": "#435c3c",
+                    "on-background": "#1b1c1c",
+                    "on-secondary-fixed": "#331200",
+                    "error-container": "#ffdad6",
+                    "surface-container-lowest": "#ffffff",
+                    "outline": "#74796f",
+                    "on-tertiary": "#ffffff",
+                    "secondary-container": "#fdb389",
+                    "on-primary": "#ffffff",
+                    "surface-bright": "#fcf9f8",
+                    "on-surface-variant": "#434840",
+                    "on-tertiary-fixed": "#1d1c14",
+                    "on-secondary-container": "#784322",
+                    "on-primary-fixed": "#092007",
+                    "secondary-fixed": "#ffdbc9",
+                    "inverse-primary": "#b2cfa7",
+                    "primary-fixed-dim": "#b2cfa7",
+                    "on-error": "#ffffff",
+                    "primary-fixed": "#cdebc1",
+                    "on-secondary-fixed-variant": "#6c3919",
+                    "inverse-on-surface": "#f3f0f0",
+                    "on-primary-container": "#ddfad0",
+                    "primary-container": "#5b7553",
+                    "secondary": "#89502e",
+                    "on-tertiary-container": "#f7f1e4",
+                    "error": "#ba1a1a",
+                    "surface-container": "#f0eded",
+                    "surface": "#fcf9f8",
+                    "on-error-container": "#93000a",
+                    "tertiary": "#59564c"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "64px",
+                    "container-max": "1200px",
+                    "stack-sm": "16px",
+                    "unit": "8px",
+                    "margin-mobile": "24px",
+                    "stack-lg": "80px",
+                    "gutter": "32px",
+                    "stack-md": "32px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Playfair Display"],
+                    "headline-lg": ["Playfair Display"],
+                    "body-md": ["Outfit"],
+                    "display-lg-mobile": ["Playfair Display"],
+                    "body-lg": ["Outfit"],
+                    "headline-md": ["Playfair Display"],
+                    "label-md": ["Outfit"]
+            },
+            "fontSize": {
+                    "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg": ["48px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "display-lg-mobile": ["40px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>body {
+    background-color: #FBF5E8;
+    color: #1b1c1c;
+    position: relative
+    }
+/* Grainy texture overlay */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuAJEoAjoGmt5SMmc21sAUuByt9e7wEiZ9F1CSf04NpuOhZW0NQ6b2QWK7HaTF_fYTEddbStbJo54f7wlZjsTCQXFKm8pjLdlG5At9P1BMCATY9Bexr-m0HvGOYAk3IrfyrJpn4lyyUjcHDcl9aqq4YW_mRu6ket8nJvpVSn34mi0gURUW3kV3WyNuNz51Lxd3pL_i4zzHPDKuFztARyP2nw86c6_2QNcmFe4WTEf9Ek_gDZHsJDWTB-OUqf1AkzMJaH4SJVRJ88s7M);
+    opacity: 0.25;
+    pointer-events: none;
+    z-index: 9999
+    }
+.glass-card {
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.5)
+    }
+.paper-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03)
+    }
+.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
+    }
+.rotate-slow {
+    animation: rotate 25s linear infinite
+    }
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+        } to {
+        transform: rotate(360deg);
+        }
+    }
+.section-padding {
+    padding-top: 100px;
+    padding-bottom: 100px
+    }
+@media (max-width: 768px) {
+    .section-padding {
+        padding-top: 60px;
+        padding-bottom: 60px
+        }
+    }
+/* Mouse light effect container */
+#light-effect {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(600px at var(--x, 0) var(--y, 0), rgba(67, 92, 60, 0.03), transparent 80%);
+    pointer-events: none;
+    z-index: 1
+    }
+.char {
+    display: inline-block;
+    opacity: 0
+    }
+.vista-overlap-item:nth-child(even) {
+    margin-top: -40px
+    }
+.btn-hover-effect {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)
+    }
+.btn-hover-effect:hover {
+    transform: translatey(-3px);
+    box-shadow: 0 10px 20px -5px rgba(67, 92, 60, 0.3)
+    }</style>
+</head>
+<body class="font-body-md text-on-surface selection:bg-secondary/20 overflow-x-hidden">
+<div id="light-effect"></div>
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-[60] bg-surface/80 backdrop-blur-xl border-b border-outline-variant/10 shadow-sm transition-all duration-300">
+<div class="flex justify-between items-center px-margin-desktop py-4 max-w-container-max mx-auto">
+<span class="font-display-lg text-headline-md tracking-tighter text-primary">Jahnvi</span>
+<div class="hidden md:flex gap-gutter items-center">
+<a class="font-label-md text-label-md text-primary font-bold border-b-2 border-secondary transition-colors duration-300" href="#intro">Intro</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-secondary transition-colors duration-300" href="#research">Research</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-secondary transition-colors duration-300" href="#background">Background</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-secondary transition-colors duration-300" href="#vistas">Vistas</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-secondary transition-colors duration-300" href="#blogs">Blogs</a>
+<button class="ml-4 px-6 py-2 bg-primary text-white rounded-full font-label-md btn-hover-effect">Contact Me</button>
+</div>
+<div class="md:hidden">
+<span class="material-symbols-outlined text-primary cursor-pointer">menu</span>
+</div>
+</div>
+</nav>
+<!-- Hero Section -->
+<section class="relative min-h-screen flex items-center pt-24 px-margin-mobile md:px-margin-desktop overflow-hidden" id="intro">
+<div class="max-w-container-max mx-auto w-full grid grid-cols-1 md:grid-cols-12 gap-gutter items-center relative z-10">
+<div class="md:col-span-7 space-y-stack-sm" id="hero-content">
+<p class="font-label-md text-secondary tracking-widest uppercase reveal-type">SARVA SAHA • RArefied</p>
+<h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface leading-tight" id="hero-headline">Hello, I am Jahnvi</h1>
+<div class="space-y-4">
+<p class="font-headline-md text-headline-md italic text-primary reveal-type">Rarefied Researcher, Starling Student &amp; Wending Writer</p>
+<p class="font-body-lg text-body-lg max-w-xl text-on-surface-variant">Exploring Political Ecology, Green Governance &amp; Sustainable Development • 'Sarva Saha'</p>
+</div>
+<div class="pt-8 flex gap-4">
+<button class="px-8 py-3 bg-primary text-white rounded-full font-label-md btn-hover-effect">View Research</button>
+<button class="px-8 py-3 border border-secondary text-secondary rounded-full font-label-md hover:bg-secondary/5 transition-all">Latest Blog</button>
+</div>
+</div>
+<div class="md:col-span-5 relative flex justify-center items-center" id="hero-visual">
+<!-- Circular Badge -->
+<div class="absolute -top-16 -right-12 w-48 h-48 z-20 hidden md:block">
+<svg class="rotate-slow w-full h-full fill-secondary/80" viewbox="0 0 100 100">
+<path d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" fill="transparent" id="circlePath"></path>
+<text class="text-[8px] font-label-md tracking-widest uppercase">
+<textpath href="#circlePath">SARVA SAHA • RESEARCHER • WRITER • ECOLOGY •</textpath>
+</text>
+</svg>
+</div>
+<div class="relative w-full aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white/50" id="portrait-wrapper">
+<img alt="Artistic representation of Jahnvi" class="w-full h-full object-cover scale-110" id="hero-image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcjadWxcryruVsYmef2JTl_S4CBJ7g6wAFnfgUfm8L9A1YLS0Gj8I6GQxqrVZkBLozbkMXD7rjAuaBrxuVqY0uORltD9govAOtq_8YeNhd5Eh3P9hdZhnVAQiV2EDVVyka5i75ua2daSDPBOnj130yX4TdnOd1tvSMzz6Q3dNnob8n09Oyv0TjldoD7ZZU7D-dzNubsdp5r03RJQOjfvDKZ2usTu2BiAjD4C-PhmruTY-G6nKr7Shuho3LlWSVNcuqeHZG6W10bgI"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+</div>
+</div>
+</div>
+<!-- Background Elements -->
+<div class="absolute top-1/4 right-0 w-1/3 h-2/3 bg-primary/5 -skew-x-12 translate-x-24 z-0 rounded-l-[10rem] parallax-bg" data-speed="0.05"></div>
+<div class="absolute bottom-10 left-10 w-48 h-48 bg-secondary/5 rounded-full blur-3xl parallax-bg" data-speed="0.1"></div>
+</section>
+<!-- Research Statement -->
+<section class="section-padding bg-surface-container-low/20 relative" id="research">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<div class="lg:col-span-4" id="statement-heading">
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-8">My Research Statement</h2>
+<div class="w-24 h-1.5 bg-primary rounded-full"></div>
+</div>
+<div class="lg:col-span-8 space-y-stack-md" id="statement-content">
+<blockquote class="relative pl-12 border-l-4 border-secondary py-6">
+<span class="absolute -left-6 -top-12 text-9xl text-secondary/10 font-display-lg italic">“</span>
+<p class="font-headline-md text-headline-md italic text-on-surface-variant leading-relaxed">
+                        'Sarva Saha' — <span class="text-primary font-bold">संस्कृत:</span> A harmonious, organic equilibrium and co-existence between humanity, green policies, and our biospheric boundaries.
+                    </p>
+</blockquote>
+<div class="font-body-lg text-body-lg text-on-surface-variant space-y-6 max-w-3xl">
+<p>My intellectual journey is rooted in the critical intersections of Political Science and Environmental Governance. As a first-generation scholar, I navigate the complexities of power dynamics that dictate how our natural world is managed and preserved.</p>
+<p>My work seeks to bridge the gap between abstract green policies and the lived realities of communities navigating the Anthropocene. I believe in intellectualism that remains in harmony with nature, fostering resilience through informed, ethical governance.</p>
+</div>
+<!-- Domain Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 pt-12">
+<div class="paper-card p-10 rounded-[2.5rem] hover:-translate-y-2 transition-all duration-300 group">
+<span class="material-symbols-outlined text-primary text-5xl mb-6 block group-hover:scale-110 transition-transform" data-weight="fill">eco</span>
+<h3 class="font-headline-md text-[22px] text-on-surface mb-4">Political Ecology</h3>
+<p class="font-body-md text-on-surface-variant">Studying the relationships between political, economic, and social factors with environmental issues.</p>
+</div>
+<div class="paper-card p-10 rounded-[2.5rem] hover:-translate-y-2 transition-all duration-300 border-primary/20 group">
+<span class="material-symbols-outlined text-primary text-5xl mb-6 block group-hover:scale-110 transition-transform" data-weight="fill">gavel</span>
+<h3 class="font-headline-md text-[22px] text-on-surface mb-4">Green Governance</h3>
+<p class="font-body-md text-on-surface-variant">Analyzing policy frameworks that aim to harmonize human systems with ecological integrity.</p>
+</div>
+<div class="paper-card p-10 rounded-[2.5rem] hover:-translate-y-2 transition-all duration-300 group">
+<span class="material-symbols-outlined text-primary text-5xl mb-6 block group-hover:scale-110 transition-transform" data-weight="fill">cycle</span>
+<h3 class="font-headline-md text-[22px] text-on-surface mb-4">Sustainable Development</h3>
+<p class="font-body-md text-on-surface-variant">Proposing pathways for growth that respect biospheric boundaries and intergenerational equity.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Academic Background (Timeline) -->
+<section class="section-padding bg-background" id="background">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop text-center mb-stack-lg">
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg">Academic Background</h2>
+<p class="font-body-lg text-on-surface-variant mt-4">A journey of scholarship and continuous evolution</p>
+</div>
+<div class="max-w-4xl mx-auto px-margin-mobile relative">
+<!-- Center Line -->
+<div class="absolute left-1/2 -translate-x-1/2 w-0.5 h-full bg-outline-variant/30 hidden md:block"></div>
+<div class="space-y-24">
+<!-- 2026 Milestone -->
+<div class="relative grid grid-cols-1 md:grid-cols-2 gap-12 timeline-item">
+<div class="md:text-right">
+<span class="inline-block px-4 py-1 bg-secondary text-white rounded-full font-label-md mb-2">2026</span>
+<h4 class="font-headline-md text-[26px]">UGC NET &amp; JRF Qualified</h4>
+<p class="font-body-md text-on-surface-variant italic">National Eligibility Test &amp; Junior Research Fellowship</p>
+</div>
+<div class="hidden md:block absolute left-1/2 -translate-x-1/2 w-5 h-5 bg-secondary rounded-full border-4 border-background z-10 shadow-lg mt-2"></div>
+<div>
+<div class="p-8 paper-card rounded-3xl border-l-4 border-secondary shadow-sm">
+<p class="font-body-md">Recognized for advanced research potential in Political Science at the national level. Awarded fellowship for Doctoral research.</p>
+</div>
+</div>
+</div>
+<!-- Post-Graduation -->
+<div class="relative grid grid-cols-1 md:grid-cols-2 gap-12 timeline-item">
+<div class="md:order-2">
+<span class="inline-block px-4 py-1 bg-primary text-white rounded-full font-label-md mb-2">2024-2026</span>
+<h4 class="font-headline-md text-[26px]">Post-Graduation</h4>
+<p class="font-body-md text-on-surface-variant italic">Masters in Political Science</p>
+</div>
+<div class="hidden md:block absolute left-1/2 -translate-x-1/2 w-5 h-5 bg-primary rounded-full border-4 border-background z-10 shadow-lg mt-2"></div>
+<div class="md:text-right">
+<div class="p-8 paper-card rounded-3xl border-r-4 border-primary shadow-sm">
+<p class="font-body-md">Deepening expertise in international relations, political theory, and ecological policy with a focus on Global South perspectives.</p>
+</div>
+</div>
+</div>
+<!-- Graduation -->
+<div class="relative grid grid-cols-1 md:grid-cols-2 gap-12 timeline-item">
+<div class="md:text-right">
+<span class="inline-block px-4 py-1 bg-primary/40 text-primary rounded-full font-label-md mb-2">2021-2024</span>
+<h4 class="font-headline-md text-[26px]">Graduation</h4>
+<p class="font-body-md text-on-surface-variant italic">Bachelors in Humanities</p>
+</div>
+<div class="hidden md:block absolute left-1/2 -translate-x-1/2 w-5 h-5 bg-primary-container rounded-full border-4 border-background z-10 shadow-lg mt-2"></div>
+<div>
+<div class="p-8 paper-card rounded-3xl shadow-sm">
+<p class="font-body-md">Developing the foundational critical thinking and analytical skills required for higher research across diverse social sciences.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Research Papers -->
+<section class="section-padding bg-surface-container-lowest/40">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+<div>
+<p class="font-label-md text-primary mb-2 tracking-widest">SCHOLARLY PUBLICATIONS</p>
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg">Selected Research Papers</h2>
+</div>
+<a class="font-label-md text-secondary flex items-center gap-2 hover:gap-4 transition-all pb-2 border-b border-secondary/30" href="#">
+                Google Scholar <span class="material-symbols-outlined">north_east</span>
+</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+<!-- Paper 1 -->
+<div class="paper-card p-10 rounded-[3rem] border-primary/10 hover:bg-white hover:shadow-2xl transition-all duration-500 paper-card-item group">
+<div class="flex justify-between items-start mb-8">
+<span class="px-4 py-1.5 bg-primary/10 text-primary text-[11px] font-bold uppercase rounded-full">Published • 2024</span>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors text-3xl">article</span>
+</div>
+<h3 class="font-headline-md text-[24px] leading-tight mb-6 text-on-surface group-hover:text-primary transition-colors">Arteries of Internet: The Geopolitics of Undersea Cables</h3>
+<p class="font-body-md text-on-surface-variant mb-8 line-clamp-3">An investigation into the strategic importance of physical digital infrastructure and its environmental footprint in international waters.</p>
+<div class="flex items-center gap-2 text-label-md font-semibold text-secondary group-hover:gap-4 transition-all cursor-pointer">
+                    Read Publication <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</div>
+</div>
+<!-- Paper 2 -->
+<div class="paper-card p-10 rounded-[3rem] border-primary/10 hover:bg-white hover:shadow-2xl transition-all duration-500 paper-card-item group">
+<div class="flex justify-between items-start mb-8">
+<span class="px-4 py-1.5 bg-secondary/10 text-secondary text-[11px] font-bold uppercase rounded-full">Presented • 2024</span>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-secondary transition-colors text-3xl">present_to_all</span>
+</div>
+<h3 class="font-headline-md text-[24px] leading-tight mb-6 text-on-surface">Digital Planet: Ecology of the Metaverse</h3>
+<p class="font-body-md text-on-surface-variant mb-8 line-clamp-3">Analyzing the carbon footprint and material consequences of virtual expansion, GPU mining, and AI training models.</p>
+<div class="flex items-center gap-2 text-label-md font-semibold text-secondary group-hover:gap-4 transition-all cursor-pointer">
+                    View Conference Slides <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</div>
+</div>
+<!-- Paper 3 -->
+<div class="paper-card p-10 rounded-[3rem] border-primary/10 hover:bg-white hover:shadow-2xl transition-all duration-500 paper-card-item group">
+<div class="flex justify-between items-start mb-8">
+<span class="px-4 py-1.5 bg-primary/10 text-primary text-[11px] font-bold uppercase rounded-full">Published • 2023</span>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors text-3xl">article</span>
+</div>
+<h3 class="font-headline-md text-[24px] leading-tight mb-6 text-on-surface group-hover:text-primary transition-colors">Sahara Seeding: Reforestation and Sovereignty</h3>
+<p class="font-body-md text-on-surface-variant mb-8 line-clamp-3">Political ecological implications of large-scale greening projects in arid landscapes and their impact on local communities.</p>
+<div class="flex items-center gap-2 text-label-md font-semibold text-secondary group-hover:gap-4 transition-all cursor-pointer">
+                    Read Publication <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</div>
+</div>
+<!-- In Review/Drafts -->
+<div class="paper-card p-10 rounded-[3rem] border-dashed border-2 border-outline-variant/50 flex flex-col justify-center opacity-70 hover:opacity-100 transition-opacity">
+<h3 class="font-headline-md text-[22px] text-on-surface-variant mb-2">Hydro-politics in the Himalayan Belt</h3>
+<p class="font-label-md text-primary font-bold italic">In Peer Review • 2025</p>
+</div>
+<div class="paper-card p-10 rounded-[3rem] border-dashed border-2 border-outline-variant/50 flex flex-col justify-center opacity-70 hover:opacity-100 transition-opacity">
+<h3 class="font-headline-md text-[22px] text-on-surface-variant mb-2">The 'Green' Trap: Neocolonialism in Carbon Credits</h3>
+<p class="font-label-md text-primary font-bold italic">Drafting Phase</p>
+</div>
+<div class="paper-card p-10 rounded-[3rem] border-dashed border-2 border-outline-variant/50 flex flex-col justify-center opacity-70 hover:opacity-100 transition-opacity">
+<h3 class="font-headline-md text-[22px] text-on-surface-variant mb-2">Governance of the High Seas: A Post-Humanist View</h3>
+<p class="font-label-md text-primary font-bold italic">Ongoing Field Research</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Intellectual Vistas (Summits) -->
+<section class="section-padding bg-surface overflow-hidden" id="vistas">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg mb-20 text-center">Intellectual Vistas</h2>
+<div class="space-y-12">
+<!-- Summit 1 -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center vista-overlap-item">
+<div class="relative rounded-[3rem] overflow-hidden h-[450px] shadow-2xl group">
+<img alt="Forest conservation summit setting" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJkCZlfkiztbqIxw42fdLjjyWs265Bkkx3O9l04VGTOixmsYW4Ygh6XH3bxOqRe37FPBMomZDpolwnUe80wrhSDRD_PECFc4S4tq7N-vYKgd6M-d9lYduMppK-W5n1ll0RUMXQpBxn8HzS3tddbozCgmS167iwvnKGr1EgtAIDHtTphoesjfraA0fbL-sf2PAVu8GHYV48FUj4Dx-F7ecB3RQl47xXNUTGHq2PyLszPqvDWIw7-zBgLNwXJPKAyHC0zfjI1gluyok"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/20 to-transparent"></div>
+<div class="absolute bottom-10 left-10 text-white">
+<p class="font-label-md uppercase tracking-widest mb-2">New Delhi, India</p>
+<h4 class="font-headline-md text-3xl">Ecological Security Summit</h4>
+</div>
+</div>
+<div class="space-y-6 md:pl-8">
+<span class="text-secondary font-bold text-5xl opacity-20">01</span>
+<h3 class="font-headline-md text-4xl">SAGARMANTHAN 2025</h3>
+<p class="font-body-lg text-on-surface-variant leading-relaxed">Active participant in the maritime dialogue focusing on blue economies and ecological security in the Indian Ocean region. Contributed to working groups on sustainable fisheries and deep-sea mineral governance, bridging policy with ocean conservation.</p>
+<button class="font-label-md text-primary flex items-center gap-2 group">
+                        Explore Insights <span class="material-symbols-outlined group-hover:translate-x-2 transition-transform">arrow_right_alt</span>
+</button>
+</div>
+</div>
+<!-- Summit 2 -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center vista-overlap-item md:flex-row-reverse">
+<div class="md:order-2 relative rounded-[3rem] overflow-hidden h-[450px] shadow-2xl group">
+<img alt="Deep sea connectivity research" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIetzw5-x7_IL509oSgV9X57SUF1KnUzGq1dZ_qvGH3oYSf2qdCQien6PCIcmeKXxUQ7lgRO6tGgRnBbMXodxxBYlXcUoXAW9WrMNyJ3xmfQxb--O0hJtOcxsZWbGywRl9HCPEG5y94GkbWqCi7WTagq_9WBEh4CHjBdgBxLP5F5I_ogNG3RwFoVFW5gqx4XVALpe0Rr1YMbgovJJj4waXyoPOwg-IeHIpS669p-1yRFTa4n0GE1uPtocjVrGWBmXf1GlpH2Yu3fU"/>
+<div class="absolute inset-0 bg-gradient-to-t from-secondary/80 via-secondary/20 to-transparent"></div>
+<div class="absolute bottom-10 left-10 text-white">
+<p class="font-label-md uppercase tracking-widest mb-2">Global Outreach</p>
+<h4 class="font-headline-md text-3xl">Sustainable Tech Forum</h4>
+</div>
+</div>
+<div class="md:order-1 space-y-6 md:pr-8 md:text-right">
+<span class="text-secondary font-bold text-5xl opacity-20">02</span>
+<h3 class="font-headline-md text-4xl">WSDS 2026</h3>
+<p class="font-body-lg text-on-surface-variant leading-relaxed">Delegate at the World Sustainable Development Summit. Engaged with global leaders on climate adaptation strategies and the implementation of 'Sarva Saha' principles in future urban planning and rural resilience projects.</p>
+<button class="font-label-md text-primary flex flex-row-reverse items-center gap-2 group ml-auto">
+                        Explore Insights <span class="material-symbols-outlined group-hover:-translate-x-2 transition-transform">arrow_left_alt</span>
+</button>
+</div>
+</div>
+<!-- Mini Vistas -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-10 pt-12">
+<div class="p-10 paper-card rounded-[2.5rem] border-l-8 border-primary/40 group hover:bg-white transition-all">
+<h4 class="font-headline-md text-2xl mb-4 group-hover:text-primary transition-colors">Raisina Dialogue 2026</h4>
+<p class="font-body-md text-on-surface-variant">Contributing insights on the nexus of security, energy, and environmental policy in a multipolar world. Focused on 'Green Realism' in foreign policy.</p>
+</div>
+<div class="p-10 paper-card rounded-[2.5rem] border-l-8 border-secondary/40 group hover:bg-white transition-all">
+<h4 class="font-headline-md text-2xl mb-4 group-hover:text-secondary transition-colors">Youth Development Forum 2026</h4>
+<p class="font-body-md text-on-surface-variant">Empowering the next generation of researchers to integrate ecological consciousness into political discourse and grassroots activism.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Blogs -->
+<section class="section-padding bg-background relative overflow-hidden" id="blogs">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-20">Wending Writer: Latest Blogs</h2>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+<!-- Blog 1 -->
+<article class="group relative overflow-hidden rounded-[3rem] bg-white shadow-xl hover:shadow-2xl transition-all duration-500 blog-card">
+<div class="h-96 overflow-hidden relative">
+<img alt="Forest governance feature" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" src="https://lh3.googleusercontent.com/aida-public/AB6AXuASTKtbs6MZh36ZiCUIk_7fkwfbFjmUnasIdiYm71ib1juPIgW8l0j3cAXTgfNdr2vRRXT8xvgkLVG74gf_KoSvb70rjftxzCcCAfT8nQu_bkpOICL9QRuhXSg_PJO5cDNzTqAfcy1wgtELppZy4h6ZZmuUR6HkGMMDJSoK7h0zUOLE1VRIMMmtseOK4C-Hnsmreu_xHqEvp2bdNRsLaT9FRjg0b6jTfJjxc7dqTSaf4acsFIW63FKI5z1cZDw1WGOF2ueocerEKp0"/>
+<div class="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors"></div>
+</div>
+<div class="p-12 space-y-6">
+<div class="flex gap-3">
+<span class="text-[11px] uppercase font-bold tracking-widest text-secondary px-4 py-1.5 bg-secondary/5 rounded-full">Ecology</span>
+<span class="text-[11px] uppercase font-bold tracking-widest text-on-surface-variant px-4 py-1.5 bg-surface-container rounded-full">June 2024</span>
+</div>
+<h3 class="font-headline-md text-3xl group-hover:text-primary transition-colors leading-tight">The Silence of the Forests: Political Neglect</h3>
+<p class="font-body-md text-on-surface-variant text-lg">A deep dive into why forest governance often fails to address the voices of indigenous communities and the biospheric reality of climate collapse...</p>
+<a class="inline-flex items-center gap-2 font-label-md text-primary group-hover:gap-4 transition-all text-lg font-bold" href="#">Read Narrative <span class="material-symbols-outlined">arrow_right_alt</span></a>
+</div>
+</article>
+<!-- Blog 2 -->
+<article class="group relative overflow-hidden rounded-[3rem] bg-white shadow-xl hover:shadow-2xl transition-all duration-500 blog-card">
+<div class="h-96 overflow-hidden relative">
+<img alt="Digital environmentalism feature" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCs-zBNexGMxoGzH00MDtfYgN8WKkfYrymNcmVJ9em7Dn_NRdbx7fWF_g6VvtyR31xktqxfqD-imvponFsNM3t5m12PBjgdhzrgfHs1XObd_x1dzvBY8q2nftC-I-FWxncA0H6YQsCyPp24SIwrYdBB0M10HlylY1sNZiwuY_3Rwwp047f_z_F1zfefhDDzMAtqgD-7aTNoPaYnqWwc32_r3_FtTUVbpXmWf_P3m_YVbXqOcggOSYtADD2Jeyf_kLqHBaXIjjieyGg"/>
+<div class="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors"></div>
+</div>
+<div class="p-12 space-y-6">
+<div class="flex gap-3">
+<span class="text-[11px] uppercase font-bold tracking-widest text-primary px-4 py-1.5 bg-primary/5 rounded-full">Technology</span>
+<span class="text-[11px] uppercase font-bold tracking-widest text-on-surface-variant px-4 py-1.5 bg-surface-container rounded-full">Aug 2024</span>
+</div>
+<h3 class="font-headline-md text-3xl group-hover:text-primary transition-colors leading-tight">Digital Seeds: Rewilding the Virtual World</h3>
+<p class="font-body-md text-on-surface-variant text-lg">Can virtual spaces actually foster a deeper connection with physical nature? Exploring the paradox of digital environmentalism and e-waste...</p>
+<a class="inline-flex items-center gap-2 font-label-md text-primary group-hover:gap-4 transition-all text-lg font-bold" href="#">Read Narrative <span class="material-symbols-outlined">arrow_right_alt</span></a>
+</div>
+</article>
+</div>
+</div>
+</section>
+<!-- Excellence Badges -->
+<section class="section-padding bg-primary/5">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="flex flex-col md:flex-row justify-between items-center gap-12 bg-white/50 p-16 rounded-[4rem] backdrop-blur-xl border border-white">
+<div class="text-center md:text-left max-w-lg">
+<h2 class="font-headline-md text-4xl text-primary mb-4">Academic Excellence</h2>
+<p class="font-body-lg text-on-surface-variant">Validated by national standards of research and teaching excellence in Political Science, ensuring a rigorous approach to ecological studies.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-10">
+<div class="flex flex-col items-center p-10 bg-white rounded-[2.5rem] shadow-xl border border-primary/5 w-48 group hover:-translate-y-2 transition-transform">
+<span class="material-symbols-outlined text-secondary text-6xl mb-4 group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 1;">verified</span>
+<p class="font-label-md text-on-surface font-bold text-lg">JRF 2026</p>
+<p class="text-[11px] uppercase tracking-widest text-outline-variant font-bold">Qualified</p>
+</div>
+<div class="flex flex-col items-center p-10 bg-white rounded-[2.5rem] shadow-xl border border-primary/5 w-48 group hover:-translate-y-2 transition-transform">
+<span class="material-symbols-outlined text-primary text-6xl mb-4 group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<p class="font-label-md text-on-surface font-bold text-lg">NET 2026</p>
+<p class="text-[11px] uppercase tracking-widest text-outline-variant font-bold">Qualified</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-surface-container-low w-full py-24 border-t border-outline-variant/20 relative z-10">
+<div class="flex flex-col md:flex-row justify-between items-center px-margin-desktop gap-gutter max-w-container-max mx-auto">
+<div class="space-y-4 text-center md:text-left">
+<span class="font-display-lg text-4xl text-primary">Jahnvi</span>
+<p class="font-body-md text-on-surface-variant max-w-xs leading-relaxed">Intellectualism in harmony with nature. Exploring the depths of political ecology and sustainable governance.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-gutter items-center">
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-200 font-body-md font-bold" href="#">LinkedIn</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-200 font-body-md font-bold" href="#">Google Scholar</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-200 font-body-md font-bold" href="#">ResearchGate</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-200 font-body-md font-bold" href="mailto:contact@jahnvi.academic">Email</a>
+</div>
+<div class="text-on-surface-variant font-body-md text-center md:text-right">
+<p>© 2024 Jahnvi. All rights reserved.</p>
+<span class="text-[12px] opacity-60 font-bold uppercase tracking-widest">Sarva Saha • Equilibrium</span>
+</div>
+</div>
+</footer>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Mouse follower effect
+        const lightEffect = document.getElementById('light-effect');
+        window.addEventListener('mousemove', (e) => {
+            lightEffect.style.setProperty('--x', e.clientX + 'px');
+            lightEffect.style.setProperty('--y', e.clientY + 'px');
+        });
+
+        // Hero Text Reveal
+        const heroTitle = document.getElementById('hero-headline');
+        const text = heroTitle.innerText;
+        heroTitle.innerHTML = text.split('').map(char => `<span class="char">${char === ' ' ? '&nbsp;' : char}</span>`).join('');
+
+        gsap.to('.char', {
+            opacity: 1,
+            y: 0,
+            stagger: 0.05,
+            duration: 1,
+            ease: "back.out(1.7)",
+            startAt: { y: 20, opacity: 0 }
+        });
+
+        gsap.from("#hero-content .reveal-type", {
+            x: -30,
+            opacity: 0,
+            duration: 1.2,
+            stagger: 0.3,
+            ease: "power3.out",
+            delay: 0.5
+        });
+
+        // Portrait Parallax
+        gsap.to("#hero-image", {
+            yPercent: 15,
+            ease: "none",
+            scrollTrigger: {
+                trigger: "#hero-visual",
+                start: "top top",
+                end: "bottom top",
+                scrub: true
+            }
+        });
+
+        // Generic Parallax for BG elements
+        document.querySelectorAll('.parallax-bg').forEach(el => {
+            const speed = el.getAttribute('data-speed');
+            gsap.to(el, {
+                y: -100 * speed,
+                scrollTrigger: {
+                    trigger: el,
+                    scrub: 1
+                }
+            });
+        });
+
+        // Timeline Items Animation
+        gsap.utils.toArray('.timeline-item').forEach((item, i) => {
+            gsap.from(item, {
+                x: i % 2 === 0 ? -60 : 60,
+                opacity: 0,
+                duration: 1.2,
+                ease: "power4.out",
+                scrollTrigger: {
+                    trigger: item,
+                    start: "top 85%",
+                    toggleActions: "play none none none"
+                }
+            });
+        });
+
+        // Section Headers
+        gsap.utils.toArray('h2').forEach(heading => {
+            gsap.from(heading, {
+                y: 30,
+                opacity: 0,
+                duration: 1,
+                scrollTrigger: {
+                    trigger: heading,
+                    start: "top 90%"
+                }
+            });
+        });
+
+        // Research Paper Cards Fade In
+        gsap.from(".paper-card-item", {
+            y: 50,
+            opacity: 0,
+            stagger: 0.2,
+            duration: 1,
+            scrollTrigger: {
+                trigger: ".paper-card-item",
+                start: "top 85%"
+            }
+        });
+
+        // Vistas Journey Masonry Feel Reveal
+        gsap.utils.toArray('.vista-overlap-item').forEach((item, i) => {
+            gsap.from(item, {
+                y: 100,
+                opacity: 0,
+                duration: 1.5,
+                ease: "expo.out",
+                scrollTrigger: {
+                    trigger: item,
+                    start: "top 80%"
+                }
+            });
+        });
+
+        // Blog Cards
+        gsap.from(".blog-card", {
+            scale: 0.95,
+            opacity: 0,
+            stagger: 0.3,
+            duration: 1.2,
+            scrollTrigger: {
+                trigger: ".blog-card",
+                start: "top 85%"
+            }
+        });
+
+        // Navbar Scroll Effect
+        const nav = document.querySelector('nav');
+        ScrollTrigger.create({
+            start: "top -50",
+            onUpdate: (self) => {
+                if (self.direction === 1) {
+                    nav.classList.add('py-2', 'shadow-md');
+                    nav.classList.remove('py-4', 'shadow-sm');
+                } else if (self.scroll() < 50) {
+                    nav.classList.add('py-4', 'shadow-sm');
+                    nav.classList.remove('py-2', 'shadow-md');
+                }
+            }
+        });
+    });
+</script>
+</body></html>

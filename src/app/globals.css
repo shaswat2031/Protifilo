@@ -1,0 +1,386 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cream: #FBF5E8;
+  --color-cream-lightest: #FFFDF9;
+  --color-cream-light: #FDF9F0;
+  --color-cream-medium: #F5ECD8;
+  --color-cream-dark: #EAE0C8;
+  --color-olive: #435c3c;
+  --color-olive-dark: #354d2e;
+  --color-charcoal: #1b1c1c;
+  --color-charcoal-light: #434840;
+  --color-warm-gray: #74796f;
+  --color-warm-gray-light: #c3c8bd;
+  --color-gold-accent: #89502e;
+  --color-forest-dark: #1F2E1B;
+
+  --color-background: #FBF5E8;
+  --color-on-secondary: #ffffff;
+  --color-tertiary-fixed-dim: #cbc6ba;
+  --color-on-primary-fixed-variant: #354d2e;
+  --color-surface-dim: #dcd9d9;
+  --color-secondary-fixed-dim: #ffb68d;
+  --color-surface-variant: #e4e2e1;
+  --color-on-tertiary-fixed-variant: #49473d;
+  --color-surface-tint: #4c6544;
+  --color-surface-container-high: #eae7e7;
+  --color-outline-variant: #c3c8bd;
+  --color-surface-container-low: #f6f3f2;
+  --color-surface-container-highest: #e4e2e1;
+  --color-tertiary-container: #716e64;
+  --color-on-surface: #1b1c1c;
+  --color-tertiary-fixed: #e8e2d5;
+  --color-inverse-surface: #303030;
+  --color-primary: #435c3c;
+  --color-on-background: #1b1c1c;
+  --color-on-secondary-fixed: #331200;
+  --color-error-container: #ffdad6;
+  --color-surface-container-lowest: #ffffff;
+  --color-outline: #74796f;
+  --color-on-tertiary: #ffffff;
+  --color-secondary-container: #fdb389;
+  --color-on-primary: #ffffff;
+  --color-surface-bright: #fcf9f8;
+  --color-on-surface-variant: #434840;
+  --color-on-tertiary-fixed: #1d1c14;
+  --color-on-secondary-container: #784322;
+  --color-on-primary-fixed: #092007;
+  --color-secondary-fixed: #ffdbc9;
+  --color-inverse-primary: #b2cfa7;
+  --color-primary-fixed-dim: #b2cfa7;
+  --color-on-error: #ffffff;
+  --color-primary-fixed: #cdebc1;
+  --color-on-secondary-fixed-variant: #6c3919;
+  --color-inverse-on-surface: #f3f0f0;
+  --color-on-primary-container: #ddfad0;
+  --color-primary-container: #5b7553;
+  --color-secondary: #89502e;
+  --color-on-tertiary-container: #f7f1e4;
+  --color-error: #ba1a1a;
+  --color-surface-container: #f0eded;
+  --color-surface: #fcf9f8;
+  --color-on-error-container: #93000a;
+  --color-tertiary: #59564c;
+
+  --font-display-lg: "Playfair Display", serif;
+  --font-headline-lg: "Playfair Display", serif;
+  --font-body-md: "Outfit", sans-serif;
+  --font-display-lg-mobile: "Playfair Display", serif;
+  --font-body-lg: "Outfit", sans-serif;
+  --font-headline-md: "Playfair Display", serif;
+  --font-label-md: "Outfit", sans-serif;
+
+  --spacing-margin-desktop: 64px;
+  --spacing-container-max: 1200px;
+  --spacing-stack-sm: 16px;
+  --spacing-unit: 8px;
+  --spacing-margin-mobile: 24px;
+  --spacing-stack-lg: 80px;
+  --spacing-gutter: 32px;
+  --spacing-stack-md: 32px;
+
+  --text-display-lg: 64px;
+  --text-display-lg--line-height: 1.1;
+  --text-display-lg--letter-spacing: -0.02em;
+  --text-display-lg--font-weight: 700;
+
+  --text-headline-lg: 48px;
+  --text-headline-lg--line-height: 1.2;
+  --text-headline-lg--font-weight: 600;
+
+  --text-body-md: 16px;
+  --text-body-md--line-height: 1.6;
+  --text-body-md--font-weight: 400;
+
+  --text-display-lg-mobile: 40px;
+  --text-display-lg-mobile--line-height: 1.2;
+  --text-display-lg-mobile--font-weight: 700;
+
+  --text-body-lg: 18px;
+  --text-body-lg--line-height: 1.6;
+  --text-body-lg--font-weight: 400;
+
+  --text-headline-md: 32px;
+  --text-headline-md--line-height: 1.3;
+  --text-headline-md--font-weight: 600;
+
+  --text-label-md: 14px;
+  --text-label-md--line-height: 1.2;
+  --text-label-md--letter-spacing: 0.05em;
+  --text-label-md--font-weight: 600;
+}
+
+@layer base {
+  body {
+    background-color: #FBF5E8;
+    color: #1b1c1c;
+    position: relative;
+    font-family: var(--font-outfit), sans-serif;
+  }
+}
+
+body {
+    background-color: #FBF5E8;
+    color: #1b1c1c;
+    position: relative
+    }
+/* Glass card styling */
+.glass-card {
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.5)
+    }
+.paper-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03)
+    }
+.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
+    }
+.rotate-slow {
+    animation: rotate 25s linear infinite
+    }
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+        } to {
+        transform: rotate(360deg);
+        }
+    }
+.section-padding {
+    padding-top: 100px;
+    padding-bottom: 100px
+    }
+@media (max-width: 768px) {
+    .section-padding {
+        padding-top: 60px;
+        padding-bottom: 60px
+        }
+    }
+/* Mouse light effect container */
+#light-effect {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(600px at var(--x, 0) var(--y, 0), rgba(67, 92, 60, 0.03), transparent 80%);
+    pointer-events: none;
+    z-index: 1
+    }
+.char {
+    display: inline-block;
+    opacity: 0
+    }
+.vista-overlap-item:nth-child(even) {
+    margin-top: -40px
+    }
+.btn-hover-effect {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)
+    }
+.btn-hover-effect:hover {
+    transform: translatey(-3px);
+    box-shadow: 0 10px 20px -5px rgba(67, 92, 60, 0.3)
+    }
+
+/* Custom premium transition keyframes and helper classes */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes scaleUp {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes pulseSlow {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-scale-up {
+  animation: scaleUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-pulse-slow {
+  animation: pulseSlow 5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* WYSIWYG Editor Helpers */
+.editor-canvas {
+  min-height: 350px;
+  max-height: 600px;
+  overflow-y: auto;
+  outline: none;
+}
+.editor-canvas[contenteditable]:empty:before {
+  content: attr(placeholder);
+  color: #74796f;
+  cursor: text;
+  font-style: italic;
+  opacity: 0.85;
+}
+/* Visual Heading and paragraph styling for MS Word live editor experience */
+.editor-canvas h1 {
+  font-size: 2.25rem !important;
+  font-weight: 700 !important;
+  font-family: "Playfair Display", serif !important;
+  margin-top: 1.5rem !important;
+  margin-bottom: 0.75rem !important;
+  color: #1b1c1c !important;
+  line-height: 1.25 !important;
+  display: block !important;
+}
+.editor-canvas h2 {
+  font-size: 1.75rem !important;
+  font-weight: 600 !important;
+  font-family: "Playfair Display", serif !important;
+  margin-top: 1.25rem !important;
+  margin-bottom: 0.5rem !important;
+  color: #435c3c !important;
+  line-height: 1.3 !important;
+  display: block !important;
+}
+.editor-canvas h3 {
+  font-size: 1.35rem !important;
+  font-weight: 600 !important;
+  font-family: "Playfair Display", serif !important;
+  margin-top: 1rem !important;
+  margin-bottom: 0.5rem !important;
+  color: #1b1c1c !important;
+  line-height: 1.4 !important;
+  display: block !important;
+}
+.editor-canvas p {
+  font-size: 0.875rem !important;
+  margin-bottom: 0.75rem !important;
+  line-height: 1.6 !important;
+  display: block !important;
+}
+.editor-canvas ul {
+  list-style-type: disc !important;
+  margin-left: 1.75rem !important;
+  margin-bottom: 0.75rem !important;
+  display: block !important;
+}
+.editor-canvas ol {
+  list-style-type: decimal !important;
+  margin-left: 1.75rem !important;
+  margin-bottom: 0.75rem !important;
+  display: block !important;
+}
+.editor-canvas li {
+  margin-bottom: 0.25rem !important;
+  display: list-item !important;
+}
+/* Ensure tables have visible borders inside editor canvas */
+.editor-canvas table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+  border: 1px solid #c3c8bd;
+}
+.editor-canvas th, .editor-canvas td {
+  border: 1px solid #c3c8bd;
+  padding: 8px 12px;
+  text-align: left;
+}
+.editor-canvas th {
+  background-color: rgba(67, 92, 60, 0.05);
+  font-weight: bold;
+}
+
+/* Frontend blog rich text container custom rendering */
+.rich-text-content h1 {
+  font-size: 2.25rem !important;
+  font-weight: 700 !important;
+  font-family: "Playfair Display", serif !important;
+  margin-top: 2rem !important;
+  margin-bottom: 1rem !important;
+  color: #1b1c1c !important;
+  line-height: 1.25 !important;
+  display: block !important;
+}
+.rich-text-content h2 {
+  font-size: 1.75rem !important;
+  font-weight: 600 !important;
+  font-family: "Playfair Display", serif !important;
+  margin-top: 1.75rem !important;
+  margin-bottom: 0.75rem !important;
+  color: #435c3c !important;
+  line-height: 1.3 !important;
+  display: block !important;
+}
+.rich-text-content h3 {
+  font-size: 1.35rem !important;
+  font-weight: 600 !important;
+  font-family: "Playfair Display", serif !important;
+  margin-top: 1.5rem !important;
+  margin-bottom: 0.75rem !important;
+  color: #1b1c1c !important;
+  line-height: 1.4 !important;
+  display: block !important;
+}
+.rich-text-content p {
+  font-size: 1.125rem !important;
+  margin-bottom: 1rem !important;
+  line-height: 1.75 !important;
+  color: #434840 !important;
+  display: block !important;
+}
+.rich-text-content ul {
+  list-style-type: disc !important;
+  margin-left: 2rem !important;
+  margin-bottom: 1rem !important;
+  display: block !important;
+}
+.rich-text-content ol {
+  list-style-type: decimal !important;
+  margin-left: 2rem !important;
+  margin-bottom: 1rem !important;
+  display: block !important;
+}
+.rich-text-content li {
+  margin-bottom: 0.5rem !important;
+  font-size: 1.125rem !important;
+  line-height: 1.75 !important;
+  color: #434840 !important;
+  display: list-item !important;
+}
+.rich-text-content table {
+  border-collapse: collapse !important;
+  width: 100% !important;
+  margin: 2rem 0 !important;
+  border: 1px solid #c3c8bd !important;
+  overflow: hidden !important;
+  border-radius: 8px !important;
+}
+.rich-text-content th, .rich-text-content td {
+  border: 1px solid #c3c8bd !important;
+  padding: 12px 16px !important;
+  text-align: left !important;
+}
+.rich-text-content th {
+  background-color: rgba(67, 92, 60, 0.05) !important;
+  font-weight: bold !important;
+  color: #435c3c !important;
+}
+
