@@ -499,7 +499,7 @@ export default function Home() {
         </div>
 
         {/* Centered Image - Positioned at Bottom Center */}
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[280px] sm:max-w-[340px] md:max-w-[500px] xl:max-w-[650px] z-10 pointer-events-none flex items-end mb-[4.5rem] md:mb-0" id="portrait-wrapper">
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[280px] sm:max-w-[340px] md:max-w-[500px] xl:max-w-[650px] z-10 pointer-events-none flex items-end mb-[8.5rem] sm:mb-[9.5rem] md:mb-0" id="portrait-wrapper">
           <img 
             alt="Profile" 
             className="w-full h-auto object-contain object-bottom pointer-events-auto transition-transform duration-700 hover:scale-[1.02]" 
@@ -510,11 +510,11 @@ export default function Home() {
         </div>
 
         {/* Bottom stylized typography */}
-        <div className="w-full max-w-[95rem] mx-auto px-4 md:px-8 xl:px-12 flex flex-col md:flex-row justify-between items-center md:items-end gap-2 md:gap-4 z-50 select-none pb-2 md:pb-6 relative pointer-events-none">
-          <h1 className="hero-bottom-title font-sans-ultra-bold text-[14vw] sm:text-[12vw] md:text-[6.5rem] xl:text-[7.5rem] uppercase leading-[0.85] text-charcoal text-center md:text-left tracking-tighter whitespace-nowrap relative pointer-events-auto w-full md:w-auto md:-translate-x-12 xl:-translate-x-24">
+        <div className="w-full max-w-[95rem] mx-auto px-4 md:px-8 xl:px-12 flex flex-col md:flex-row justify-between items-center md:items-end gap-2 md:gap-4 z-50 select-none pb-4 md:pb-6 relative pointer-events-none">
+          <h1 className="hero-bottom-title font-sans-ultra-bold text-4xl sm:text-5xl md:text-[6.5rem] xl:text-[7.5rem] uppercase leading-[0.85] text-charcoal text-center md:text-left tracking-tighter whitespace-nowrap relative pointer-events-auto w-full md:w-auto md:-translate-x-12 xl:-translate-x-24">
             I AM <span className="block">{profile?.name || "JAHNVI"}</span>
           </h1>
-          <h2 className="hero-bottom-title font-sans-ultra-bold text-[9vw] sm:text-[7vw] md:text-[4rem] xl:text-[5.5rem] uppercase leading-[0.85] text-charcoal text-center md:text-right tracking-tighter whitespace-nowrap relative pointer-events-auto w-full md:w-auto md:translate-x-16 xl:translate-x-32 mt-2 md:mt-0">
+          <h2 className="hero-bottom-title font-sans-ultra-bold text-2xl sm:text-3xl md:text-[4rem] xl:text-[5.5rem] uppercase leading-[0.85] text-charcoal text-center md:text-right tracking-tighter whitespace-nowrap relative pointer-events-auto w-full md:w-auto md:translate-x-16 xl:translate-x-32 mt-3 md:mt-0">
             RESEARCHER <span className="block">AND WRITER</span>
           </h2>
         </div>
