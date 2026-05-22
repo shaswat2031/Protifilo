@@ -1,8 +1,12 @@
 const mongoose = require("mongoose");
 const fs = require("fs");
 const path = require("path");
+const dns = require("dns");
 
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/jahnvi_portfolio";
+// Set Google DNS to bypass SRV query issues
+dns.setServers(['8.8.8.8', '8.8.4.4']);
+
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://jhavani:jhavani@cluster0.0tqeuqa.mongodb.net/?appName=Cluster0";
 
 // Define schemas inline in CommonJS so the seeder can run standalone without ESM transpilation issues
 const ProfileSchema = new mongoose.Schema({
