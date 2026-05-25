@@ -233,6 +233,7 @@ export default function Home() {
   const [activePaperSlides, setActivePaperSlides] = useState(null);
   const [slideIndex, setSlideIndex] = useState(0);
   const [activeCertificate, setActiveCertificate] = useState(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // References for light effect
   const containerRef = useRef();
@@ -410,12 +411,12 @@ export default function Home() {
       ScrollTrigger.create({
         start: "top -50",
         onUpdate: (self) => {
-          if (self.direction === 1) {
-            nav.classList.add('py-2.5', 'bg-white/90', 'shadow-xs');
-            nav.classList.remove('py-4.5', 'bg-white/40');
+          if (self.direction === 1 && self.scroll() > 50) {
+            nav.classList.add('py-2.5', 'bg-white/80', 'shadow-md');
+            nav.classList.remove('py-3.5', 'bg-white/50', 'shadow-[0_8px_32px_rgba(0,0,0,0.04)]');
           } else if (self.scroll() < 50) {
-            nav.classList.add('py-4.5', 'bg-white/40');
-            nav.classList.remove('py-2.5', 'bg-white/90', 'shadow-xs');
+            nav.classList.add('py-3.5', 'bg-white/50', 'shadow-[0_8px_32px_rgba(0,0,0,0.04)]');
+            nav.classList.remove('py-2.5', 'bg-white/80', 'shadow-md');
           }
         }
       });
@@ -446,34 +447,104 @@ export default function Home() {
       <div id="light-effect" ref={lightEffectRef}></div>
       
       {/* TopNavBar */}
-      <nav className="fixed top-0 w-full z-[60] bg-white/40 backdrop-blur-xl border-b border-charcoal/5 px-6 py-4.5 md:px-12 transition-all duration-300">
-        <div className="mx-auto flex max-w-7xl items-center justify-between">
-          <a href="#intro" className="font-serif-italic text-2xl font-bold tracking-tight text-charcoal">Jahnvi.</a>
-          
-          <div className="hidden md:flex gap-8 items-center">
-            <a className="font-sans font-medium text-sm tracking-wide text-charcoal hover:text-secondary transition-colors duration-300" href="#intro">Home</a>
-            <a className="font-sans font-medium text-sm tracking-wide text-charcoal-light hover:text-secondary transition-colors duration-300" href="#research">Works</a>
-            <a className="font-sans font-medium text-sm tracking-wide text-charcoal-light hover:text-secondary transition-colors duration-300" href="#background">About</a>
-            <a className="font-sans font-medium text-sm tracking-wide text-charcoal-light hover:text-secondary transition-colors duration-300" href="#vistas">Services</a>
-            <a className="font-sans font-medium text-sm tracking-wide text-charcoal-light hover:text-secondary transition-colors duration-300" href="#blogs">Testimonial</a>
-          </div>
+      <div className="fixed top-0 left-0 w-full z-[60] pt-4 md:pt-6 px-4 md:px-8 pointer-events-none flex justify-center">
+        <nav className={`pointer-events-auto w-full max-w-5xl bg-white/50 backdrop-blur-2xl border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.04)] px-6 py-3.5 transition-all duration-500 hover:bg-white/60 hover:shadow-[0_8px_32px_rgba(0,0,0,0.08)] ${isMobileMenuOpen ? 'rounded-[2rem]' : 'rounded-full'}`}>
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center justify-between w-full">
+              <a href="#intro" className="font-serif-italic text-2xl font-bold tracking-tight text-charcoal flex items-center gap-3 group">
+                <span className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#ffe4e6] to-[#e0f2fe] flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-300 border border-white">
+                  <span className="font-sans font-bold text-sm text-charcoal">J</span>
+                </span>
+                <span>Jahnvi.</span>
+              </a>
+              
+              <div className="hidden md:flex items-center bg-charcoal/5 rounded-full p-1 border border-charcoal/5">
+                <a className="px-4 py-1.5 rounded-full font-sans font-medium text-xs tracking-wide text-charcoal hover:bg-white hover:shadow-sm transition-all duration-300" href="#intro">Home</a>
+                <a className="px-4 py-1.5 rounded-full font-sans font-medium text-xs tracking-wide text-charcoal hover:bg-white hover:shadow-sm transition-all duration-300" href="#research">Philosophy</a>
+                <a className="px-4 py-1.5 rounded-full font-sans font-medium text-xs tracking-wide text-charcoal hover:bg-white hover:shadow-sm transition-all duration-300" href="#research-papers">Publications</a>
+                <a className="px-4 py-1.5 rounded-full font-sans font-medium text-xs tracking-wide text-charcoal hover:bg-white hover:shadow-sm transition-all duration-300" href="#background">Journey</a>
+                <a className="px-4 py-1.5 rounded-full font-sans font-medium text-xs tracking-wide text-charcoal hover:bg-white hover:shadow-sm transition-all duration-300" href="#vistas">Vistas</a>
+                <a className="px-4 py-1.5 rounded-full font-sans font-medium text-xs tracking-wide text-charcoal hover:bg-white hover:shadow-sm transition-all duration-300" href="#blogs">Blogs</a>
+              </div>
 
-          <a href="#accolades" className="hidden md:inline-block px-7 py-2.5 bg-charcoal text-white rounded-full font-sans font-semibold text-xs tracking-wider uppercase hover:bg-charcoal/90 transition-all duration-300">
-            Contact
-          </a>
+              <a href="#accolades" className="hidden md:inline-block px-6 py-2.5 bg-gradient-to-r from-charcoal to-charcoal-light text-white rounded-full font-sans font-semibold text-xs tracking-wider uppercase hover:shadow-[0_0_20px_rgba(27,28,28,0.2)] hover:scale-105 transition-all duration-300">
+                Accolades
+              </a>
 
-          <div className="md:hidden">
-            <span className="material-symbols-outlined text-charcoal cursor-pointer">menu</span>
+              <div className="md:hidden flex items-center">
+                <button 
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
+                  className="material-symbols-outlined text-charcoal cursor-pointer p-2 bg-charcoal/5 rounded-full hover:bg-charcoal/10 transition-colors pointer-events-auto flex items-center justify-center"
+                >
+                  {isMobileMenuOpen ? 'close' : 'menu'}
+                </button>
+              </div>
+            </div>
+
+            {/* Mobile Navigation Drawer */}
+            {isMobileMenuOpen && (
+              <div className="md:hidden w-full flex flex-col gap-2 pt-2 border-t border-charcoal/5 animate-scale-up">
+                <a 
+                  onClick={() => setIsMobileMenuOpen(false)} 
+                  className="px-4 py-2.5 rounded-2xl font-sans font-medium text-base text-charcoal hover:bg-charcoal/5 transition-all text-center" 
+                  href="#intro"
+                >
+                  Home
+                </a>
+                <a 
+                  onClick={() => setIsMobileMenuOpen(false)} 
+                  className="px-4 py-2.5 rounded-2xl font-sans font-medium text-base text-charcoal hover:bg-charcoal/5 transition-all text-center" 
+                  href="#research"
+                >
+                  Philosophy
+                </a>
+                <a 
+                  onClick={() => setIsMobileMenuOpen(false)} 
+                  className="px-4 py-2.5 rounded-2xl font-sans font-medium text-base text-charcoal hover:bg-charcoal/5 transition-all text-center" 
+                  href="#research-papers"
+                >
+                  Publications
+                </a>
+                <a 
+                  onClick={() => setIsMobileMenuOpen(false)} 
+                  className="px-4 py-2.5 rounded-2xl font-sans font-medium text-base text-charcoal hover:bg-charcoal/5 transition-all text-center" 
+                  href="#background"
+                >
+                  Journey
+                </a>
+                <a 
+                  onClick={() => setIsMobileMenuOpen(false)} 
+                  className="px-4 py-2.5 rounded-2xl font-sans font-medium text-base text-charcoal hover:bg-charcoal/5 transition-all text-center" 
+                  href="#vistas"
+                >
+                  Vistas
+                </a>
+                <a 
+                  onClick={() => setIsMobileMenuOpen(false)} 
+                  className="px-4 py-2.5 rounded-2xl font-sans font-medium text-base text-charcoal hover:bg-charcoal/5 transition-all text-center" 
+                  href="#blogs"
+                >
+                  Blogs
+                </a>
+                <a 
+                  onClick={() => setIsMobileMenuOpen(false)} 
+                  className="mt-2 px-6 py-3 bg-gradient-to-r from-charcoal to-charcoal-light text-white rounded-full font-sans font-semibold text-sm tracking-wider uppercase text-center hover:shadow-md transition-all flex items-center justify-center gap-2" 
+                  href="#accolades"
+                >
+                  Accolades
+                </a>
+              </div>
+            )}
           </div>
-        </div>
-      </nav>
+        </nav>
+      </div>
 
       {/* Hero Section */}
       <section className="relative min-h-[100svh] md:min-h-screen flex flex-col justify-between pt-24 md:pt-28 pb-8 md:pb-12 overflow-hidden premium-glow-bg select-text" id="intro">
         {/* Background Italic Text "Hey, there" */}
-        <div className="absolute inset-x-0 top-[18%] md:top-[12%] text-center z-0 pointer-events-none select-none flex justify-center items-center gap-[12vw] md:gap-[26rem] xl:gap-[36rem]">
-          <h2 className="hero-bg-text font-serif-italic text-[26vw] md:text-[16vw] font-light text-charcoal leading-none tracking-tight">Hey,</h2>
-          <h2 className="hero-bg-text font-serif-italic text-[26vw] md:text-[16vw] font-light text-charcoal leading-none tracking-tight">there</h2>
+        <div className="absolute inset-x-0 top-[16%] lg:top-[12%] text-center z-0 pointer-events-none select-none flex flex-col lg:flex-row justify-center items-center gap-1 lg:gap-[26rem] xl:gap-[36rem]">
+          <h2 className="hero-bg-text font-serif-italic text-[20vw] lg:text-[16vw] font-light text-charcoal leading-none tracking-tight">Hey,</h2>
+          <h2 className="hero-bg-text font-serif-italic text-[20vw] lg:text-[16vw] font-light text-charcoal leading-none tracking-tight">there</h2>
         </div>
 
         {/* Central visual items */}
@@ -510,11 +581,11 @@ export default function Home() {
         </div>
 
         {/* Bottom stylized typography */}
-        <div className="w-full max-w-[95rem] mx-auto px-4 md:px-8 xl:px-12 flex flex-col md:flex-row justify-between items-center md:items-end gap-2 md:gap-4 z-50 select-none pb-4 md:pb-6 relative pointer-events-none">
-          <h1 className="hero-bottom-title font-sans-ultra-bold text-4xl sm:text-5xl md:text-[6.5rem] xl:text-[7.5rem] uppercase leading-[0.85] text-charcoal text-center md:text-left tracking-tighter whitespace-nowrap relative pointer-events-auto w-full md:w-auto md:-translate-x-12 xl:-translate-x-24">
+        <div className="w-full max-w-[95rem] mx-auto px-6 md:px-8 xl:px-12 flex flex-col lg:flex-row justify-between items-center lg:items-end gap-4 lg:gap-4 z-50 select-none pb-4 md:pb-6 relative pointer-events-none">
+          <h1 className="hero-bottom-title font-sans-ultra-bold text-4xl sm:text-5xl lg:text-[6.5rem] xl:text-[7.5rem] uppercase leading-[0.85] text-charcoal text-center lg:text-left tracking-tighter whitespace-normal lg:whitespace-nowrap relative pointer-events-auto w-full lg:w-auto lg:-translate-x-12 xl:-translate-x-24">
             I AM <span className="block">{profile?.name || "JAHNVI"}</span>
           </h1>
-          <h2 className="hero-bottom-title font-sans-ultra-bold text-2xl sm:text-3xl md:text-[4rem] xl:text-[5.5rem] uppercase leading-[0.85] text-charcoal text-center md:text-right tracking-tighter whitespace-nowrap relative pointer-events-auto w-full md:w-auto md:translate-x-16 xl:translate-x-32 mt-3 md:mt-0">
+          <h2 className="hero-bottom-title font-sans-ultra-bold text-2xl sm:text-3xl lg:text-[4rem] xl:text-[5.5rem] uppercase leading-[0.85] text-charcoal text-center lg:text-right tracking-tighter whitespace-normal lg:whitespace-nowrap relative pointer-events-auto w-full lg:w-auto lg:translate-x-16 xl:translate-x-32 mt-2 lg:mt-0">
             RESEARCHER <span className="block">AND WRITER</span>
           </h2>
         </div>
@@ -535,7 +606,7 @@ export default function Home() {
             </div>
             <div className="lg:col-span-8 space-y-8" id="statement-content">
               {/* Quote layout - glassmorphism wrapper */}
-              <div className="glassmorphism-premium border border-olive/10 rounded-[2.5rem] p-8 md:p-12 relative overflow-hidden">
+              <div className="glassmorphism-premium bg-pastel-purple/15 border border-olive/10 rounded-[2.5rem] p-8 md:p-12 relative overflow-hidden">
                 <span className="absolute -left-2 -top-12 text-[10rem] text-olive/5 font-serif-italic select-none pointer-events-none">“</span>
                 <p className="font-serif-italic text-2xl md:text-3xl text-olive leading-relaxed relative z-10">
                   'Sarva Saha' — <span className="text-gold-accent font-sans-ultra-bold font-normal not-italic">संस्कृत:</span> A harmonious, organic equilibrium and co-existence between humanity, green policies, and our biospheric boundaries.
@@ -550,35 +621,48 @@ export default function Home() {
 
           {/* Domain Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-6">
-            {researchInterests.map((interest, idx) => (
-              <div 
-                key={interest._id || idx} 
-                className="glassmorphism-premium p-10 rounded-[2.5rem] border border-charcoal/10 hover:border-olive/30 hover:-translate-y-2 transition-all duration-300 group flex flex-col justify-between"
-              >
-                <div>
-                  <div className="w-14 h-14 rounded-2xl bg-olive/5 flex items-center justify-center mb-8 group-hover:scale-105 transition-transform duration-300">
-                    <span className="material-symbols-outlined text-olive text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>
-                      {getInterestIcon(interest.iconName)}
-                    </span>
+            {researchInterests.map((interest, idx) => {
+              const pastelBgColors = [
+                "bg-pastel-pink/20 hover:bg-pastel-pink/30",
+                "bg-pastel-blue/20 hover:bg-pastel-blue/30",
+                "bg-pastel-mint/20 hover:bg-pastel-mint/30"
+              ];
+              const bgs = pastelBgColors[idx % pastelBgColors.length];
+              return (
+                <div 
+                  key={interest._id || idx} 
+                  className={`glassmorphism-premium p-10 rounded-[2.5rem] border border-charcoal/10 hover:-translate-y-2 transition-all duration-500 group flex flex-col justify-between ${bgs}`}
+                >
+                  <div>
+                    <div className="w-14 h-14 rounded-2xl bg-olive/5 flex items-center justify-center mb-8 group-hover:scale-105 transition-transform duration-300">
+                      <span className="material-symbols-outlined text-olive text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>
+                        {getInterestIcon(interest.iconName)}
+                      </span>
+                    </div>
+                    <h3 className="font-sans-ultra-bold text-xl uppercase tracking-tight text-charcoal mb-4">{interest.title}</h3>
+                    <p className="font-sans text-sm text-charcoal-light leading-relaxed">{interest.description}</p>
                   </div>
-                  <h3 className="font-sans-ultra-bold text-xl uppercase tracking-tight text-charcoal mb-4">{interest.title}</h3>
-                  <p className="font-sans text-sm text-charcoal-light leading-relaxed">{interest.description}</p>
+                  <div className="w-12 h-1 bg-gold-accent/20 mt-8 rounded-full group-hover:w-20 group-hover:bg-gold-accent/40 transition-all duration-300"></div>
                 </div>
-                <div className="w-12 h-1 bg-gold-accent/20 mt-8 rounded-full group-hover:w-20 group-hover:bg-gold-accent/40 transition-all duration-300"></div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
 
+
       {/* Academic Background (Timeline) */}
-      <section className="section-padding bg-cream-light relative overflow-hidden" id="background">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(253,230,138,0.2),transparent_40%)] pointer-events-none"></div>
+      <section className="section-padding premium-glow-alt-1 relative overflow-hidden" id="background">
+        {/* Large Decorative Watermark */}
+        <div className="absolute inset-x-0 top-12 text-center pointer-events-none select-none z-0">
+          <span className="section-watermark text-[14vw] md:text-[10vw] block">Scholastic</span>
+        </div>
+        
         <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop text-center mb-20 relative z-10">
           <span className="font-label-md text-gold-accent uppercase tracking-widest text-xs font-bold block mb-3">Scholastic Journey</span>
           <h2 className="font-headline-lg text-4xl md:text-5xl text-charcoal font-bold">Academic Background</h2>
           <p className="font-serif-italic text-lg text-charcoal-light mt-4">A journey of scholarship and continuous evolution</p>
-          <div className="w-20 h-1 bg-gold-accent mx-auto mt-6 rounded-full"></div>
+          <div className="w-16 h-1 bg-olive/45 mx-auto mt-6 rounded-full"></div>
         </div>
         
         <div className="max-w-4xl mx-auto px-margin-mobile relative z-10">
@@ -616,10 +700,10 @@ export default function Home() {
                     <div 
                       className={`w-full p-8 glassmorphism-premium rounded-3xl border transition-all duration-300 hover:shadow-lg ${
                         event.isHighlight 
-                          ? 'border-gold-accent/30 bg-gold-accent/5 shadow-xs' 
+                          ? 'border-gold-accent/30 bg-pastel-yellow/30 shadow-xs' 
                           : isEven 
-                            ? 'border-l-4 border-l-gold-accent border-r-charcoal/10 border-t-charcoal/10 border-b-charcoal/10' 
-                            : 'border-r-4 border-r-olive border-l-charcoal/10 border-t-charcoal/10 border-b-charcoal/10'
+                            ? 'border-l-4 border-l-gold-accent bg-pastel-purple/20 border-r-charcoal/10 border-t-charcoal/10 border-b-charcoal/10' 
+                            : 'border-r-4 border-r-olive bg-pastel-blue/20 border-l-charcoal/10 border-t-charcoal/10 border-b-charcoal/10'
                       }`}
                     >
                       {event.isHighlight && (
@@ -638,17 +722,23 @@ export default function Home() {
         </div>
       </section>
 
+
       {/* Research Papers */}
-      <section className="section-padding bg-cream-lightest relative overflow-hidden" id="research-papers">
-        <div className="absolute right-0 top-1/4 w-80 h-80 bg-cream-medium/20 rounded-full blur-3xl pointer-events-none"></div>
+      <section className="section-padding premium-glow-alt-2 relative overflow-hidden" id="research-papers">
+        {/* Large Decorative Watermark */}
+        <div className="absolute inset-x-0 top-12 text-center pointer-events-none select-none z-0">
+          <span className="section-watermark text-[14vw] md:text-[10vw] block">Publications</span>
+        </div>
+        
         <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop relative z-10">
           <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6 border-b border-charcoal/5 pb-8">
-            <div>
-              <span className="font-label-md text-gold-accent uppercase tracking-widest text-xs font-bold block mb-3">Scholarly Publications</span>
+            <div className="space-y-2">
+              <span className="font-label-md text-gold-accent uppercase tracking-widest text-xs font-bold block">Scholarly Publications</span>
               <h2 className="font-headline-lg text-4xl md:text-5xl text-charcoal font-bold">Selected Research Papers</h2>
+              <p className="font-serif-italic text-lg text-charcoal-light">Academic investigations addressing critical ecological, digital, and statecraft challenges</p>
             </div>
             <a 
-              className="font-sans text-sm font-bold text-olive flex items-center gap-2 group pb-1 transition-all border-b border-olive/30 hover:border-olive hover:text-gold-accent" 
+              className="font-sans text-sm font-bold text-olive flex items-center gap-2 group pb-1 transition-all border-b border-olive/30 hover:border-olive hover:text-gold-accent shrink-0" 
               href={profile.contact?.googleScholar || "https://scholar.google.com"} 
               target="_blank" 
               rel="noopener noreferrer"
@@ -661,82 +751,95 @@ export default function Home() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {researchPapers.map((paper, idx) => (
-              <div 
-                key={paper._id || idx} 
-                className={`glassmorphism-premium p-10 rounded-[2.5rem] hover:-translate-y-2 hover:border-olive/20 hover:shadow-xl transition-all duration-500 paper-card-item flex flex-col justify-between group border border-charcoal/10`}
-              >
-                <div>
-                  <div className="flex justify-between items-start mb-6">
-                    <span className={`px-4 py-1.5 text-[10px] font-sans font-bold uppercase rounded-full tracking-wider ${
-                      paper.type === 'published' 
-                        ? 'bg-olive/10 text-olive border border-olive/10' 
-                        : 'bg-gold-accent/10 text-gold-accent border border-gold-accent/10'
-                    }`}>
-                      {paper.type} • {paper.date}
-                    </span>
-                    <span className={`material-symbols-outlined text-warm-gray-light transition-colors text-2xl ${
-                      paper.type === 'published' ? 'group-hover:text-olive' : 'group-hover:text-gold-accent'
-                    }`}>
-                      {paper.type === 'published' ? 'article' : 'present_to_all'}
-                    </span>
+            {researchPapers.map((paper, idx) => {
+              const pastelBgColors = [
+                "bg-pastel-blue/15 hover:bg-pastel-blue/25",
+                "bg-pastel-pink/15 hover:bg-pastel-pink/25",
+                "bg-pastel-mint/15 hover:bg-pastel-mint/25"
+              ];
+              const bgs = pastelBgColors[idx % pastelBgColors.length];
+              return (
+                <div 
+                  key={paper._id || idx} 
+                  className={`glassmorphism-premium p-10 rounded-[2.5rem] hover:-translate-y-2 hover:border-olive/20 hover:shadow-xl transition-all duration-500 paper-card-item flex flex-col justify-between group border border-charcoal/10 ${bgs}`}
+                >
+                  <div>
+                    <div className="flex justify-between items-start mb-6">
+                      <span className={`px-4 py-1.5 text-[10px] font-sans font-bold uppercase rounded-full tracking-wider ${
+                        paper.type === 'published' 
+                          ? 'bg-olive/10 text-olive border border-olive/10' 
+                          : 'bg-gold-accent/10 text-gold-accent border border-gold-accent/10'
+                      }`}>
+                        {paper.type} • {paper.date}
+                      </span>
+                      <span className={`material-symbols-outlined text-warm-gray-light transition-colors text-2xl ${
+                        paper.type === 'published' ? 'group-hover:text-olive' : 'group-hover:text-gold-accent'
+                      }`}>
+                        {paper.type === 'published' ? 'article' : 'present_to_all'}
+                      </span>
+                    </div>
+
+                    <h3 className="font-sans-ultra-bold text-lg md:text-xl leading-snug mb-4 text-charcoal uppercase group-hover:text-olive transition-colors duration-300">
+                      {paper.title}
+                    </h3>
+
+                    {paper.award && (
+                      <div className="flex items-center gap-1.5 text-[10px] font-sans font-bold text-gold-accent uppercase tracking-widest mb-4">
+                        <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>emoji_events</span>
+                        {paper.award}
+                      </div>
+                    )}
+
+                    <p className="font-sans text-sm text-charcoal-light mb-8 line-clamp-4 leading-relaxed">
+                      {paper.abstract || paper.description}
+                    </p>
                   </div>
 
-                  <h3 className="font-sans-ultra-bold text-lg md:text-xl leading-snug mb-4 text-charcoal uppercase group-hover:text-olive transition-colors duration-300">
-                    {paper.title}
-                  </h3>
-
-                  {paper.award && (
-                    <div className="flex items-center gap-1.5 text-[10px] font-sans font-bold text-gold-accent uppercase tracking-widest mb-4">
-                      <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>emoji_events</span>
-                      {paper.award}
-                    </div>
-                  )}
-
-                  <p className="font-sans text-sm text-charcoal-light mb-8 line-clamp-4 leading-relaxed">
-                    {paper.abstract || paper.description}
-                  </p>
+                  <div className="space-y-3 pt-6 border-t border-charcoal/5">
+                    {(paper.paperUrl || paper.pdfUrl) && (
+                      <a 
+                        href={paper.paperUrl || paper.pdfUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className={`inline-flex items-center gap-2 text-xs font-sans font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                          paper.type === 'published' ? 'text-olive hover:text-gold-accent' : 'text-gold-accent hover:text-olive'
+                        }`}
+                      >
+                        Read Publication 
+                        <span className="material-symbols-outlined text-[16px] transition-transform group-hover:translate-x-1">arrow_forward</span>
+                      </a>
+                    )}
+                    {paper.type === 'presented' && paper.images && paper.images.length > 0 && (
+                      <button 
+                        onClick={() => { setActivePaperSlides(paper); setSlideIndex(0); }} 
+                        className="flex items-center gap-2 text-xs font-sans font-bold uppercase tracking-wider text-gold-accent hover:text-olive transition-colors cursor-pointer w-full text-left"
+                      >
+                        <span className="material-symbols-outlined text-[18px]">slideshow</span>
+                        View Slides &amp; Media ({paper.images.length})
+                      </button>
+                    )}
+                  </div>
                 </div>
-
-                <div className="space-y-3 pt-6 border-t border-charcoal/5">
-                  {(paper.paperUrl || paper.pdfUrl) && (
-                    <a 
-                      href={paper.paperUrl || paper.pdfUrl} 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className={`inline-flex items-center gap-2 text-xs font-sans font-bold uppercase tracking-wider transition-all cursor-pointer ${
-                        paper.type === 'published' ? 'text-olive hover:text-gold-accent' : 'text-gold-accent hover:text-olive'
-                      }`}
-                    >
-                      Read Publication 
-                      <span className="material-symbols-outlined text-[16px] transition-transform group-hover:translate-x-1">arrow_forward</span>
-                    </a>
-                  )}
-                  {paper.type === 'presented' && paper.images && paper.images.length > 0 && (
-                    <button 
-                      onClick={() => { setActivePaperSlides(paper); setSlideIndex(0); }} 
-                      className="flex items-center gap-2 text-xs font-sans font-bold uppercase tracking-wider text-gold-accent hover:text-olive transition-colors cursor-pointer w-full text-left"
-                    >
-                      <span className="material-symbols-outlined text-[18px]">slideshow</span>
-                      View Slides &amp; Media ({paper.images.length})
-                    </button>
-                  )}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
 
+
       {/* Intellectual Vistas (Summits) */}
-      <section className="section-padding bg-cream-light relative overflow-hidden" id="vistas">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(254,243,199,0.3),transparent_50%)] pointer-events-none"></div>
+      <section className="section-padding premium-glow-alt-1 relative overflow-hidden" id="vistas">
+        {/* Large Decorative Watermark */}
+        <div className="absolute inset-x-0 top-12 text-center pointer-events-none select-none z-0">
+          <span className="section-watermark text-[14vw] md:text-[10vw] block">Summits</span>
+        </div>
+        
         <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop relative z-10">
           <div className="text-center mb-20">
             <span className="font-label-md text-gold-accent uppercase tracking-widest text-xs font-bold block mb-3">Exploring the Summits</span>
             <h2 className="font-headline-lg text-4xl md:text-5xl text-charcoal font-bold">Intellectual Vistas</h2>
             <p className="font-serif-italic text-lg text-charcoal-light mt-4">Keynotes, discussions, and leadership in ecological discourses</p>
-            <div className="w-20 h-1 bg-gold-accent mx-auto mt-6 rounded-full"></div>
+            <div className="w-16 h-1 bg-olive/45 mx-auto mt-6 rounded-full"></div>
           </div>
           <div className="space-y-24">
             {intellectualVistas.map((vista, idx) => (
@@ -746,9 +849,14 @@ export default function Home() {
         </div>
       </section>
 
+
       {/* Blogs */}
       <section className="section-padding bg-cream-lightest relative overflow-hidden" id="blogs">
-        <div className="absolute left-0 bottom-1/4 w-96 h-96 bg-cream-medium/20 rounded-full blur-3xl pointer-events-none"></div>
+        {/* Large Decorative Watermark */}
+        <div className="absolute inset-x-0 top-12 text-center pointer-events-none select-none z-0">
+          <span className="section-watermark text-[14vw] md:text-[10vw] block">Wending</span>
+        </div>
+        
         <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop relative z-10">
           <div className="mb-16 border-b border-charcoal/5 pb-8">
             <span className="font-label-md text-gold-accent uppercase tracking-widest text-xs font-bold block mb-3">Wending Writer</span>
@@ -815,8 +923,13 @@ export default function Home() {
         </div>
       </section>
 
+
       {/* Excellence Badges */}
       <section className="section-padding bg-gradient-to-b from-cream-lightest to-cream-medium relative overflow-hidden" id="accolades">
+        {/* Large Decorative Watermark */}
+        <div className="absolute inset-x-0 top-12 text-center pointer-events-none select-none z-0">
+          <span className="section-watermark text-[14vw] md:text-[10vw] block">Accolades</span>
+        </div>
         <div className="absolute left-0 bottom-0 w-80 h-80 bg-olive/5 rounded-full blur-3xl pointer-events-none"></div>
         <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
@@ -836,48 +949,51 @@ export default function Home() {
 
             {/* Right Column: Interactive Luxury Credentials Cards */}
             <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-8">
-              {certificates.map((cert, idx) => (
-                <div 
-                  key={cert._id || idx} 
-                  onClick={() => setActiveCertificate(cert)}
-                  className="glassmorphism-premium border border-charcoal/10 rounded-[2.5rem] p-8 md:p-10 relative overflow-hidden flex flex-col justify-between group cursor-pointer hover:shadow-xl hover:border-gold-accent/20 hover:-translate-y-2 transition-all duration-500"
-                >
-                  {/* Subtle Security Radial Gradient Background */}
-                  <div className="absolute -right-20 -top-20 w-48 h-48 rounded-full bg-gold-accent/5 group-hover:bg-gold-accent/10 transition-colors duration-500 blur-2xl pointer-events-none"></div>
+              {certificates.map((cert, idx) => {
+                const bgs = idx % 2 === 0 ? "bg-pastel-purple/15 hover:bg-pastel-purple/25" : "bg-pastel-peach/15 hover:bg-pastel-peach/25";
+                return (
+                  <div 
+                    key={cert._id || idx} 
+                    onClick={() => setActiveCertificate(cert)}
+                    className={`glassmorphism-premium border border-charcoal/10 rounded-[2.5rem] p-8 md:p-10 relative overflow-hidden flex flex-col justify-between group cursor-pointer hover:shadow-xl hover:-translate-y-2 transition-all duration-500 ${bgs}`}
+                  >
+                    {/* Subtle Security Radial Gradient Background */}
+                    <div className="absolute -right-20 -top-20 w-48 h-48 rounded-full bg-gold-accent/5 group-hover:bg-gold-accent/10 transition-colors duration-500 blur-2xl pointer-events-none"></div>
 
-                  <div>
-                    {/* Golden Emblem badge */}
-                    <div className="w-14 h-14 rounded-2xl bg-gold-accent/10 border border-gold-accent/20 flex items-center justify-center shadow-xs mb-8 group-hover:scale-105 group-hover:rotate-6 transition-all duration-500">
-                      <span className="material-symbols-outlined text-gold-accent text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>
-                        {idx === 0 ? 'verified' : 'verified_user'}
-                      </span>
+                    <div>
+                      {/* Golden Emblem badge */}
+                      <div className="w-14 h-14 rounded-2xl bg-gold-accent/10 border border-gold-accent/20 flex items-center justify-center shadow-xs mb-8 group-hover:scale-105 group-hover:rotate-6 transition-all duration-500">
+                        <span className="material-symbols-outlined text-gold-accent text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>
+                          {idx === 0 ? 'verified' : 'verified_user'}
+                        </span>
+                      </div>
+
+                      {/* Official Subtitle */}
+                      <span className="text-[9px] text-gold-accent font-sans font-bold uppercase tracking-widest block mb-2">{cert.issuer || "UGC / NTA"}</span>
+
+                      {/* Title */}
+                      <h3 className="font-sans-ultra-bold text-lg text-charcoal uppercase leading-tight mb-4 min-h-[3rem] group-hover:text-olive transition-colors duration-300">
+                        {cert.title}
+                      </h3>
                     </div>
 
-                    {/* Official Subtitle */}
-                    <span className="text-[9px] text-gold-accent font-sans font-bold uppercase tracking-widest block mb-2">{cert.issuer || "UGC / NTA"}</span>
+                    {/* Verification Capsules and Actions */}
+                    <div className="pt-6 border-t border-charcoal/5 space-y-4">
+                      <div className="flex justify-between items-center">
+                        <span className="bg-emerald-900/5 text-emerald-800 border border-emerald-600/10 text-[9px] uppercase font-sans font-bold tracking-widest px-3 py-1 rounded-full inline-flex items-center gap-1">
+                          <span className="material-symbols-outlined text-xs">check_circle</span> VERIFIED
+                        </span>
+                        <span className="text-[10px] text-charcoal-light font-bold uppercase tracking-wider">{cert.date || "2026"}</span>
+                      </div>
 
-                    {/* Title */}
-                    <h3 className="font-sans-ultra-bold text-lg text-charcoal uppercase leading-tight mb-4 min-h-[3rem] group-hover:text-olive transition-colors duration-300">
-                      {cert.title}
-                    </h3>
-                  </div>
-
-                  {/* Verification Capsules and Actions */}
-                  <div className="pt-6 border-t border-charcoal/5 space-y-4">
-                    <div className="flex justify-between items-center">
-                      <span className="bg-emerald-900/5 text-emerald-800 border border-emerald-600/10 text-[9px] uppercase font-sans font-bold tracking-widest px-3 py-1 rounded-full inline-flex items-center gap-1">
-                        <span className="material-symbols-outlined text-xs">check_circle</span> VERIFIED
-                      </span>
-                      <span className="text-[10px] text-charcoal-light font-bold uppercase tracking-wider">{cert.date || "2026"}</span>
+                      <button className="flex items-center gap-2 text-xs font-sans font-bold uppercase tracking-widest text-olive group-hover:text-gold-accent transition-colors duration-300 w-full text-left">
+                        View Certificate 
+                        <span className="material-symbols-outlined text-sm transition-transform group-hover:translate-x-1">arrow_forward</span>
+                      </button>
                     </div>
-
-                    <button className="flex items-center gap-2 text-xs font-sans font-bold uppercase tracking-widest text-olive group-hover:text-gold-accent transition-colors duration-300 w-full text-left">
-                      View Certificate 
-                      <span className="material-symbols-outlined text-sm transition-transform group-hover:translate-x-1">arrow_forward</span>
-                    </button>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
             
           </div>
@@ -886,7 +1002,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="bg-cream-medium/40 w-full py-20 border-t border-charcoal/5 relative z-10">
-        <div className="flex flex-col md:flex-row justify-between items-center px-margin-desktop gap-gutter max-w-container-max mx-auto">
+        <div className="flex flex-col md:flex-row justify-between items-center px-margin-mobile md:px-margin-desktop gap-gutter max-w-container-max mx-auto">
           <div className="space-y-4 text-center md:text-left">
             <span className="font-serif-italic text-3xl text-charcoal font-bold block">Jahnvi.</span>
             <p className="font-sans text-sm text-charcoal-light max-w-xs leading-relaxed">

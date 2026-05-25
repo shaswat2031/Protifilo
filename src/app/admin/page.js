@@ -642,7 +642,7 @@ export default function AdminDashboard() {
       <main className="mx-auto max-w-7xl px-6 pt-8 md:px-12 grid gap-8 lg:grid-cols-12">
         
         {/* Left Side Tab Controls */}
-        <nav className="lg:col-span-3 space-y-2 bg-cream-medium/50 p-4 border border-olive/5 rounded-xl h-fit">
+        <nav className="lg:col-span-3 flex flex-row overflow-x-auto lg:flex-col lg:space-y-2 gap-2 bg-cream-medium/50 p-4 border border-olive/5 rounded-xl h-fit w-full scrollbar-none">
           {[
             { id: "profile", label: "Profile Information", icon: User },
             { id: "milestone", label: "Academic timeline", icon: GraduationCap },
@@ -660,7 +660,7 @@ export default function AdminDashboard() {
                   setShowModal(null);
                   setEditItem(null);
                 }}
-                className={`w-full flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-semibold tracking-wide transition-all ${
+                className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-semibold tracking-wide transition-all shrink-0 whitespace-nowrap lg:w-full ${
                   activeTab === tab.id
                     ? "bg-olive text-cream-lightest shadow-lg shadow-olive/15"
                     : "text-charcoal-light hover:bg-olive/10 hover:text-charcoal"

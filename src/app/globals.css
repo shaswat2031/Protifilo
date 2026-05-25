@@ -15,6 +15,13 @@
   --color-gold-accent: #89502e;
   --color-forest-dark: #1F2E1B;
 
+  --color-pastel-pink: #ffe4e6;
+  --color-pastel-purple: #ede9fe;
+  --color-pastel-blue: #e0f2fe;
+  --color-pastel-mint: #d1fae5;
+  --color-pastel-peach: #ffedd5;
+  --color-pastel-yellow: #fef08a;
+
   --color-background: #FBF5E8;
   --color-on-secondary: #ffffff;
   --color-tertiary-fixed-dim: #cbc6ba;
@@ -380,9 +387,9 @@
 
 /* Premium Madison Redesign Custom Styles */
 .premium-glow-bg {
-  background: radial-gradient(circle at 50% 25%, rgba(254, 243, 199, 0.75), rgba(255, 255, 255, 0) 55%),
-              radial-gradient(circle at 85% 65%, rgba(253, 230, 138, 0.4), rgba(255, 255, 255, 0) 45%),
-              radial-gradient(circle at 15% 75%, rgba(254, 243, 199, 0.35), rgba(255, 255, 255, 0) 45%),
+  background: radial-gradient(circle at 50% 25%, rgba(237, 233, 254, 0.65), rgba(255, 255, 255, 0) 55%),
+              radial-gradient(circle at 85% 65%, rgba(255, 228, 230, 0.6), rgba(255, 255, 255, 0) 50%),
+              radial-gradient(circle at 15% 75%, rgba(209, 250, 229, 0.5), rgba(255, 255, 255, 0) 50%),
               #FFFDF9;
 }
 
@@ -415,14 +422,14 @@
 
 /* Alternating premium section glow backgrounds (matches hero premium-glow-bg) */
 .premium-glow-alt-1 {
-  background: radial-gradient(ellipse at 80% 20%, rgba(254, 243, 199, 0.55), transparent 55%),
-              radial-gradient(ellipse at 15% 85%, rgba(253, 230, 138, 0.3), transparent 45%),
+  background: radial-gradient(ellipse at 80% 20%, rgba(224, 242, 254, 0.6), transparent 55%),
+              radial-gradient(ellipse at 15% 85%, rgba(237, 233, 254, 0.5), transparent 45%),
               #FFFDF9;
 }
 
 .premium-glow-alt-2 {
-  background: radial-gradient(ellipse at 15% 25%, rgba(254, 243, 199, 0.5), transparent 50%),
-              radial-gradient(ellipse at 90% 80%, rgba(253, 230, 138, 0.35), transparent 50%),
+  background: radial-gradient(ellipse at 15% 25%, rgba(255, 237, 213, 0.6), transparent 50%),
+              radial-gradient(ellipse at 90% 80%, rgba(255, 228, 230, 0.55), transparent 50%),
               #FDF9F0;
 }
 

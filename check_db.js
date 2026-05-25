@@ -1,4 +1,8 @@
 const mongoose = require("mongoose");
+const dns = require("dns");
+
+// Set Google DNS to bypass SRV query issues
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/jahnvi_portfolio";
 

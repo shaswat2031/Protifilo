@@ -1,4 +1,8 @@
 import mongoose from "mongoose";
+import dns from "dns";
+
+// Set Google DNS to bypass SRV query issues on local machine
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://jhavani:jhavani@cluster0.0tqeuqa.mongodb.net/jahnvi_portfolio?appName=Cluster0";
 
