@@ -126,87 +126,125 @@
     font-family: var(--font-outfit), sans-serif;
   }
 }
+
 /* Glass card styling */
 .glass-card {
-    background: rgba(255, 255, 255, 0.45);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.5)
-    }
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.5)
+}
+
 .paper-card {
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.8);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03)
-    }
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03)
+}
+
 .material-symbols-outlined {
-    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
-    }
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
+}
+
 .rotate-slow {
-    animation: rotate 25s linear infinite
-    }
+  animation: rotate 25s linear infinite
+}
+
 @keyframes rotate {
-    from {
-        transform: rotate(0deg);
-        } to {
-        transform: rotate(360deg);
-        }
-    }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .section-padding {
-    padding-top: 100px;
-    padding-bottom: 100px
-    }
+  padding-top: 100px;
+  padding-bottom: 100px
+}
+
 @media (max-width: 768px) {
-    .section-padding {
-        padding-top: 60px;
-        padding-bottom: 60px
-        }
-    }
+  .section-padding {
+    padding-top: 60px;
+    padding-bottom: 60px
+  }
+}
+
 /* Mouse light effect container */
 #light-effect {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(600px at var(--x, 0) var(--y, 0), rgba(67, 92, 60, 0.03), transparent 80%);
-    pointer-events: none;
-    z-index: 1
-    }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(600px at var(--x, 0) var(--y, 0), rgba(67, 92, 60, 0.03), transparent 80%);
+  pointer-events: none;
+  z-index: 1
+}
+
 .char {
-    display: inline-block;
-    opacity: 0
-    }
+  display: inline-block;
+  opacity: 0
+}
+
 .vista-overlap-item:nth-child(even) {
-    margin-top: -40px
-    }
+  margin-top: -40px
+}
+
 .btn-hover-effect {
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)
-    }
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)
+}
+
 .btn-hover-effect:hover {
-    transform: translatey(-3px);
-    box-shadow: 0 10px 20px -5px rgba(67, 92, 60, 0.3)
-    }
+  transform: translatey(-3px);
+  box-shadow: 0 10px 20px -5px rgba(67, 92, 60, 0.3)
+}
 
 /* Custom premium transition keyframes and helper classes */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slideIn {
-  from { transform: translateX(100%); }
-  to { transform: translateX(0); }
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
 }
 
 @keyframes scaleUp {
-  from { transform: scale(0.95); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 @keyframes pulseSlow {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.02); }
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.02);
+  }
 }
 
 .animate-fade-in {
@@ -232,6 +270,7 @@
   overflow-y: auto;
   outline: none;
 }
+
 .editor-canvas[contenteditable]:empty:before {
   content: attr(placeholder);
   color: #74796f;
@@ -239,6 +278,7 @@
   font-style: italic;
   opacity: 0.85;
 }
+
 /* Visual Heading and paragraph styling for MS Word live editor experience */
 .editor-canvas h1 {
   font-size: 2.25rem !important;
@@ -250,6 +290,7 @@
   line-height: 1.25 !important;
   display: block !important;
 }
+
 .editor-canvas h2 {
   font-size: 1.75rem !important;
   font-weight: 600 !important;
@@ -260,6 +301,7 @@
   line-height: 1.3 !important;
   display: block !important;
 }
+
 .editor-canvas h3 {
   font-size: 1.35rem !important;
   font-weight: 600 !important;
@@ -270,28 +312,33 @@
   line-height: 1.4 !important;
   display: block !important;
 }
+
 .editor-canvas p {
   font-size: 0.875rem !important;
   margin-bottom: 0.75rem !important;
   line-height: 1.6 !important;
   display: block !important;
 }
+
 .editor-canvas ul {
   list-style-type: disc !important;
   margin-left: 1.75rem !important;
   margin-bottom: 0.75rem !important;
   display: block !important;
 }
+
 .editor-canvas ol {
   list-style-type: decimal !important;
   margin-left: 1.75rem !important;
   margin-bottom: 0.75rem !important;
   display: block !important;
 }
+
 .editor-canvas li {
   margin-bottom: 0.25rem !important;
   display: list-item !important;
 }
+
 /* Ensure tables have visible borders inside editor canvas */
 .editor-canvas table {
   border-collapse: collapse;
@@ -299,11 +346,14 @@
   margin: 1rem 0;
   border: 1px solid #c3c8bd;
 }
-.editor-canvas th, .editor-canvas td {
+
+.editor-canvas th,
+.editor-canvas td {
   border: 1px solid #c3c8bd;
   padding: 8px 12px;
   text-align: left;
 }
+
 .editor-canvas th {
   background-color: rgba(67, 92, 60, 0.05);
   font-weight: bold;
@@ -320,6 +370,7 @@
   line-height: 1.25 !important;
   display: block !important;
 }
+
 .rich-text-content h2 {
   font-size: 1.75rem !important;
   font-weight: 600 !important;
@@ -330,6 +381,7 @@
   line-height: 1.3 !important;
   display: block !important;
 }
+
 .rich-text-content h3 {
   font-size: 1.35rem !important;
   font-weight: 600 !important;
@@ -340,6 +392,7 @@
   line-height: 1.4 !important;
   display: block !important;
 }
+
 .rich-text-content p {
   font-size: 1.125rem !important;
   margin-bottom: 1rem !important;
@@ -347,18 +400,21 @@
   color: #434840 !important;
   display: block !important;
 }
+
 .rich-text-content ul {
   list-style-type: disc !important;
   margin-left: 2rem !important;
   margin-bottom: 1rem !important;
   display: block !important;
 }
+
 .rich-text-content ol {
   list-style-type: decimal !important;
   margin-left: 2rem !important;
   margin-bottom: 1rem !important;
   display: block !important;
 }
+
 .rich-text-content li {
   margin-bottom: 0.5rem !important;
   font-size: 1.125rem !important;
@@ -366,6 +422,7 @@
   color: #434840 !important;
   display: list-item !important;
 }
+
 .rich-text-content table {
   border-collapse: collapse !important;
   width: 100% !important;
@@ -374,11 +431,14 @@
   overflow: hidden !important;
   border-radius: 8px !important;
 }
-.rich-text-content th, .rich-text-content td {
+
+.rich-text-content th,
+.rich-text-content td {
   border: 1px solid #c3c8bd !important;
   padding: 12px 16px !important;
   text-align: left !important;
 }
+
 .rich-text-content th {
   background-color: rgba(67, 92, 60, 0.05) !important;
   font-weight: bold !important;
@@ -388,9 +448,9 @@
 /* Premium Madison Redesign Custom Styles */
 .premium-glow-bg {
   background: radial-gradient(circle at 50% 25%, rgba(237, 233, 254, 0.65), rgba(255, 255, 255, 0) 55%),
-              radial-gradient(circle at 85% 65%, rgba(255, 228, 230, 0.6), rgba(255, 255, 255, 0) 50%),
-              radial-gradient(circle at 15% 75%, rgba(209, 250, 229, 0.5), rgba(255, 255, 255, 0) 50%),
-              #FFFDF9;
+    radial-gradient(circle at 85% 65%, rgba(255, 228, 230, 0.6), rgba(255, 255, 255, 0) 50%),
+    radial-gradient(circle at 15% 75%, rgba(209, 250, 229, 0.5), rgba(255, 255, 255, 0) 50%),
+    #FFFDF9;
 }
 
 .font-serif-italic {
@@ -416,6 +476,7 @@
 .glow-dot-amber {
   box-shadow: 0 0 12px 2px rgba(245, 158, 11, 0.6);
 }
+
 .animate-ping-slow {
   animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
@@ -423,14 +484,14 @@
 /* Alternating premium section glow backgrounds (matches hero premium-glow-bg) */
 .premium-glow-alt-1 {
   background: radial-gradient(ellipse at 80% 20%, rgba(224, 242, 254, 0.6), transparent 55%),
-              radial-gradient(ellipse at 15% 85%, rgba(237, 233, 254, 0.5), transparent 45%),
-              #FFFDF9;
+    radial-gradient(ellipse at 15% 85%, rgba(237, 233, 254, 0.5), transparent 45%),
+    #FFFDF9;
 }
 
 .premium-glow-alt-2 {
   background: radial-gradient(ellipse at 15% 25%, rgba(255, 237, 213, 0.6), transparent 50%),
-              radial-gradient(ellipse at 90% 80%, rgba(255, 228, 230, 0.55), transparent 50%),
-              #FDF9F0;
+    radial-gradient(ellipse at 90% 80%, rgba(255, 228, 230, 0.55), transparent 50%),
+    #FDF9F0;
 }
 
 /* Large decorative watermark text (like hero's "Hey, there") */
@@ -444,5 +505,3 @@
   user-select: none;
   pointer-events: none;
 }
-
-

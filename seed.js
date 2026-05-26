@@ -256,6 +256,7 @@ async function seed() {
       pdfUrl: "https://drive.google.com/file/d/1tyFyygTZiVlbs01VVK17oDIV3afQ2bGZ/view?usp=drivesdk",
       abstract: "This paper analyzes the physical infrastructure of the internet—subsea telecommunication cables—and its profound ecological footprint. Deemed the 'arteries of the internet,' these subsea lines impact seabed environments, introducing physical hazards and thermal variations. By tracing the historical mapping of maritime routes, the paper unpacks 'cable colonialism' and details solutions for reconciling ecological sustainability with global telecommunications expansion.",
       description: "Major academic publication addressing the unseen ecological weight of subsea data transfer systems.",
+      images: ["10.png", "11.png"],
       order: 1
     },
     {
@@ -268,6 +269,7 @@ async function seed() {
       pdfUrl: "https://drive.google.com/file/d/1tNy6R8RJHo7Pc16pJU0S8OrtLX0KX8zM/view?usp=drivesdk",
       abstract: "Examining the dichotomy between rapid digitalization and global climate goals, this study decodes digital pollution—ranging from high-power servers and digital streams to electronic wastes. It analyzes the risk of 'developing dehumanization' as digital automation overrides human environmental sensitivity and outlines frameworks to align technological growth with absolute decarbonization metrics.",
       description: "Critical review of technological acceleration versus biosphere capacities.",
+      images: ["image.png"],
       order: 2
     },
     // Presented

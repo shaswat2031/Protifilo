@@ -230,6 +230,7 @@ export default function Home() {
 
   // New premium interactive states
   const [activeBlog, setActiveBlog] = useState(null);
+  const [activePaper, setActivePaper] = useState(null);
   const [activePaperSlides, setActivePaperSlides] = useState(null);
   const [slideIndex, setSlideIndex] = useState(0);
   const [activeCertificate, setActiveCertificate] = useState(null);
@@ -761,9 +762,44 @@ export default function Home() {
               return (
                 <div 
                   key={paper._id || idx} 
-                  className={`glassmorphism-premium p-10 rounded-[2.5rem] hover:-translate-y-2 hover:border-olive/20 hover:shadow-xl transition-all duration-500 paper-card-item flex flex-col justify-between group border border-charcoal/10 ${bgs}`}
+                  className={`glassmorphism-premium p-10 rounded-[2.5rem] hover:-translate-y-2 hover:border-olive/20 hover:shadow-xl transition-all duration-500 paper-card-item flex flex-col justify-between group border border-charcoal/10 h-full ${bgs}`}
                 >
                   <div>
+                    {paper.images && paper.images.length > 0 && (
+                      <div 
+                        onClick={() => {
+                          if (paper.type === 'published') {
+                            const url = paper.paperUrl || paper.pdfUrl;
+                            if (url) window.open(url, '_blank', 'noopener,noreferrer');
+                          } else {
+                            setActivePaperSlides(paper); 
+                            setSlideIndex(0);
+                          }
+                        }}
+                        className="w-full h-48 rounded-2xl overflow-hidden mb-6 relative group/img cursor-pointer border border-charcoal/5 shadow-xs bg-white/50"
+                      >
+                        <img 
+                          alt={paper.title} 
+                          src={`/api/images/${paper.images[0]}`} 
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-charcoal/20 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                          <span className="bg-[#FFFDF9]/95 text-charcoal font-sans font-bold text-[10px] uppercase tracking-widest px-3.5 py-2 rounded-full shadow-md flex items-center gap-1.5 backdrop-blur-xs transform translate-y-2 group-hover/img:translate-y-0 transition-all duration-300">
+                            <span className="material-symbols-outlined text-xs">
+                              {paper.type === 'published' ? 'open_in_new' : 'zoom_in'}
+                            </span>
+                            {paper.type === 'published' ? 'Read Publication' : 'Expand Slides'}
+                          </span>
+                        </div>
+                        {paper.images.length > 1 && (
+                          <div className="absolute bottom-3 right-3 bg-charcoal/75 backdrop-blur-xs text-white text-[9px] font-sans font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border border-white/10 flex items-center gap-1 shadow-sm">
+                            <span className="material-symbols-outlined text-[10px]" style={{ fontVariationSettings: "'FILL' 1" }}>filter</span>
+                            {paper.images.length} Slides
+                          </div>
+                        )}
+                      </div>
+                    )}
+
                     <div className="flex justify-between items-start mb-6">
                       <span className={`px-4 py-1.5 text-[10px] font-sans font-bold uppercase rounded-full tracking-wider ${
                         paper.type === 'published' 
@@ -779,20 +815,42 @@ export default function Home() {
                       </span>
                     </div>
 
-                    <h3 className="font-sans-ultra-bold text-lg md:text-xl leading-snug mb-4 text-charcoal uppercase group-hover:text-olive transition-colors duration-300">
-                      {paper.title}
-                    </h3>
+                    <div className="min-h-[5.5rem] lg:min-h-[5rem] flex flex-col justify-center mb-4">
+                      <h3 className="font-sans-ultra-bold text-lg md:text-xl leading-snug text-charcoal uppercase group-hover:text-olive transition-colors duration-300 line-clamp-3">
+                        {paper.title}
+                      </h3>
+                    </div>
 
-                    {paper.award && (
-                      <div className="flex items-center gap-1.5 text-[10px] font-sans font-bold text-gold-accent uppercase tracking-widest mb-4">
-                        <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>emoji_events</span>
-                        {paper.award}
-                      </div>
-                    )}
+                    <div className="h-6 flex items-center mb-4">
+                      {paper.award ? (
+                        <div className="flex items-center gap-1.5 text-[10px] font-sans font-bold text-gold-accent uppercase tracking-widest">
+                          <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>emoji_events</span>
+                          {paper.award}
+                        </div>
+                      ) : (
+                        <span className="block h-6" />
+                      )}
+                    </div>
 
-                    <p className="font-sans text-sm text-charcoal-light mb-8 line-clamp-4 leading-relaxed">
-                      {paper.abstract || paper.description}
-                    </p>
+                    <div className="h-20 mb-2 overflow-hidden">
+                      <p className="font-sans text-sm text-charcoal-light leading-relaxed line-clamp-3">
+                        {paper.abstract || paper.description}
+                      </p>
+                    </div>
+
+                    <div className="h-6 mb-6 flex items-center">
+                      {(paper.abstract || paper.description || '').length > 120 ? (
+                        <button 
+                          onClick={() => setActivePaper(paper)}
+                          className="text-xs font-semibold text-olive hover:text-gold-accent transition-colors duration-300 flex items-center gap-1 cursor-pointer"
+                        >
+                          Read More 
+                          <span className="material-symbols-outlined text-xs">arrow_right</span>
+                        </button>
+                      ) : (
+                        <span className="block h-6" />
+                      )}
+                    </div>
                   </div>
 
                   <div className="space-y-3 pt-6 border-t border-charcoal/5">
@@ -961,18 +1019,38 @@ export default function Home() {
                     <div className="absolute -right-20 -top-20 w-48 h-48 rounded-full bg-gold-accent/5 group-hover:bg-gold-accent/10 transition-colors duration-500 blur-2xl pointer-events-none"></div>
 
                     <div>
-                      {/* Golden Emblem badge */}
-                      <div className="w-14 h-14 rounded-2xl bg-gold-accent/10 border border-gold-accent/20 flex items-center justify-center shadow-xs mb-8 group-hover:scale-105 group-hover:rotate-6 transition-all duration-500">
-                        <span className="material-symbols-outlined text-gold-accent text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>
-                          {idx === 0 ? 'verified' : 'verified_user'}
-                        </span>
+                      {/* Certificate Image Preview */}
+                      {cert.image && (
+                        <div className="w-full h-44 rounded-2xl overflow-hidden mb-6 relative group/img border border-charcoal/5 shadow-inner bg-white/95 p-1.5 flex items-center justify-center">
+                          <img 
+                            alt={cert.title} 
+                            src={`/api/images/${cert.image}`} 
+                            className="max-w-full max-h-full object-contain rounded-lg transition-transform duration-700 group-hover/img:scale-103"
+                          />
+                          <div className="absolute inset-0 bg-charcoal/10 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center rounded-lg">
+                            <span className="bg-[#FFFDF9]/95 text-charcoal font-sans font-bold text-[10px] uppercase tracking-widest px-3.5 py-2 rounded-full shadow-md flex items-center gap-1.5 backdrop-blur-xs transform translate-y-2 group-hover/img:translate-y-0 transition-all duration-300">
+                              <span className="material-symbols-outlined text-xs">zoom_in</span>
+                              Expand Certificate
+                            </span>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Golden Emblem badge and Issuer Info */}
+                      <div className="flex items-center gap-4 mb-4">
+                        <div className="w-10 h-10 shrink-0 rounded-xl bg-gold-accent/10 border border-gold-accent/20 flex items-center justify-center shadow-xs group-hover:scale-105 group-hover:rotate-6 transition-all duration-500">
+                          <span className="material-symbols-outlined text-gold-accent text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>
+                            {idx === 0 ? 'verified' : 'verified_user'}
+                          </span>
+                        </div>
+                        <div>
+                          {/* Official Subtitle */}
+                          <span className="text-[9px] text-gold-accent font-sans font-bold uppercase tracking-widest block">{cert.issuer || "UGC / NTA"}</span>
+                        </div>
                       </div>
 
-                      {/* Official Subtitle */}
-                      <span className="text-[9px] text-gold-accent font-sans font-bold uppercase tracking-widest block mb-2">{cert.issuer || "UGC / NTA"}</span>
-
                       {/* Title */}
-                      <h3 className="font-sans-ultra-bold text-lg text-charcoal uppercase leading-tight mb-4 min-h-[3rem] group-hover:text-olive transition-colors duration-300">
+                      <h3 className="font-sans-ultra-bold text-lg text-charcoal uppercase leading-tight mb-4 min-h-[3.5rem] group-hover:text-olive transition-colors duration-300">
                         {cert.title}
                       </h3>
                     </div>
@@ -1001,39 +1079,69 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-cream-medium/40 w-full py-20 border-t border-charcoal/5 relative z-10">
-        <div className="flex flex-col md:flex-row justify-between items-center px-margin-mobile md:px-margin-desktop gap-gutter max-w-container-max mx-auto">
-          <div className="space-y-4 text-center md:text-left">
-            <span className="font-serif-italic text-3xl text-charcoal font-bold block">Jahnvi.</span>
-            <p className="font-sans text-sm text-charcoal-light max-w-xs leading-relaxed">
-              Intellectualism in harmony with nature. Exploring the depths of political ecology and sustainable governance.
-            </p>
+      <footer className="bg-charcoal text-cream-lightest w-full relative z-10 overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gold-accent/50 to-transparent"></div>
+        <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-olive/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute -top-40 -left-40 w-96 h-96 bg-gold-accent/10 rounded-full blur-3xl pointer-events-none"></div>
+        
+        <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-24 relative z-10">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 items-center border-b border-cream-lightest/10 pb-16 mb-12">
+            
+            <div className="md:col-span-5 space-y-6 text-center md:text-left">
+              <span className="font-serif-italic text-5xl text-cream-lightest font-bold block drop-shadow-sm">Jahnvi.</span>
+              <p className="font-sans text-base text-cream-lightest/70 max-w-sm leading-relaxed mx-auto md:mx-0">
+                Intellectualism in harmony with nature. Exploring the depths of political ecology and sustainable governance.
+              </p>
+            </div>
+            
+            <div className="md:col-span-7 flex flex-wrap justify-center md:justify-end gap-x-8 gap-y-6">
+              {profile.contact?.linkedin && (
+                <a className="group relative text-cream-lightest/80 hover:text-gold-accent transition-colors duration-300 font-sans font-bold text-sm uppercase tracking-wider" href={profile.contact.linkedin} target="_blank" rel="noopener noreferrer">
+                  LinkedIn
+                  <span className="block w-0 group-hover:w-full transition-all duration-300 h-0.5 bg-gold-accent absolute -bottom-1 left-0"></span>
+                </a>
+              )}
+              {profile.contact?.googleScholar && (
+                <a className="group relative text-cream-lightest/80 hover:text-gold-accent transition-colors duration-300 font-sans font-bold text-sm uppercase tracking-wider" href={profile.contact.googleScholar} target="_blank" rel="noopener noreferrer">
+                  Scholar
+                  <span className="block w-0 group-hover:w-full transition-all duration-300 h-0.5 bg-gold-accent absolute -bottom-1 left-0"></span>
+                </a>
+              )}
+              {profile.contact?.researchGate && (
+                <a className="group relative text-cream-lightest/80 hover:text-gold-accent transition-colors duration-300 font-sans font-bold text-sm uppercase tracking-wider" href={profile.contact.researchGate} target="_blank" rel="noopener noreferrer">
+                  ResearchGate
+                  <span className="block w-0 group-hover:w-full transition-all duration-300 h-0.5 bg-gold-accent absolute -bottom-1 left-0"></span>
+                </a>
+              )}
+              {profile.contact?.github && (
+                <a className="group relative text-cream-lightest/80 hover:text-gold-accent transition-colors duration-300 font-sans font-bold text-sm uppercase tracking-wider" href={profile.contact.github} target="_blank" rel="noopener noreferrer">
+                  GitHub
+                  <span className="block w-0 group-hover:w-full transition-all duration-300 h-0.5 bg-gold-accent absolute -bottom-1 left-0"></span>
+                </a>
+              )}
+              {profile.contact?.orcid && (
+                <a className="group relative text-cream-lightest/80 hover:text-gold-accent transition-colors duration-300 font-sans font-bold text-sm uppercase tracking-wider" href={profile.contact.orcid} target="_blank" rel="noopener noreferrer">
+                  ORCID
+                  <span className="block w-0 group-hover:w-full transition-all duration-300 h-0.5 bg-gold-accent absolute -bottom-1 left-0"></span>
+                </a>
+              )}
+              {profile.contact?.email && (
+                <a className="group relative text-cream-lightest/80 hover:text-gold-accent transition-colors duration-300 font-sans font-bold text-sm uppercase tracking-wider" href={`mailto:${profile.contact.email}`}>
+                  Email
+                  <span className="block w-0 group-hover:w-full transition-all duration-300 h-0.5 bg-gold-accent absolute -bottom-1 left-0"></span>
+                </a>
+              )}
+            </div>
           </div>
           
-          <div className="flex flex-wrap justify-center gap-6 items-center my-8 md:my-0">
-            {profile.contact?.linkedin && (
-              <a className="text-charcoal hover:text-gold-accent transition-colors duration-300 font-sans font-bold text-xs uppercase tracking-wider" href={profile.contact.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
-            )}
-            {profile.contact?.googleScholar && (
-              <a className="text-charcoal hover:text-gold-accent transition-colors duration-300 font-sans font-bold text-xs uppercase tracking-wider" href={profile.contact.googleScholar} target="_blank" rel="noopener noreferrer">Scholar</a>
-            )}
-            {profile.contact?.researchGate && (
-              <a className="text-charcoal hover:text-gold-accent transition-colors duration-300 font-sans font-bold text-xs uppercase tracking-wider" href={profile.contact.researchGate} target="_blank" rel="noopener noreferrer">ResearchGate</a>
-            )}
-            {profile.contact?.github && (
-              <a className="text-charcoal hover:text-gold-accent transition-colors duration-300 font-sans font-bold text-xs uppercase tracking-wider" href={profile.contact.github} target="_blank" rel="noopener noreferrer">GitHub</a>
-            )}
-            {profile.contact?.orcid && (
-              <a className="text-charcoal hover:text-gold-accent transition-colors duration-300 font-sans font-bold text-xs uppercase tracking-wider" href={profile.contact.orcid} target="_blank" rel="noopener noreferrer">ORCID</a>
-            )}
-            {profile.contact?.email && (
-              <a className="text-charcoal hover:text-gold-accent transition-colors duration-300 font-sans font-bold text-xs uppercase tracking-wider" href={`mailto:${profile.contact.email}`}>Email</a>
-            )}
-          </div>
-          
-          <div className="text-charcoal-light font-sans text-xs text-center md:text-right space-y-1">
-            <p>© 2026 Jahnvi. All rights reserved.</p>
-            <span className="text-[10px] opacity-60 font-sans font-bold uppercase tracking-widest block">Sarva Saha • Equilibrium</span>
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-cream-lightest/50 font-sans text-sm">
+            <p className="order-2 md:order-1">© 2026 Jahnvi. All rights reserved.</p>
+            <div className="order-1 md:order-2 flex items-center gap-3">
+              <span className="w-8 h-px bg-gold-accent/30 hidden md:block"></span>
+              <span className="text-xs text-gold-accent font-sans font-bold uppercase tracking-[0.2em]">Sarva Saha • Equilibrium</span>
+              <span className="w-8 h-px bg-gold-accent/30 hidden md:block"></span>
+            </div>
           </div>
         </div>
       </footer>
@@ -1188,6 +1296,141 @@ export default function Home() {
                 Verify Official Link <span className="material-symbols-outlined text-lg">north_east</span>
               </a>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* 4. Research Paper Details Modal */}
+      {activePaper && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/75 backdrop-blur-md transition-all animate-fade-in" onClick={() => setActivePaper(null)}>
+          <div className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-[#FFFDF9] rounded-[2.5rem] border border-charcoal/10 text-charcoal shadow-2xl animate-scale-up p-8 md:p-12 m-4" onClick={(e) => e.stopPropagation()}>
+            
+            {/* Header / Title */}
+            <div className="w-full flex justify-between items-start border-b pb-6 mb-6 border-charcoal/10">
+              <div className="space-y-2 pr-6">
+                <span className={`inline-block px-3 py-1 text-[10px] font-sans font-bold uppercase rounded-full tracking-wider ${
+                  activePaper.type === 'published' 
+                    ? 'bg-olive/10 text-olive border border-olive/10' 
+                    : 'bg-gold-accent/10 text-gold-accent border border-gold-accent/10'
+                }`}>
+                  {activePaper.type} • {activePaper.date}
+                </span>
+                <h2 className="font-sans-ultra-bold text-2xl md:text-3xl text-charcoal uppercase leading-tight">{activePaper.title}</h2>
+                <div className="text-xs font-semibold text-warm-gray">
+                  Venue: <span className="text-charcoal-light italic">{activePaper.venue}</span>
+                </div>
+                {activePaper.award && (
+                  <div className="inline-flex items-center gap-1.5 text-xs font-sans font-bold text-gold-accent uppercase tracking-widest mt-1">
+                    <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>emoji_events</span>
+                    {activePaper.award}
+                  </div>
+                )}
+              </div>
+              <button 
+                onClick={() => setActivePaper(null)}
+                className="flex items-center justify-center w-10 h-10 bg-charcoal/5 hover:bg-charcoal/10 text-charcoal rounded-full transition-all cursor-pointer shrink-0 border border-charcoal/10"
+              >
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+
+            {/* Slides / Media Carousel inside modal if slides are present! */}
+            {activePaper.images && activePaper.images.length > 0 && (
+              <div className="mb-8 space-y-3">
+                <h4 className="text-xs font-sans-ultra-bold text-charcoal uppercase tracking-widest">
+                  {activePaper.type === 'published' ? 'Document & Associated Figures' : 'Presentation Slides & Media'}
+                </h4>
+                <div className="relative w-full min-h-[250px] max-h-[50vh] bg-black/5 rounded-2xl overflow-hidden border border-charcoal/10 flex items-center justify-center p-2">
+                  <img 
+                    alt={`Slide preview`} 
+                    className="max-w-full max-h-[48vh] object-contain rounded-lg shadow-sm transition-transform duration-300 hover:scale-[1.01]" 
+                    src={`/api/images/${activePaper.images[slideIndex < activePaper.images.length ? slideIndex : 0]}`} 
+                  />
+                  {activePaper.images.length > 1 && (
+                    <>
+                      <button 
+                        onClick={() => setSlideIndex((prev) => (prev - 1 + activePaper.images.length) % activePaper.images.length)}
+                        className="absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-[#FFFDF9]/80 hover:bg-[#FFFDF9] text-charcoal flex items-center justify-center transition-all shadow-md z-20 cursor-pointer"
+                      >
+                        <span className="material-symbols-outlined text-sm">chevron_left</span>
+                      </button>
+                      <button 
+                        onClick={() => setSlideIndex((prev) => (prev + 1) % activePaper.images.length)}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-[#FFFDF9]/80 hover:bg-[#FFFDF9] text-charcoal flex items-center justify-center transition-all shadow-md z-20 cursor-pointer"
+                      >
+                        <span className="material-symbols-outlined text-sm">chevron_right</span>
+                      </button>
+                    </>
+                  )}
+                </div>
+                {/* Carousel thumbnails */}
+                {activePaper.images.length > 1 && (
+                  <div className="flex gap-2 overflow-x-auto pb-1 justify-start">
+                    {activePaper.images.map((img, i) => (
+                      <div 
+                        key={i} 
+                        onClick={() => setSlideIndex(i)}
+                        className={`w-16 aspect-[16/10] rounded-lg overflow-hidden cursor-pointer transition-all border-2 shrink-0 ${
+                          (slideIndex < activePaper.images.length ? slideIndex : 0) === i 
+                            ? 'border-gold-accent scale-102 opacity-100 shadow-sm' 
+                            : 'border-transparent opacity-60 hover:opacity-100'
+                        }`}
+                      >
+                        <img alt={`Thumb ${i + 1}`} className="w-full h-full object-cover" src={`/api/images/${img}`} />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Abstract/Description content */}
+            <div className="space-y-6">
+              {activePaper.abstract && (
+                <div className="space-y-3">
+                  <h4 className="text-xs font-sans-ultra-bold text-charcoal uppercase tracking-widest">Research Abstract</h4>
+                  <p className="font-sans text-base text-charcoal-light leading-relaxed whitespace-pre-line select-text">
+                    {activePaper.abstract}
+                  </p>
+                </div>
+              )}
+              {activePaper.description && activePaper.description !== activePaper.abstract && (
+                <div className="space-y-3">
+                  <h4 className="text-xs font-sans-ultra-bold text-charcoal uppercase tracking-widest">Overview & Key Insights</h4>
+                  <p className="font-sans text-base text-charcoal-light leading-relaxed whitespace-pre-line select-text">
+                    {activePaper.description}
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* Footer / Actions */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-between items-center mt-8 pt-6 border-t border-charcoal/10">
+              <div className="flex flex-wrap gap-4">
+                {(activePaper.paperUrl || activePaper.pdfUrl) && (
+                  <a 
+                    href={activePaper.paperUrl || activePaper.pdfUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-sans text-xs font-bold uppercase tracking-widest transition-all cursor-pointer text-white ${
+                      activePaper.type === 'published' 
+                        ? 'bg-olive hover:bg-olive-dark shadow-md' 
+                        : 'bg-gold-accent hover:bg-amber-800 shadow-md'
+                    }`}
+                  >
+                    Read Publication 
+                    <span className="material-symbols-outlined text-sm">north_east</span>
+                  </a>
+                )}
+              </div>
+              <button 
+                onClick={() => setActivePaper(null)}
+                className="w-full sm:w-auto px-6 py-2.5 bg-charcoal/5 hover:bg-charcoal/10 text-charcoal border border-charcoal/10 rounded-full font-sans text-xs font-bold uppercase tracking-widest transition-colors cursor-pointer"
+              >
+                Close Window
+              </button>
+            </div>
+
           </div>
         </div>
       )}
