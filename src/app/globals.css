@@ -79,7 +79,7 @@
   --font-label-md: var(--font-outfit), sans-serif;
 
   --spacing-margin-desktop: 64px;
-  --spacing-container-max: 1200px;
+  --spacing-container-max: 1600px;
   --spacing-stack-sm: 16px;
   --spacing-unit: 8px;
   --spacing-margin-mobile: 24px;
@@ -504,4 +504,65 @@
   letter-spacing: -0.03em;
   user-select: none;
   pointer-events: none;
+}
+
+/* Continuous Marquee Slider for Blog Section (moving left-to-right, stops on hover) */
+@keyframes marquee-scroll-right {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.marquee-container {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+  padding: 1.5rem 0;
+  mask-image: linear-gradient(to right, transparent, white 2%, white 98%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, white 2%, white 98%, transparent);
+}
+
+.marquee-wrapper {
+  display: flex;
+  width: max-content;
+  gap: 2rem;
+  animation: marquee-scroll-right 40s linear infinite;
+}
+
+.marquee-wrapper:hover {
+  animation-play-state: paused;
+}
+
+.marquee-card-landscape {
+  width: 700px;
+  height: 320px;
+  flex-shrink: 0;
+  white-space: normal;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+}
+
+.marquee-card-landscape:hover {
+  transform: translateY(-8px);
+}
+
+@media (max-width: 768px) {
+  .marquee-card-landscape {
+    width: 580px;
+    height: 280px;
+  }
+}
+
+@media (max-width: 640px) {
+  .marquee-card-landscape {
+    width: 310px;
+    height: 420px;
+    flex-direction: column;
+  }
 }

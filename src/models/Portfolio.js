@@ -52,7 +52,8 @@ const ResearchPaperSchema = new mongoose.Schema({
   abstract: { type: String },
   description: { type: String },
   images: [{ type: String }], // references to AssetImage keys/ids
-  order: { type: Number, default: 0 }
+  order: { type: Number, default: 0 },
+  showOnHome: { type: Boolean, default: true }
 }, { timestamps: true });
 
 // --- VISTA (PRESTIGIOUS EVENT) MODEL ---
@@ -62,7 +63,8 @@ const VistaSchema = new mongoose.Schema({
   date: { type: String, required: true },
   description: { type: String, required: true },
   images: [{ type: String }], // references to AssetImage keys/ids
-  order: { type: Number, default: 0 }
+  order: { type: Number, default: 0 },
+  showOnHome: { type: Boolean, default: true }
 }, { timestamps: true });
 
 // --- BLOG MODEL ---

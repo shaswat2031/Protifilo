@@ -961,7 +961,7 @@ export default function AdminDashboard() {
                     </div>
                     <button
                       onClick={() => {
-                        setEditItem({ title: "", venue: "", date: "", type: "published", award: "", paperUrl: "", pdfUrl: "", abstract: "", description: "", images: [], order: data?.papers?.length || 0 });
+                        setEditItem({ title: "", venue: "", date: "", type: "published", award: "", paperUrl: "", pdfUrl: "", abstract: "", description: "", images: [], order: data?.papers?.length || 0, showOnHome: true });
                         setShowModal("paper");
                       }}
                       className="flex items-center gap-1.5 rounded-lg bg-olive px-4 py-2 text-xs font-bold text-cream-lightest hover:bg-olive/90"
@@ -1024,7 +1024,7 @@ export default function AdminDashboard() {
                     </div>
                     <button
                       onClick={() => {
-                        setEditItem({ title: "", organization: "", date: "", description: "", images: [], order: data?.vistas?.length || 0 });
+                        setEditItem({ title: "", organization: "", date: "", description: "", images: [], order: data?.vistas?.length || 0, showOnHome: true });
                         setShowModal("vista");
                       }}
                       className="flex items-center gap-1.5 rounded-lg bg-olive px-4 py-2 text-xs font-bold text-cream-lightest hover:bg-olive/90"
@@ -1040,11 +1040,18 @@ export default function AdminDashboard() {
                         <div className="space-y-1">
                           <h3 className="font-serif text-base font-bold text-charcoal">{item.title}</h3>
                           <p className="text-xs text-warm-gray font-semibold">{item.organization} ({item.date})</p>
-                          {item.images && item.images.length > 0 && (
-                            <span className="text-3xs font-extrabold uppercase tracking-widest text-olive">
-                              Images: {item.images.length} photos linked
-                            </span>
-                          )}
+                          <div className="flex flex-wrap items-center gap-2 mt-1">
+                            {item.showOnHome !== false ? (
+                              <span className="rounded bg-gold-accent/10 border border-gold-accent/25 px-1.5 py-0.5 text-3xs font-extrabold uppercase tracking-widest text-gold-accent">Top 3 / Home</span>
+                            ) : (
+                              <span className="rounded bg-warm-gray/10 border border-warm-gray/20 px-1.5 py-0.5 text-3xs font-extrabold uppercase tracking-widest text-warm-gray">Subpage Only</span>
+                            )}
+                            {item.images && item.images.length > 0 && (
+                              <span className="rounded bg-olive/10 border border-olive/20 px-1.5 py-0.5 text-3xs font-extrabold uppercase tracking-widest text-olive">
+                                Images: {item.images.length}
+                              </span>
+                            )}
+                          </div>
                         </div>
 
                         <div className="flex items-center gap-2">
@@ -1353,6 +1360,27 @@ export default function AdminDashboard() {
                       className="w-full rounded-lg border border-olive/20 bg-cream px-4 py-2.5 text-sm focus:border-olive focus:outline-none"
                     />
                   </div>
+                  <div className="space-y-1">
+                    <label className="text-2xs font-semibold text-warm-gray">Display Order</label>
+                    <input
+                      type="number"
+                      value={editItem.order || 0}
+                      onChange={(e) => setEditItem({ ...editItem, order: parseInt(e.target.value) || 0 })}
+                      className="w-full rounded-lg border border-olive/20 bg-cream px-4 py-2.5 text-sm focus:border-olive focus:outline-none"
+                    />
+                  </div>
+                  <div className="flex items-center gap-2 pt-6">
+                    <input
+                      type="checkbox"
+                      id="showonhome-checkbox"
+                      checked={editItem.showOnHome !== false}
+                      onChange={(e) => setEditItem({ ...editItem, showOnHome: e.target.checked })}
+                      className="h-4 w-4 rounded bg-cream border-olive/25 focus:ring-olive text-olive"
+                    />
+                    <label htmlFor="showonhome-checkbox" className="text-xs font-semibold text-charcoal-light cursor-pointer">
+                      Show on Homepage (Featured Top 6)
+                    </label>
+                  </div>
                   <div className="space-y-1 md:col-span-2">
                     <label className="text-2xs font-semibold text-warm-gray">Research Abstract</label>
                     <textarea
@@ -1462,6 +1490,29 @@ export default function AdminDashboard() {
                       value={editItem.description}
                       onChange={(e) => setEditItem({ ...editItem, description: e.target.value })}
                       className="w-full rounded-lg border border-olive/20 bg-cream px-4 py-2.5 text-sm focus:border-olive focus:outline-none leading-relaxed"
+                    />
+                  </div>
+                  
+                  <div className="flex items-center gap-2 pt-6">
+                    <input
+                      type="checkbox"
+                      id="showonhome-checkbox"
+                      checked={editItem.showOnHome !== false}
+                      onChange={(e) => setEditItem({ ...editItem, showOnHome: e.target.checked })}
+                      className="h-4 w-4 rounded bg-cream border-olive/25 focus:ring-olive text-olive"
+                    />
+                    <label htmlFor="showonhome-checkbox" className="text-xs font-semibold text-charcoal-light cursor-pointer">
+                      Show in Top 3 on Homepage
+                    </label>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-2xs font-semibold text-warm-gray">Display Order</label>
+                    <input
+                      type="number"
+                      value={editItem.order || 0}
+                      onChange={(e) => setEditItem({ ...editItem, order: parseInt(e.target.value) || 0 })}
+                      className="w-full rounded-lg border border-olive/20 bg-cream px-4 py-2.5 text-sm focus:border-olive focus:outline-none"
                     />
                   </div>
 
