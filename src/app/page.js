@@ -771,8 +771,9 @@ export default function Home() {
 
                   <span className="absolute left-6 top-4 text-6xl md:text-7xl text-olive/10 font-serif-italic select-none pointer-events-none">“</span>
 
-                  <p className="font-serif-italic text-xl md:text-2xl text-olive leading-relaxed relative z-10">
-                    'Sarva Saha' — <span className="text-gold-accent font-sans-ultra-bold font-normal not-italic tracking-wider px-2 py-0.5 bg-gold-accent/5 rounded-lg border border-gold-accent/10">संस्कृत:</span> A harmonious, organic equilibrium and co-existence between humanity, green policies, and our biospheric boundaries.
+                  <p className="font-serif-italic text-xl md:text-2xl text-olive leading-relaxed relative z-10 min-h-[140px] sm:min-h-[100px] md:min-h-[80px]">
+                    '{quotes[activeQuoteIdx]?.word}' — <span className="text-gold-accent font-sans-ultra-bold font-normal not-italic tracking-wider px-2 py-0.5 bg-gold-accent/5 rounded-lg border border-gold-accent/10">{quotes[activeQuoteIdx]?.lang}</span> {displayedText}
+                    <span className="inline-block w-[3px] h-5 ml-1 bg-olive/70 animate-pulse align-middle"></span>
                   </p>
                 </div>
               </div>
