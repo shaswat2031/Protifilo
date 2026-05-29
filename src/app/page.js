@@ -432,17 +432,38 @@ export default function Home() {
     );
 
     // Advanced: Fade and translate hero elements on scroll to prevent messy overlaps under the sticky navbar
-    gsap.to([".hero-bottom-title", ".hero-bg-text", ".hero-desc-right", ".hero-badge-left", "#portrait-wrapper"], {
-      opacity: 0,
-      y: -60,
-      ease: "power1.inOut",
-      scrollTrigger: {
-        trigger: "#intro",
-        start: "top top",
-        end: "bottom 55%",
-        scrub: true
+    // Split into explicit fromTo animations with immediateRender: false to avoid capturing mount states
+    gsap.fromTo([".hero-bottom-title", "#portrait-wrapper"],
+      { opacity: 1, y: 0 },
+      {
+        opacity: 0,
+        y: -60,
+        ease: "power1.inOut",
+        scrollTrigger: {
+          trigger: "#intro",
+          start: "top top",
+          end: "bottom 55%",
+          scrub: true,
+          immediateRender: false
+        }
       }
-    });
+    );
+
+    gsap.fromTo(".hero-bg-text",
+      { opacity: 0.12, y: 0 },
+      {
+        opacity: 0,
+        y: -60,
+        ease: "power1.inOut",
+        scrollTrigger: {
+          trigger: "#intro",
+          start: "top top",
+          end: "bottom 55%",
+          scrub: true,
+          immediateRender: false
+        }
+      }
+    );
 
     // Generic Parallax for BG elements
     document.querySelectorAll('.parallax-bg').forEach(el => {
