@@ -95,6 +95,17 @@ const AssetImageSchema = new mongoose.Schema({
   contentType: { type: String, default: "image/jpeg" }
 }, { timestamps: true });
 
+// --- CONTACT MESSAGE MODEL ---
+const ContactMessageSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true },
+  organization: { type: String },
+  inquiryType: { type: String, required: true },
+  subject: { type: String, required: true },
+  message: { type: String, required: true },
+  read: { type: Boolean, default: false }
+}, { timestamps: true });
+
 
 // Export Mongoose models safely (checking if they are already compiled during Next.js serverless HMR reloads)
 export const Profile = mongoose.models.Profile || mongoose.model("Profile", ProfileSchema);
@@ -105,3 +116,4 @@ export const Vista = mongoose.models.Vista || mongoose.model("Vista", VistaSchem
 export const Blog = mongoose.models.Blog || mongoose.model("Blog", BlogSchema);
 export const Certificate = mongoose.models.Certificate || mongoose.model("Certificate", CertificateSchema);
 export const AssetImage = mongoose.models.AssetImage || mongoose.model("AssetImage", AssetImageSchema);
+export const ContactMessage = mongoose.models.ContactMessage || mongoose.model("ContactMessage", ContactMessageSchema);

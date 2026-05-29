@@ -28,6 +28,18 @@ export default function RootLayout({ children }) {
     <html lang="en" suppressHydrationWarning className={`${playfair.variable} ${outfit.variable} h-full antialiased`}>
       <head>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+              navigator.serviceWorker.getRegistrations().then(function(regs) {
+                for (var i = 0; i < regs.length; i++) {
+                  regs[i].unregister();
+                  console.log('Cleared leftover service worker:', regs[i].active ? regs[i].active.scriptURL : 'unknown');
+                }
+              });
+            }
+          `
+        }} />
       </head>
       <body suppressHydrationWarning className="min-h-full flex flex-col bg-cream text-charcoal" style={{ backgroundColor: '#FBF5E8' }}>
         <Noise />

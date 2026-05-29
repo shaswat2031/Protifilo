@@ -48,14 +48,14 @@ function renderMarkdown(content) {
   if (!content) return null;
   const lines = content.split("\n");
   const elements = [];
-  
+
   let inTable = false;
   let tableRows = [];
 
   for (let idx = 0; idx < lines.length; idx++) {
     const line = lines[idx];
     const trimmed = line.trim();
-    
+
     // Check if table row
     if (trimmed.startsWith("|")) {
       inTable = true;
@@ -113,10 +113,10 @@ function renderMarkdown(content) {
 function parseInlineFormatting(text) {
   if (!text) return "";
   const tokens = text.split(/(\[.*?\]\(.*?\))|(\*\*.*?\*\*)/g);
-  
+
   return tokens.map((token, idx) => {
     if (!token) return null;
-    
+
     // Link token
     if (token.startsWith("[") && token.includes("](")) {
       const match = token.match(/\[(.*?)\]\((.*?)\)/);
@@ -130,12 +130,12 @@ function parseInlineFormatting(text) {
         );
       }
     }
-    
+
     // Bold token
     if (token.startsWith("**") && token.endsWith("**")) {
       return <strong key={idx} className="font-bold text-primary">{token.slice(2, -2)}</strong>;
     }
-    
+
     // Italic token sub-parsing
     const subParts = token.split(/(\*.*?\*)/g);
     return subParts.map((subPart, j) => {
@@ -170,20 +170,20 @@ function VistaItem({ vista, idx }) {
       <div className={`relative rounded-[2.5rem] overflow-hidden h-[400px] md:h-[450px] shadow-lg border border-charcoal/10 group ${!isEven ? "lg:order-2" : ""}`}>
         {images.length > 0 ? (
           <>
-            <img 
-              alt={vista.title} 
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-103" 
-              src={`/api/images/${images[currentImgIdx]}`} 
+            <img
+              alt={vista.title}
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-103"
+              src={`/api/images/${images[currentImgIdx]}`}
             />
             {images.length > 1 && (
               <>
-                <button 
+                <button
                   onClick={prevImg}
                   className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-[#FFFDF9]/80 hover:bg-[#FFFDF9] text-charcoal flex items-center justify-center transition-all shadow-md backdrop-blur-xs z-20 cursor-pointer border border-charcoal/5"
                 >
                   <span className="material-symbols-outlined text-lg">chevron_left</span>
                 </button>
-                <button 
+                <button
                   onClick={nextImg}
                   className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-[#FFFDF9]/80 hover:bg-[#FFFDF9] text-charcoal flex items-center justify-center transition-all shadow-md backdrop-blur-xs z-20 cursor-pointer border border-charcoal/5"
                 >
@@ -192,8 +192,8 @@ function VistaItem({ vista, idx }) {
                 {/* Dots */}
                 <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-1.5 z-20 bg-charcoal/80 px-3 py-1.5 rounded-full backdrop-blur-xs">
                   {images.map((_, i) => (
-                    <span 
-                      key={i} 
+                    <span
+                      key={i}
                       onClick={(e) => { e.stopPropagation(); setCurrentImgIdx(i); }}
                       className={`w-1.5 h-1.5 rounded-full cursor-pointer transition-all ${i === currentImgIdx ? "bg-cream-medium scale-125" : "bg-[#FFFDF9]/40"}`}
                     />
@@ -224,6 +224,29 @@ function VistaItem({ vista, idx }) {
   );
 }
 
+const quotes = [
+  {
+    word: "Sarva Saha",
+    lang: "संस्कृत:",
+    text: "A harmonious, organic equilibrium and co-existence between humanity, green policies, and our biospheric boundaries."
+  },
+  {
+    word: "Samskara",
+    lang: "संस्कृत:",
+    text: "Sowing ethical values in the strategies of states and supply chains, elevating India's role from balancing agent to global builder."
+  },
+  {
+    word: "Manthan",
+    lang: "संस्कृत:",
+    text: "The democratic churning of ideas—evolving our loktantra from simple voting (matdaan) to deep deliberation (manthan)."
+  },
+  {
+    word: "Sutradhar",
+    lang: "संस्कृत:",
+    text: "The thread-bearer of intellectual heritage, bridging academic ideas with actionable transformations for sustainable green governance."
+  }
+];
+
 export default function Home() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -235,6 +258,70 @@ export default function Home() {
   const [slideIndex, setSlideIndex] = useState(0);
   const [activeCertificate, setActiveCertificate] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeQuoteIdx, setActiveQuoteIdx] = useState(0);
+  const [displayedText, setDisplayedText] = useState("");
+  const [isTyping, setIsTyping] = useState(true);
+
+  // Elite device-adaptive Typewriter State Machine (Type forward -> Rest -> Backspace snappy -> Pause gap -> Rotate)
+  useEffect(() => {
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+    const currentText = quotes[activeQuoteIdx].text;
+
+    // Configurable timing profiles based on device capacity
+    const typeSpeed = isMobile ? 30 : 18;
+    const eraseSpeed = isMobile ? 18 : 10; // Snappier backspace speed
+    const charsPerTick = isMobile ? 2 : 1;
+    const readDuration = 3000; // 3 seconds reading static time
+    const gapDuration = 1000; // 1-second transitional silence gap
+
+    let mode = "typing"; // typing, resting, erasing, paused
+    let charIndex = 0;
+    let timer = null;
+
+    const runLoop = () => {
+      if (mode === "typing") {
+        setIsTyping(true);
+        if (charIndex < currentText.length) {
+          charIndex += charsPerTick;
+          setDisplayedText(currentText.substring(0, charIndex));
+          timer = setTimeout(runLoop, typeSpeed);
+        } else {
+          // Finish typing -> enter rest state
+          setIsTyping(false);
+          mode = "resting";
+          timer = setTimeout(runLoop, readDuration);
+        }
+      } else if (mode === "resting") {
+        // Finish resting -> start backspacing/erasing
+        setIsTyping(true);
+        mode = "erasing";
+        timer = setTimeout(runLoop, eraseSpeed);
+      } else if (mode === "erasing") {
+        setIsTyping(true);
+        if (charIndex > 0) {
+          charIndex -= charsPerTick;
+          if (charIndex < 0) charIndex = 0;
+          setDisplayedText(currentText.substring(0, charIndex));
+          timer = setTimeout(runLoop, eraseSpeed);
+        } else {
+          // Finish erasing -> enter transitional gap
+          setIsTyping(false);
+          mode = "paused";
+          timer = setTimeout(runLoop, gapDuration);
+        }
+      } else if (mode === "paused") {
+        // Increment index - triggers useEffect cleanup and restarts cycle
+        setActiveQuoteIdx((prev) => (prev + 1) % quotes.length);
+      }
+    };
+
+    // Kick off the loop
+    timer = setTimeout(runLoop, 200);
+
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [activeQuoteIdx]);
 
   // References for light effect
   const containerRef = useRef();
@@ -258,8 +345,11 @@ export default function Home() {
     fetchData();
   }, []);
 
-  // Mouse follower effect
+  // Mouse follower effect (completely disabled on mobile/touch screens to maximize scroll performance)
   useEffect(() => {
+    const isTouchDevice = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+    if (isTouchDevice) return;
+
     const handleMouseMove = (e) => {
       if (lightEffectRef.current) {
         lightEffectRef.current.style.setProperty('--x', e.clientX + 'px');
@@ -272,13 +362,13 @@ export default function Home() {
 
   useGSAP(() => {
     // Fade and slide up the background text "Hey, there"
-    gsap.fromTo(".hero-bg-text", 
+    gsap.fromTo(".hero-bg-text",
       { y: 60, opacity: 0 },
       { y: 0, opacity: 0.12, duration: 1.6, ease: "power4.out" }
     );
 
     // Zoom-in / Scale-up the portrait
-    gsap.fromTo("#portrait-wrapper", 
+    gsap.fromTo("#portrait-wrapper",
       { scale: 0.92, opacity: 0 },
       { scale: 1, opacity: 1, duration: 1.5, ease: "power3.out", delay: 0.15 }
     );
@@ -296,22 +386,35 @@ export default function Home() {
     });
 
     // Fade and slide left the left badge
-    gsap.fromTo(".hero-badge-left", 
+    gsap.fromTo(".hero-badge-left",
       { x: -40, opacity: 0 },
       { x: 0, opacity: 1, duration: 1.2, ease: "power3.out", delay: 0.5 }
     );
 
     // Fade and slide right the right description
-    gsap.fromTo(".hero-desc-right", 
+    gsap.fromTo(".hero-desc-right",
       { x: 40, opacity: 0 },
       { x: 0, opacity: 1, duration: 1.2, ease: "power3.out", delay: 0.5 }
     );
 
     // Slide up bottom titles sequentially
-    gsap.fromTo(".hero-bottom-title", 
+    gsap.fromTo(".hero-bottom-title",
       { y: 60, opacity: 0 },
       { y: 0, opacity: 1, duration: 1.4, ease: "power4.out", stagger: 0.18, delay: 0.3 }
     );
+
+    // Advanced: Fade and translate hero elements on scroll to prevent messy overlaps under the sticky navbar
+    gsap.to([".hero-bottom-title", ".hero-bg-text", ".hero-desc-right", ".hero-badge-left", "#portrait-wrapper"], {
+      opacity: 0,
+      y: -60,
+      ease: "power1.inOut",
+      scrollTrigger: {
+        trigger: "#intro",
+        start: "top top",
+        end: "bottom 55%",
+        scrub: true
+      }
+    });
 
     // Generic Parallax for BG elements
     document.querySelectorAll('.parallax-bg').forEach(el => {
@@ -325,18 +428,24 @@ export default function Home() {
       });
     });
 
-    // Timeline Items Animation
+    // Timeline Items Animation (Optimized: pure vertical movement on mobile to prevent paint reflow lag)
     gsap.utils.toArray('.timeline-item').forEach((item, i) => {
-      gsap.fromTo(item, 
-        { x: i % 2 === 0 ? -60 : 60, opacity: 0 },
+      const isMobile = window.innerWidth < 768;
+      gsap.fromTo(item,
+        {
+          x: isMobile ? 0 : (i % 2 === 0 ? -60 : 60),
+          y: isMobile ? 30 : 0,
+          opacity: 0
+        },
         {
           x: 0,
+          y: 0,
           opacity: 1,
-          duration: 1.2,
-          ease: "power4.out",
+          duration: isMobile ? 0.8 : 1.2,
+          ease: isMobile ? "power2.out" : "power4.out",
           scrollTrigger: {
             trigger: item,
-            start: "top 85%",
+            start: "top 90%",
             toggleActions: "play none none none"
           }
         }
@@ -345,7 +454,7 @@ export default function Home() {
 
     // Section Headers
     gsap.utils.toArray('h2').forEach(heading => {
-      gsap.fromTo(heading, 
+      gsap.fromTo(heading,
         { y: 30, opacity: 0 },
         {
           y: 0,
@@ -360,7 +469,7 @@ export default function Home() {
     });
 
     // Research Paper Cards Fade In
-    gsap.fromTo(".paper-card-item", 
+    gsap.fromTo(".paper-card-item",
       { y: 50, opacity: 0 },
       {
         y: 0,
@@ -376,7 +485,7 @@ export default function Home() {
 
     // Vistas Journey Masonry Feel Reveal
     gsap.utils.toArray('.vista-overlap-item').forEach((item, i) => {
-      gsap.fromTo(item, 
+      gsap.fromTo(item,
         { y: 100, opacity: 0 },
         {
           y: 0,
@@ -392,7 +501,7 @@ export default function Home() {
     });
 
     // Blog Cards
-    gsap.fromTo(".blog-card", 
+    gsap.fromTo(".blog-card",
       { scale: 0.95, opacity: 0 },
       {
         scale: 1,
@@ -447,7 +556,7 @@ export default function Home() {
   return (
     <main ref={containerRef} className="relative">
       <div id="light-effect" ref={lightEffectRef}></div>
-      
+
       {/* TopNavBar */}
       <div className="fixed top-0 left-0 w-full z-[60] pt-4 md:pt-6 px-4 md:px-8 pointer-events-none flex justify-center">
         <nav className={`pointer-events-auto w-full max-w-7xl bg-white/50 backdrop-blur-2xl border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.04)] px-6 py-3.5 transition-all duration-500 hover:bg-white/60 hover:shadow-[0_8px_32px_rgba(0,0,0,0.08)] ${isMobileMenuOpen ? 'rounded-[2rem]' : 'rounded-full'}`}>
@@ -459,7 +568,7 @@ export default function Home() {
                 </span>
                 <span>Jahnvi.</span>
               </a>
-              
+
               <div className="hidden md:flex items-center bg-charcoal/5 rounded-full p-1 border border-charcoal/5">
                 <a className="px-4 py-1.5 rounded-full font-sans font-medium text-xs tracking-wide text-charcoal hover:bg-white hover:shadow-sm transition-all duration-300" href="#intro">Home</a>
                 <a className="px-4 py-1.5 rounded-full font-sans font-medium text-xs tracking-wide text-charcoal hover:bg-white hover:shadow-sm transition-all duration-300" href="#research">Philosophy</a>
@@ -469,13 +578,13 @@ export default function Home() {
                 <a className="px-4 py-1.5 rounded-full font-sans font-medium text-xs tracking-wide text-charcoal hover:bg-white hover:shadow-sm transition-all duration-300" href="#blogs">Blogs</a>
               </div>
 
-              <a href="#accolades" className="hidden md:inline-block px-6 py-2.5 bg-gradient-to-r from-charcoal to-charcoal-light text-white rounded-full font-sans font-semibold text-xs tracking-wider uppercase hover:shadow-[0_0_20px_rgba(27,28,28,0.2)] hover:scale-105 transition-all duration-300">
-                Accolades
+              <a href="/contact" className="hidden md:inline-block px-6 py-2.5 bg-gradient-to-r from-charcoal to-charcoal-light text-white rounded-full font-sans font-semibold text-xs tracking-wider uppercase hover:shadow-[0_0_20px_rgba(27,28,28,0.2)] hover:scale-105 transition-all duration-300">
+                Contact
               </a>
 
               <div className="md:hidden flex items-center">
-                <button 
-                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
+                <button
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                   className="material-symbols-outlined text-charcoal cursor-pointer p-2 bg-charcoal/5 rounded-full hover:bg-charcoal/10 transition-colors pointer-events-auto flex items-center justify-center"
                 >
                   {isMobileMenuOpen ? 'close' : 'menu'}
@@ -486,54 +595,54 @@ export default function Home() {
             {/* Mobile Navigation Drawer */}
             {isMobileMenuOpen && (
               <div className="md:hidden w-full flex flex-col gap-2 pt-2 border-t border-charcoal/5 animate-scale-up">
-                <a 
-                  onClick={() => setIsMobileMenuOpen(false)} 
-                  className="px-4 py-2.5 rounded-2xl font-sans font-medium text-base text-charcoal hover:bg-charcoal/5 transition-all text-center" 
+                <a
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="px-4 py-2.5 rounded-2xl font-sans font-medium text-base text-charcoal hover:bg-charcoal/5 transition-all text-center"
                   href="#intro"
                 >
                   Home
                 </a>
-                <a 
-                  onClick={() => setIsMobileMenuOpen(false)} 
-                  className="px-4 py-2.5 rounded-2xl font-sans font-medium text-base text-charcoal hover:bg-charcoal/5 transition-all text-center" 
+                <a
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="px-4 py-2.5 rounded-2xl font-sans font-medium text-base text-charcoal hover:bg-charcoal/5 transition-all text-center"
                   href="#research"
                 >
                   Philosophy
                 </a>
-                <a 
-                  onClick={() => setIsMobileMenuOpen(false)} 
-                  className="px-4 py-2.5 rounded-2xl font-sans font-medium text-base text-charcoal hover:bg-charcoal/5 transition-all text-center" 
+                <a
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="px-4 py-2.5 rounded-2xl font-sans font-medium text-base text-charcoal hover:bg-charcoal/5 transition-all text-center"
                   href="#research-papers"
                 >
                   Publications
                 </a>
-                <a 
-                  onClick={() => setIsMobileMenuOpen(false)} 
-                  className="px-4 py-2.5 rounded-2xl font-sans font-medium text-base text-charcoal hover:bg-charcoal/5 transition-all text-center" 
+                <a
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="px-4 py-2.5 rounded-2xl font-sans font-medium text-base text-charcoal hover:bg-charcoal/5 transition-all text-center"
                   href="#background"
                 >
                   Journey
                 </a>
-                <a 
-                  onClick={() => setIsMobileMenuOpen(false)} 
-                  className="px-4 py-2.5 rounded-2xl font-sans font-medium text-base text-charcoal hover:bg-charcoal/5 transition-all text-center" 
+                <a
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="px-4 py-2.5 rounded-2xl font-sans font-medium text-base text-charcoal hover:bg-charcoal/5 transition-all text-center"
                   href="#vistas"
                 >
                   Vistas
                 </a>
-                <a 
-                  onClick={() => setIsMobileMenuOpen(false)} 
-                  className="px-4 py-2.5 rounded-2xl font-sans font-medium text-base text-charcoal hover:bg-charcoal/5 transition-all text-center" 
+                <a
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="px-4 py-2.5 rounded-2xl font-sans font-medium text-base text-charcoal hover:bg-charcoal/5 transition-all text-center"
                   href="#blogs"
                 >
                   Blogs
                 </a>
-                <a 
-                  onClick={() => setIsMobileMenuOpen(false)} 
-                  className="mt-2 px-6 py-3 bg-gradient-to-r from-charcoal to-charcoal-light text-white rounded-full font-sans font-semibold text-sm tracking-wider uppercase text-center hover:shadow-md transition-all flex items-center justify-center gap-2" 
-                  href="#accolades"
+                <a
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="mt-2 px-6 py-3 bg-gradient-to-r from-charcoal to-charcoal-light text-white rounded-full font-sans font-semibold text-sm tracking-wider uppercase text-center hover:shadow-md transition-all flex items-center justify-center gap-2"
+                  href="/contact"
                 >
-                  Accolades
+                  Contact
                 </a>
               </div>
             )}
@@ -542,52 +651,33 @@ export default function Home() {
       </div>
 
       {/* Hero Section */}
-      <section className="relative min-h-[100svh] md:min-h-screen flex flex-col justify-between pt-24 md:pt-28 pb-8 md:pb-12 overflow-hidden premium-glow-bg select-text" id="intro">
+      <section className="relative min-h-[100svh] md:min-h-screen flex flex-col justify-between pt-12 md:pt-28 pb-8 md:pb-12 overflow-hidden premium-glow-bg select-text" id="intro">
         {/* Background Italic Text "Hey, there" */}
-        <div className="absolute inset-x-0 top-[16%] lg:top-[12%] text-center z-0 pointer-events-none select-none flex flex-col lg:flex-row justify-center items-center gap-1 lg:gap-[26rem] xl:gap-[36rem]">
-          <h2 className="hero-bg-text font-serif-italic text-[20vw] lg:text-[16vw] font-light text-charcoal leading-none tracking-tight">Hey,</h2>
-          <h2 className="hero-bg-text font-serif-italic text-[20vw] lg:text-[16vw] font-light text-charcoal leading-none tracking-tight">there</h2>
-        </div>
-
-        {/* Central visual items */}
-        <div className="relative w-full max-w-5xl mx-auto flex flex-col items-center justify-center flex-grow z-10 px-6 py-4">
-          
-          {/* Left badge */}
-          <div className="hero-badge-left absolute left-4 md:left-12 top-[40%] md:top-[65%] -translate-y-1/2 z-20">
-            <div className="glassmorphism-premium border border-charcoal/10 rounded-full px-4 py-2 md:px-5 md:py-2.5 flex items-center gap-2 md:gap-2.5 text-[10px] md:text-xs font-semibold shadow-xs transition-all duration-500 hover:scale-105">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping-slow absolute inline-flex h-full w-full rounded-full bg-amber-500 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500 glow-dot-amber"></span>
-              </span>
-              <span className="text-charcoal-light font-medium tracking-wide whitespace-nowrap">Available for collaborations</span>
-            </div>
-          </div>
-
-          {/* Right small desc */}
-          <div className="hero-desc-right absolute right-4 md:right-12 top-[55%] md:top-[65%] -translate-y-1/2 z-20 max-w-[130px] md:max-w-[200px] text-right md:text-left">
-            <p className="text-[10px] md:text-sm font-semibold leading-relaxed text-charcoal-light tracking-wide">
-              Specialized in Political Ecology, Green Governance, and Sustainable Development.
-            </p>
-          </div>
+        <div className="absolute inset-x-0 top-[18%] sm:top-[16%] lg:top-[12%] text-center z-0 pointer-events-none select-none flex flex-row justify-center items-center gap-[22vw] sm:gap-[26vw] md:gap-[30vw] lg:gap-[34vw] xl:gap-[38vw]">
+          <h2 className="hero-bg-text font-serif-italic text-[16vw] sm:text-[14vw] lg:text-[15vw] xl:text-[16vw] font-light text-charcoal leading-none tracking-tight">Hey,</h2>
+          <h2 className="hero-bg-text font-serif-italic text-[16vw] sm:text-[14vw] lg:text-[15vw] xl:text-[16vw] font-light text-charcoal leading-none tracking-tight">there</h2>
         </div>
 
         {/* Centered Image - Positioned at Bottom Center */}
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[280px] sm:max-w-[340px] md:max-w-[500px] xl:max-w-[650px] z-10 pointer-events-none flex items-end mb-[8.5rem] sm:mb-[9.5rem] md:mb-0" id="portrait-wrapper">
-          <img 
-            alt="Profile" 
-            className="w-full h-auto object-contain object-bottom pointer-events-auto transition-transform duration-700 hover:scale-[1.02]" 
-            id="hero-image" 
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[220px] sm:max-w-[280px] md:max-w-[360px] lg:max-w-[420px] xl:max-w-[520px] 2xl:max-w-[600px] z-10 pointer-events-none flex items-end mb-[12.5rem] sm:mb-[13.5rem] md:mb-[14.5rem] lg:mb-0" id="portrait-wrapper">
+          <img
+            alt="Profile"
+            className="w-full h-auto object-contain object-bottom pointer-events-auto transition-transform duration-700 hover:scale-[1.02]"
+            id="hero-image"
             src="/avatar.png"
             style={{ filter: "drop-shadow(0 10px 25px rgba(0,0,0,0.15))" }}
           />
         </div>
 
+        {/* Spacer to push typography to the bottom on all screen heights */}
+        <div className="flex-grow pointer-events-none"></div>
+
         {/* Bottom stylized typography */}
-        <div className="w-full max-w-[95rem] mx-auto px-6 md:px-8 xl:px-12 flex flex-col lg:flex-row justify-between items-center lg:items-end gap-4 lg:gap-4 z-50 select-none pb-4 md:pb-6 relative pointer-events-none">
-          <h1 className="hero-bottom-title font-sans-ultra-bold text-4xl sm:text-5xl lg:text-[6.5rem] xl:text-[7.5rem] uppercase leading-[0.85] text-charcoal text-center lg:text-left tracking-tighter whitespace-normal lg:whitespace-nowrap relative pointer-events-auto w-full lg:w-auto lg:-translate-x-12 xl:-translate-x-24">
+        <div className="w-full max-w-[95rem] mx-auto px-6 md:px-8 xl:px-12 flex flex-col lg:flex-row justify-between items-center lg:items-end gap-4 lg:gap-4 z-50 select-none pb-4 md:pb-6 relative pointer-events-none mt-auto">
+          <h1 className="hero-bottom-title font-sans-ultra-bold text-3xl sm:text-4xl md:text-5xl lg:text-[5.5rem] xl:text-[6.5rem] 2xl:text-[7.5rem] uppercase leading-[0.85] text-charcoal text-center lg:text-left tracking-tighter whitespace-normal lg:whitespace-nowrap relative pointer-events-auto w-full lg:w-auto">
             I AM <span className="block">{profile?.name || "JAHNVI"}</span>
           </h1>
-          <h2 className="hero-bottom-title font-sans-ultra-bold text-2xl sm:text-3xl lg:text-[4rem] xl:text-[5.5rem] uppercase leading-[0.85] text-charcoal text-center lg:text-right tracking-tighter whitespace-normal lg:whitespace-nowrap relative pointer-events-auto w-full lg:w-auto lg:translate-x-16 xl:translate-x-32 mt-2 lg:mt-0">
+          <h2 className="hero-bottom-title font-sans-ultra-bold text-xl sm:text-2xl md:text-3xl lg:text-[3.2rem] xl:text-[4.2rem] 2xl:text-[5rem] uppercase leading-[0.85] text-charcoal text-center lg:text-right tracking-tighter whitespace-normal lg:whitespace-nowrap relative pointer-events-auto w-full lg:w-auto mt-2 lg:mt-0">
             RESEARCHER <span className="block">AND WRITER</span>
           </h2>
         </div>
@@ -607,35 +697,52 @@ export default function Home() {
             <div className="w-24 h-1 bg-gradient-to-r from-olive/20 via-olive to-olive/20 mx-auto mt-6 rounded-full"></div>
           </div>
 
-          {/* Highlighted Quote centerpiece */}
-          <div className="max-w-4xl mx-auto mb-16" id="statement-quote">
-            <div className="glassmorphism-premium bg-gradient-to-br from-pastel-purple/25 via-white/70 to-pastel-blue/20 border border-olive/15 rounded-[2.5rem] p-8 md:p-14 relative overflow-hidden shadow-md group hover:shadow-xl transition-all duration-500 text-center">
-              {/* Ambient glowing circles */}
-              <div className="absolute -left-16 -top-16 w-52 h-52 bg-pastel-pink/20 rounded-full blur-3xl opacity-60 pointer-events-none"></div>
-              <div className="absolute -right-16 -bottom-16 w-52 h-52 bg-pastel-mint/20 rounded-full blur-3xl opacity-60 pointer-events-none"></div>
-              
-              <span className="absolute left-8 top-6 text-7xl md:text-8xl text-olive/10 font-serif-italic select-none pointer-events-none">“</span>
-              <span className="absolute right-8 bottom-2 text-7xl md:text-8xl text-olive/10 font-serif-italic select-none pointer-events-none">”</span>
-              
-              <p className="font-serif-italic text-2xl md:text-3.5xl text-olive leading-relaxed relative z-10 max-w-3xl mx-auto">
-                'Sarva Saha' — <span className="text-gold-accent font-sans-ultra-bold font-normal not-italic tracking-wider px-2 py-0.5 bg-gold-accent/5 rounded-lg border border-gold-accent/10">संस्कृत:</span> A harmonious, organic equilibrium and co-existence between humanity, green policies, and our biospheric boundaries.
-              </p>
+          {/* Two-column layout: Image on Left, Details on Right */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center mb-20">
+            {/* Left Column: Image */}
+            <div className="lg:col-span-5 relative group w-full max-w-md mx-auto lg:max-w-none">
+              <div className="relative rounded-[2.5rem] overflow-hidden aspect-[4/5] border border-charcoal/10 shadow-lg bg-white/50">
+                <img
+                  alt="Sarva Saha Philosophy"
+                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-103"
+                  src="/philosophy_image.png"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-charcoal/30 via-transparent to-transparent pointer-events-none"></div>
+              </div>
             </div>
-          </div>
 
-          {/* Editorial-style Bio Grid */}
-          <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 font-sans text-lg text-charcoal-light leading-relaxed mb-20 text-justify" id="statement-bio">
-            <div className="space-y-4 relative">
-              <div className="absolute -left-4 top-0 w-1 h-full bg-olive/20 rounded-full"></div>
-              <p className="pl-4 first-letter:text-5xl first-letter:font-serif-italic first-letter:font-bold first-letter:float-left first-letter:mr-3 first-letter:text-olive">
-                {profile?.bioIntro || "My intellectual journey is rooted in the critical intersections of Political Science and Environmental Governance..."}
-              </p>
-            </div>
-            <div className="space-y-4 relative">
-              <div className="absolute -left-4 top-0 w-1 h-full bg-gold-accent/20 rounded-full"></div>
-              <p className="pl-4 pt-1">
-                {profile?.bioSecondary || "My roots lie in a family of Business minds and Entrepreneurs..."}
-              </p>
+            {/* Right Column: Content */}
+            <div className="lg:col-span-7 space-y-8 text-left w-full">
+              {/* Highlighted Quote centerpiece */}
+              <div id="statement-quote" className="w-full">
+                <div className="glassmorphism-premium bg-gradient-to-br from-pastel-purple/25 via-white/70 to-pastel-blue/20 border border-olive/15 rounded-[2.5rem] p-8 md:p-10 relative overflow-hidden shadow-md group hover:shadow-xl transition-all duration-500 text-center md:text-left">
+                  {/* Ambient glowing circles */}
+                  <div className="absolute -left-16 -top-16 w-52 h-52 bg-pastel-pink/20 rounded-full blur-3xl opacity-60 pointer-events-none"></div>
+                  <div className="absolute -right-16 -bottom-16 w-52 h-52 bg-pastel-mint/20 rounded-full blur-3xl opacity-60 pointer-events-none"></div>
+
+                  <span className="absolute left-6 top-4 text-6xl md:text-7xl text-olive/10 font-serif-italic select-none pointer-events-none">“</span>
+
+                  <p className="font-serif-italic text-xl md:text-2xl text-olive leading-relaxed relative z-10">
+                    'Sarva Saha' — <span className="text-gold-accent font-sans-ultra-bold font-normal not-italic tracking-wider px-2 py-0.5 bg-gold-accent/5 rounded-lg border border-gold-accent/10">संस्कृत:</span> A harmonious, organic equilibrium and co-existence between humanity, green policies, and our biospheric boundaries.
+                  </p>
+                </div>
+              </div>
+
+              {/* Editorial-style Bio Grid */}
+              <div id="statement-bio" className="space-y-6 font-sans text-base md:text-lg text-charcoal-light leading-relaxed text-justify">
+                <div className="relative pl-6">
+                  <div className="absolute left-0 top-0 w-1 h-full bg-olive/20 rounded-full"></div>
+                  <p className="first-letter:text-4xl first-letter:font-serif-italic first-letter:font-bold first-letter:float-left first-letter:mr-2 first-letter:text-olive">
+                    {profile?.bioIntro || "I read in a book two years back that there are two worlds: one is a world shaped by mind-set of the masses symbolic of the ordinary lives of more than 80% of the population and the other world shaped by thinkers, leaving a legacy of intellectual heritage. I decided to be in the latter. With that approach, I started my research journey—where ideas and reflecting on problems were the fuel for igniting changes. It began with my first year of pursuing Masters in Political Science and I found my interests growing in contributing to the formulation of policy solutions for climate crisis."}
+                  </p>
+                </div>
+                <div className="relative pl-6">
+                  <div className="absolute left-0 top-0 w-1 h-full bg-gold-accent/20 rounded-full"></div>
+                  <p className="pt-1">
+                    {profile?.bioSecondary || "My roots lie in a family of Business minds and Entrepreneurs; I am the first generation Post-graduate, first in my family to earn a Master's degree. It felt like a call to stewardship, heavy yet honourable. My journey into the world of visionaries ignited my intellectual energy and the inherent sustainability of India shaped my horizons. So far, I am playing my part to construct a change academically that could trigger transformations if aligned with our policies on sustainability or “Sarva Saha” in Sanskrit which means a harmonious coexistence between man and its nature."}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -649,8 +756,8 @@ export default function Home() {
               ];
               const bgs = pastelBgColors[idx % pastelBgColors.length];
               return (
-                <div 
-                  key={interest._id || idx} 
+                <div
+                  key={interest._id || idx}
                   className={`glassmorphism-premium p-10 rounded-[2.5rem] border border-charcoal/10 hover:-translate-y-2 hover:shadow-xl transition-all duration-500 group flex flex-col justify-between relative overflow-hidden ${bgs}`}
                 >
                   {/* Decorative floating card number */}
@@ -679,25 +786,30 @@ export default function Home() {
       {/* Academic Background (Timeline) */}
       <section className="section-padding premium-glow-alt-1 relative overflow-hidden" id="background">
 
-        
+
         <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop text-center mb-20 relative z-10">
           <span className="font-label-md text-gold-accent uppercase tracking-widest text-xs font-bold block mb-3">Scholastic Journey</span>
           <h2 className="font-headline-lg text-4xl md:text-5xl text-charcoal font-extrabold uppercase tracking-wider leading-tight">Academic Background</h2>
           <p className="font-serif-italic text-lg text-charcoal-light mt-4">A journey of scholarship and continuous evolution</p>
           <div className="w-16 h-1 bg-olive/45 mx-auto mt-6 rounded-full"></div>
         </div>
-        
+
         <div className="max-w-4xl mx-auto px-margin-mobile relative z-10">
-          {/* Center Line */}
+          {/* Center Line (Desktop) */}
           <div className="absolute left-1/2 -translate-x-1/2 w-px h-full bg-charcoal/10 hidden md:block"></div>
-          
+          {/* Mobile Vertical Line */}
+          <div className="absolute left-5 top-4 bottom-4 w-px bg-charcoal/10 md:hidden"></div>
+
           <div className="space-y-20">
             {timelineEvents.map((event, idx) => {
               const isEven = idx % 2 === 0;
               return (
-                <div key={event._id || idx} className="relative grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 timeline-item">
+                <div key={event._id || idx} className="relative flex flex-col md:grid md:grid-cols-2 gap-4 md:gap-16 pl-8 md:pl-0 timeline-item">
+                  {/* Mobile timeline dot */}
+                  <div className="absolute left-[-4px] -translate-x-1/2 w-3 h-3 rounded-full border-2 border-cream-lightest bg-gold-accent z-20 shadow-md md:hidden top-3.5"></div>
+
                   {/* Left/Alternating Column */}
-                  <div className={`${isEven ? "md:text-right md:pr-4" : "md:order-2 md:pl-4"} flex flex-col justify-center`}>
+                  <div className={`${isEven ? "md:text-right md:pr-4" : "md:text-left md:order-2 md:pl-4"} flex flex-col justify-center`}>
                     <div className="mb-2">
                       <span className="inline-block px-4 py-1.5 bg-olive text-cream-lightest rounded-full font-sans font-bold text-xs uppercase tracking-wider shadow-xs">
                         {event.period}
@@ -706,7 +818,7 @@ export default function Home() {
                     <h4 className="font-sans-ultra-bold text-xl md:text-2xl text-charcoal leading-tight uppercase">{event.title}</h4>
                     <p className="font-serif-italic text-base text-gold-accent mt-1">{event.institution}</p>
                     {event.grade && (
-                      <div className={`mt-3 ${isEven ? "md:justify-end" : "md:justify-start"} flex`}>
+                      <div className={`mt-3 justify-start ${isEven ? "md:justify-end" : "md:justify-start"} flex`}>
                         <span className="inline-block text-[10px] font-sans font-bold uppercase tracking-widest text-olive px-3 py-1 bg-olive/5 rounded-full border border-olive/10">
                           {event.grade}
                         </span>
@@ -714,23 +826,22 @@ export default function Home() {
                     )}
                   </div>
 
-                  {/* Timeline dot */}
+                  {/* Timeline dot (Desktop) */}
                   <div className="hidden md:block absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full border-4 border-cream-light bg-gold-accent z-20 shadow-md top-[calc(50%-8px)]"></div>
 
                   {/* Right/Alternating Column (details card) */}
                   <div className={`${!isEven ? "md:text-right md:order-1 md:pr-4" : "md:pl-4"} flex items-center`}>
-                    <div 
-                      className={`w-full p-8 glassmorphism-premium rounded-3xl border transition-all duration-300 hover:shadow-lg ${
-                        event.isHighlight 
-                          ? 'border-gold-accent/30 bg-pastel-yellow/30 shadow-xs' 
-                          : isEven 
-                            ? 'border-l-4 border-l-gold-accent bg-pastel-purple/20 border-r-charcoal/10 border-t-charcoal/10 border-b-charcoal/10' 
-                            : 'border-r-4 border-r-olive bg-pastel-blue/20 border-l-charcoal/10 border-t-charcoal/10 border-b-charcoal/10'
-                      }`}
+                    <div
+                      className={`w-full p-8 glassmorphism-premium rounded-3xl border transition-all duration-300 hover:shadow-lg ${event.isHighlight
+                        ? 'border-gold-accent/30 bg-pastel-yellow/30 shadow-xs'
+                        : isEven
+                          ? 'border-l-4 border-l-gold-accent bg-pastel-purple/20 border-r-charcoal/10 border-t-charcoal/10 border-b-charcoal/10'
+                          : 'border-l-4 md:border-l-0 md:border-r-4 border-l-olive md:border-r-olive bg-pastel-blue/20 border-r-charcoal/10 md:border-l-charcoal/10 border-t-charcoal/10 border-b-charcoal/10'
+                        }`}
                     >
                       {event.isHighlight && (
                         <span className="flex items-center gap-1.5 text-[10px] font-sans font-bold uppercase tracking-widest text-gold-accent mb-3 justify-start">
-                          <span className="material-symbols-outlined text-xs" style={{ fontVariationSettings: "'FILL' 1" }}>star</span> 
+                          <span className="material-symbols-outlined text-xs" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
                           Highlighted Milestone
                         </span>
                       )}
@@ -748,7 +859,7 @@ export default function Home() {
       {/* Research Papers */}
       <section className="section-padding premium-glow-alt-2 relative overflow-hidden" id="research-papers">
 
-        
+
         <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop relative z-10">
           <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6 border-b border-charcoal/5 pb-8">
             <div className="space-y-2">
@@ -756,19 +867,19 @@ export default function Home() {
               <h2 className="font-headline-lg text-4xl md:text-5xl text-charcoal font-extrabold uppercase tracking-wider leading-tight">Selected Research Papers</h2>
               <p className="font-serif-italic text-lg text-charcoal-light">Academic investigations addressing critical ecological, digital, and statecraft challenges</p>
             </div>
-            <a 
-              className="font-sans text-sm font-bold text-olive flex items-center gap-2 group pb-1 transition-all border-b border-olive/30 hover:border-olive hover:text-gold-accent shrink-0" 
-              href={profile.contact?.googleScholar || "https://scholar.google.com"} 
-              target="_blank" 
+            <a
+              className="font-sans text-sm font-bold text-olive flex items-center gap-2 group pb-1 transition-all border-b border-olive/30 hover:border-olive hover:text-gold-accent shrink-0"
+              href={profile.contact?.googleScholar || "https://scholar.google.com"}
+              target="_blank"
               rel="noopener noreferrer"
             >
-              Google Scholar Profile 
+              Google Scholar Profile
               <span className="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1">
                 north_east
               </span>
             </a>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {researchPapers
               .filter((paper) => paper.showOnHome !== false)
@@ -781,27 +892,27 @@ export default function Home() {
                 ];
                 const bgs = pastelBgColors[idx % pastelBgColors.length];
                 return (
-                  <div 
-                    key={paper._id || idx} 
+                  <div
+                    key={paper._id || idx}
                     className={`glassmorphism-premium p-10 rounded-[2.5rem] hover:-translate-y-2 hover:border-olive/20 hover:shadow-xl transition-all duration-500 paper-card-item flex flex-col justify-between group border border-charcoal/10 h-full ${bgs}`}
                   >
                     <div>
                       {paper.images && paper.images.length > 0 && (
-                        <div 
+                        <div
                           onClick={() => {
                             if (paper.type === 'published') {
                               const url = paper.paperUrl || paper.pdfUrl;
                               if (url) window.open(url, '_blank', 'noopener,noreferrer');
                             } else {
-                              setActivePaperSlides(paper); 
+                              setActivePaperSlides(paper);
                               setSlideIndex(0);
                             }
                           }}
                           className="w-full h-48 rounded-2xl overflow-hidden mb-6 relative group/img cursor-pointer border border-charcoal/5 shadow-xs bg-white/50"
                         >
-                          <img 
-                            alt={paper.title} 
-                            src={`/api/images/${paper.images[0]}`} 
+                          <img
+                            alt={paper.title}
+                            src={`/api/images/${paper.images[0]}`}
                             className="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-105"
                           />
                           <div className="absolute inset-0 bg-charcoal/20 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center">
@@ -822,16 +933,14 @@ export default function Home() {
                       )}
 
                       <div className="flex justify-between items-start mb-6">
-                        <span className={`px-4 py-1.5 text-[10px] font-sans font-bold uppercase rounded-full tracking-wider ${
-                          paper.type === 'published' 
-                            ? 'bg-olive/10 text-olive border border-olive/10' 
-                            : 'bg-gold-accent/10 text-gold-accent border border-gold-accent/10'
-                        }`}>
+                        <span className={`px-4 py-1.5 text-[10px] font-sans font-bold uppercase rounded-full tracking-wider ${paper.type === 'published'
+                          ? 'bg-olive/10 text-olive border border-olive/10'
+                          : 'bg-gold-accent/10 text-gold-accent border border-gold-accent/10'
+                          }`}>
                           {paper.type} • {paper.date}
                         </span>
-                        <span className={`material-symbols-outlined text-warm-gray-light transition-colors text-2xl ${
-                          paper.type === 'published' ? 'group-hover:text-olive' : 'group-hover:text-gold-accent'
-                        }`}>
+                        <span className={`material-symbols-outlined text-warm-gray-light transition-colors text-2xl ${paper.type === 'published' ? 'group-hover:text-olive' : 'group-hover:text-gold-accent'
+                          }`}>
                           {paper.type === 'published' ? 'article' : 'present_to_all'}
                         </span>
                       </div>
@@ -861,11 +970,11 @@ export default function Home() {
 
                       <div className="h-6 mb-6 flex items-center">
                         {(paper.abstract || paper.description || '').length > 120 ? (
-                          <button 
+                          <button
                             onClick={() => setActivePaper(paper)}
                             className="text-xs font-semibold text-olive hover:text-gold-accent transition-colors duration-300 flex items-center gap-1 cursor-pointer"
                           >
-                            Read More 
+                            Read More
                             <span className="material-symbols-outlined text-xs">arrow_right</span>
                           </button>
                         ) : (
@@ -876,21 +985,20 @@ export default function Home() {
 
                     <div className="space-y-3 pt-6 border-t border-charcoal/5">
                       {(paper.paperUrl || paper.pdfUrl) && (
-                        <a 
-                          href={paper.paperUrl || paper.pdfUrl} 
-                          target="_blank" 
-                          rel="noopener noreferrer" 
-                          className={`inline-flex items-center gap-2 text-xs font-sans font-bold uppercase tracking-wider transition-all cursor-pointer ${
-                            paper.type === 'published' ? 'text-olive hover:text-gold-accent' : 'text-gold-accent hover:text-olive'
-                          }`}
+                        <a
+                          href={paper.paperUrl || paper.pdfUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`inline-flex items-center gap-2 text-xs font-sans font-bold uppercase tracking-wider transition-all cursor-pointer ${paper.type === 'published' ? 'text-olive hover:text-gold-accent' : 'text-gold-accent hover:text-olive'
+                            }`}
                         >
-                          Read Publication 
+                          Read Publication
                           <span className="material-symbols-outlined text-[16px] transition-transform group-hover:translate-x-1">arrow_forward</span>
                         </a>
                       )}
                       {paper.type === 'presented' && paper.images && paper.images.length > 0 && (
-                        <button 
-                          onClick={() => { setActivePaperSlides(paper); setSlideIndex(0); }} 
+                        <button
+                          onClick={() => { setActivePaperSlides(paper); setSlideIndex(0); }}
                           className="flex items-center gap-2 text-xs font-sans font-bold uppercase tracking-wider text-gold-accent hover:text-olive transition-colors cursor-pointer w-full text-left"
                         >
                           <span className="material-symbols-outlined text-[18px]">slideshow</span>
@@ -906,7 +1014,7 @@ export default function Home() {
           {/* View All Publications Button */}
           {researchPapers.length > 6 && (
             <div className="flex justify-center mt-16" id="view-all-papers-btn">
-              <a 
+              <a
                 href="/papers"
                 className="inline-flex items-center gap-2 px-8 py-4 bg-olive hover:bg-olive/90 text-cream-lightest font-sans font-bold text-sm uppercase tracking-widest rounded-full shadow-sm hover:shadow-md transition-all duration-300 group"
               >
@@ -924,7 +1032,7 @@ export default function Home() {
       {/* Intellectual Vistas (Summits) */}
       <section className="section-padding premium-glow-alt-1 relative overflow-hidden" id="vistas">
 
-        
+
         <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop relative z-10">
           <div className="text-center mb-20">
             <span className="font-label-md text-gold-accent uppercase tracking-widest text-xs font-bold block mb-3">Exploring the Summits</span>
@@ -941,7 +1049,7 @@ export default function Home() {
           {/* Show All Vistas / Summits Redirect Button */}
           {intellectualVistas.length > 3 && (
             <div className="flex justify-center mt-16" id="view-all-vistas-btn">
-              <a 
+              <a
                 href="/vistas"
                 className="inline-flex items-center gap-2 px-8 py-4 bg-olive hover:bg-olive/90 text-cream-lightest font-sans font-bold text-sm uppercase tracking-widest rounded-full shadow-sm hover:shadow-md transition-all duration-300 group"
               >
@@ -979,17 +1087,17 @@ export default function Home() {
                     ? blog.content.replace(/<[^>]*>/g, "").replace(/[#*`>]/g, "").trim().slice(0, 120) + "..."
                     : "";
                   return (
-                    <article 
+                    <article
                       key={uniqueKey}
                       onClick={() => setActiveBlog(blog)}
                       className="group relative overflow-hidden rounded-[2.5rem] glassmorphism-premium border border-charcoal/10 hover:border-olive/20 hover:shadow-xl transition-all duration-500 marquee-card-landscape"
                     >
                       {/* Left: Cover Image */}
                       <div className="w-[40%] sm:w-[45%] h-full relative overflow-hidden shrink-0">
-                        <img 
-                          alt={blog.title} 
-                          className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-1000" 
-                          src={`/api/images/${blog.coverImage}`} 
+                        <img
+                          alt={blog.title}
+                          className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-1000"
+                          src={`/api/images/${blog.coverImage}`}
                         />
                         <div className="absolute inset-0 bg-charcoal/10 group-hover:bg-charcoal/0 transition-colors duration-500"></div>
                       </div>
@@ -999,13 +1107,12 @@ export default function Home() {
                         <div className="space-y-3">
                           <div className="flex gap-2 flex-wrap items-center">
                             {blog.tags?.slice(0, 2).map((tag, tagIdx) => (
-                              <span 
-                                key={tagIdx} 
-                                className={`text-[8px] uppercase font-sans font-bold tracking-widest px-2.5 py-0.5 rounded-full ${
-                                  tagIdx % 2 === 0 
-                                    ? 'bg-olive/10 text-olive border border-olive/5' 
-                                    : 'bg-gold-accent/10 text-gold-accent border border-gold-accent/5'
-                                }`}
+                              <span
+                                key={tagIdx}
+                                className={`text-[8px] uppercase font-sans font-bold tracking-widest px-2.5 py-0.5 rounded-full ${tagIdx % 2 === 0
+                                  ? 'bg-olive/10 text-olive border border-olive/5'
+                                  : 'bg-gold-accent/10 text-gold-accent border border-gold-accent/5'
+                                  }`}
                               >
                                 {tag}
                               </span>
@@ -1014,22 +1121,22 @@ export default function Home() {
                               {blog.date}
                             </span>
                           </div>
-                          
+
                           <h3 className="font-sans-ultra-bold text-sm md:text-base text-charcoal uppercase leading-tight group-hover:text-olive transition-colors duration-300 line-clamp-2">
                             {blog.title}
                           </h3>
-                          
+
                           <p className="font-sans text-[10px] md:text-xs text-charcoal-light leading-relaxed line-clamp-3">
                             {cleanContent}
                           </p>
                         </div>
-                        
+
                         <div>
-                          <button 
+                          <button
                             onClick={(e) => { e.stopPropagation(); setActiveBlog(blog); }}
                             className="inline-flex items-center gap-1.5 text-2xs font-sans font-bold uppercase tracking-widest text-olive hover:text-gold-accent transition-all cursor-pointer"
                           >
-                            Read Narrative 
+                            Read Narrative
                             <span className="material-symbols-outlined text-xs transition-transform group-hover:translate-x-1">arrow_forward</span>
                           </button>
                         </div>
@@ -1054,14 +1161,14 @@ export default function Home() {
         <div className="absolute left-0 bottom-0 w-80 h-80 bg-olive/5 rounded-full blur-3xl pointer-events-none"></div>
         <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-            
+
             {/* Left Column: Interactive Luxury Credentials Cards */}
             <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-8 lg:order-1 order-2">
               {certificates.map((cert, idx) => {
                 const bgs = idx % 2 === 0 ? "bg-pastel-purple/15 hover:bg-pastel-purple/25" : "bg-pastel-peach/15 hover:bg-pastel-peach/25";
                 return (
-                  <div 
-                    key={cert._id || idx} 
+                  <div
+                    key={cert._id || idx}
                     onClick={() => setActiveCertificate(cert)}
                     className={`glassmorphism-premium border border-charcoal/10 rounded-[2.5rem] p-8 md:p-10 relative overflow-hidden flex flex-col justify-between group cursor-pointer hover:shadow-xl hover:-translate-y-2 transition-all duration-500 ${bgs}`}
                   >
@@ -1072,9 +1179,9 @@ export default function Home() {
                       {/* Certificate Image Preview */}
                       {cert.image && (
                         <div className="w-full h-44 rounded-2xl overflow-hidden mb-6 relative group/img border border-charcoal/5 shadow-inner bg-white/95 p-1.5 flex items-center justify-center">
-                          <img 
-                            alt={cert.title} 
-                            src={`/api/images/${cert.image}`} 
+                          <img
+                            alt={cert.title}
+                            src={`/api/images/${cert.image}`}
                             className="max-w-full max-h-full object-contain rounded-lg transition-transform duration-700 group-hover/img:scale-103"
                           />
                           <div className="absolute inset-0 bg-charcoal/10 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center rounded-lg">
@@ -1115,7 +1222,7 @@ export default function Home() {
                       </div>
 
                       <button className="flex items-center gap-2 text-xs font-sans font-bold uppercase tracking-widest text-olive group-hover:text-gold-accent transition-colors duration-300 w-full text-left">
-                        View Certificate 
+                        View Certificate
                         <span className="material-symbols-outlined text-sm transition-transform group-hover:translate-x-1">arrow_forward</span>
                       </button>
                     </div>
@@ -1147,17 +1254,17 @@ export default function Home() {
         <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gold-accent/50 to-transparent"></div>
         <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-olive/20 rounded-full blur-3xl pointer-events-none"></div>
         <div className="absolute -top-40 -left-40 w-96 h-96 bg-gold-accent/10 rounded-full blur-3xl pointer-events-none"></div>
-        
+
         <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-24 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 items-center border-b border-cream-lightest/10 pb-16 mb-12">
-            
+
             <div className="md:col-span-5 space-y-6 text-center md:text-left">
               <span className="font-serif-italic text-5xl text-cream-lightest font-bold block drop-shadow-sm">Jahnvi.</span>
               <p className="font-sans text-base text-cream-lightest/70 max-w-sm leading-relaxed mx-auto md:mx-0">
                 Intellectualism in harmony with nature. Exploring the depths of political ecology and sustainable governance.
               </p>
             </div>
-            
+
             <div className="md:col-span-7 flex flex-wrap justify-center md:justify-end gap-x-8 gap-y-6">
               {profile.contact?.linkedin && (
                 <a className="group relative text-cream-lightest/80 hover:text-gold-accent transition-colors duration-300 font-sans font-bold text-sm uppercase tracking-wider" href={profile.contact.linkedin} target="_blank" rel="noopener noreferrer">
@@ -1197,7 +1304,7 @@ export default function Home() {
               )}
             </div>
           </div>
-          
+
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-cream-lightest/50 font-sans text-sm">
             <p className="order-2 md:order-1">© 2026 Jahnvi. All rights reserved.</p>
             <div className="order-1 md:order-2 flex items-center gap-3">
@@ -1224,7 +1331,7 @@ export default function Home() {
                   <span key={i} className="text-xs uppercase font-sans font-bold tracking-widest px-3 py-1 bg-olive/10 text-olive rounded-full">{tag}</span>
                 ))}
               </div>
-              <button 
+              <button
                 onClick={() => setActiveBlog(null)}
                 className="flex items-center gap-2 px-4 py-2 bg-charcoal/5 hover:bg-charcoal/10 text-charcoal rounded-full font-sans text-xs font-bold uppercase tracking-wider transition-all cursor-pointer border border-charcoal/10"
               >
@@ -1237,7 +1344,7 @@ export default function Home() {
             <div className="space-y-8 animate-fade-in">
               <h1 className="font-sans-ultra-bold text-3xl md:text-5xl text-charcoal uppercase leading-tight">{activeBlog.title}</h1>
               <p className="font-serif-italic text-base text-gold-accent">{activeBlog.date} • {activeBlog.readTime || "5 min read"}</p>
-              
+
               <div className="w-full h-[380px] rounded-[2rem] overflow-hidden shadow-lg border border-charcoal/5">
                 <img alt={activeBlog.title} className="w-full h-full object-cover animate-scale-up" src={`/api/images/${activeBlog.coverImage}`} />
               </div>
@@ -1259,14 +1366,14 @@ export default function Home() {
       {activePaperSlides && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-lg transition-all" onClick={() => setActivePaperSlides(null)}>
           <div className="relative w-full max-w-5xl h-full md:h-auto max-h-[95vh] p-6 flex flex-col justify-between text-white bg-charcoal/40 rounded-3xl backdrop-blur-xl border border-white/10 m-4 animate-scale-up" onClick={(e) => e.stopPropagation()}>
-            
+
             {/* Header */}
             <div className="w-full flex justify-between items-center border-b border-white/10 pb-4 mb-4">
               <div className="space-y-1 pr-6">
                 <h2 className="font-sans-ultra-bold text-xl md:text-2xl text-gold-accent leading-tight uppercase">{activePaperSlides.title}</h2>
                 <p className="text-xs md:text-sm opacity-60 leading-relaxed font-sans">Venue: {activePaperSlides.venue}</p>
               </div>
-              <button 
+              <button
                 onClick={() => { setActivePaperSlides(null); setSlideIndex(0); }}
                 className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-full font-sans text-xs font-bold uppercase tracking-wider transition-all cursor-pointer border border-white/10 shrink-0"
               >
@@ -1277,21 +1384,21 @@ export default function Home() {
 
             {/* Slide Visual Container */}
             <div className="relative flex items-center justify-center w-full aspect-[16/10] bg-black/40 rounded-2xl overflow-hidden border border-white/10 group">
-              <img 
-                alt={`Presentation slide ${slideIndex + 1}`} 
-                className="max-w-full max-h-full object-contain transition-all duration-300 animate-fade-in" 
-                src={`/api/images/${activePaperSlides.images[slideIndex]}`} 
+              <img
+                alt={`Presentation slide ${slideIndex + 1}`}
+                className="max-w-full max-h-full object-contain transition-all duration-300 animate-fade-in"
+                src={`/api/images/${activePaperSlides.images[slideIndex]}`}
               />
 
               {activePaperSlides.images.length > 1 && (
                 <>
-                  <button 
+                  <button
                     onClick={() => setSlideIndex((prev) => (prev - 1 + activePaperSlides.images.length) % activePaperSlides.images.length)}
                     className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/40 hover:bg-black/75 flex items-center justify-center transition-all backdrop-blur-sm z-20 text-white cursor-pointer"
                   >
                     <span className="material-symbols-outlined text-3xl">chevron_left</span>
                   </button>
-                  <button 
+                  <button
                     onClick={() => setSlideIndex((prev) => (prev + 1) % activePaperSlides.images.length)}
                     className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/40 hover:bg-black/75 flex items-center justify-center transition-all backdrop-blur-sm z-20 text-white cursor-pointer"
                   >
@@ -1309,8 +1416,8 @@ export default function Home() {
               </div>
               <div className="flex gap-3 overflow-x-auto pb-2 justify-start md:justify-center">
                 {activePaperSlides.images.map((img, i) => (
-                  <div 
-                    key={i} 
+                  <div
+                    key={i}
                     onClick={() => setSlideIndex(i)}
                     className={`w-20 md:w-24 aspect-[16/10] rounded-xl overflow-hidden cursor-pointer transition-all border-2 ${i === slideIndex ? 'border-gold-accent scale-105 shadow-lg opacity-100' : 'border-transparent opacity-40 hover:opacity-100'}`}
                   >
@@ -1332,7 +1439,7 @@ export default function Home() {
                 <h2 className="font-sans-ultra-bold text-xl md:text-2xl text-olive uppercase leading-tight">{activeCertificate.title}</h2>
                 <p className="text-xs md:text-sm text-charcoal-light font-sans font-semibold leading-relaxed">Issued by: {activeCertificate.issuer} ({activeCertificate.date})</p>
               </div>
-              <button 
+              <button
                 onClick={() => setActiveCertificate(null)}
                 className="flex items-center justify-center w-10 h-10 bg-charcoal/5 hover:bg-charcoal/10 text-charcoal rounded-full transition-all cursor-pointer shrink-0 border border-charcoal/10"
               >
@@ -1342,18 +1449,18 @@ export default function Home() {
 
             {/* Image display */}
             <div className="w-full max-h-[55vh] overflow-hidden rounded-2xl border bg-white flex items-center justify-center p-2 shadow-inner">
-              <img 
-                alt={activeCertificate.title} 
-                className="max-h-[50vh] object-contain rounded-lg shadow-sm" 
-                src={`/api/images/${activeCertificate.image}`} 
+              <img
+                alt={activeCertificate.title}
+                className="max-h-[50vh] object-contain rounded-lg shadow-sm"
+                src={`/api/images/${activeCertificate.image}`}
               />
             </div>
 
             {activeCertificate.verificationUrl && (
-              <a 
-                href={activeCertificate.verificationUrl} 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href={activeCertificate.verificationUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="mt-6 px-6 py-2.5 bg-olive text-cream-lightest rounded-full font-sans text-xs font-bold uppercase tracking-widest hover:bg-olive-dark hover:scale-102 transition-all flex items-center gap-2 cursor-pointer shadow-md"
               >
                 Verify Official Link <span className="material-symbols-outlined text-lg">north_east</span>
@@ -1367,15 +1474,14 @@ export default function Home() {
       {activePaper && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/75 backdrop-blur-md transition-all animate-fade-in" onClick={() => setActivePaper(null)}>
           <div className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-[#FFFDF9] rounded-[2.5rem] border border-charcoal/10 text-charcoal shadow-2xl animate-scale-up p-8 md:p-12 m-4" onClick={(e) => e.stopPropagation()}>
-            
+
             {/* Header / Title */}
             <div className="w-full flex justify-between items-start border-b pb-6 mb-6 border-charcoal/10">
               <div className="space-y-2 pr-6">
-                <span className={`inline-block px-3 py-1 text-[10px] font-sans font-bold uppercase rounded-full tracking-wider ${
-                  activePaper.type === 'published' 
-                    ? 'bg-olive/10 text-olive border border-olive/10' 
-                    : 'bg-gold-accent/10 text-gold-accent border border-gold-accent/10'
-                }`}>
+                <span className={`inline-block px-3 py-1 text-[10px] font-sans font-bold uppercase rounded-full tracking-wider ${activePaper.type === 'published'
+                  ? 'bg-olive/10 text-olive border border-olive/10'
+                  : 'bg-gold-accent/10 text-gold-accent border border-gold-accent/10'
+                  }`}>
                   {activePaper.type} • {activePaper.date}
                 </span>
                 <h2 className="font-sans-ultra-bold text-2xl md:text-3xl text-charcoal uppercase leading-tight">{activePaper.title}</h2>
@@ -1389,7 +1495,7 @@ export default function Home() {
                   </div>
                 )}
               </div>
-              <button 
+              <button
                 onClick={() => setActivePaper(null)}
                 className="flex items-center justify-center w-10 h-10 bg-charcoal/5 hover:bg-charcoal/10 text-charcoal rounded-full transition-all cursor-pointer shrink-0 border border-charcoal/10"
               >
@@ -1404,20 +1510,20 @@ export default function Home() {
                   {activePaper.type === 'published' ? 'Document & Associated Figures' : 'Presentation Slides & Media'}
                 </h4>
                 <div className="relative w-full min-h-[250px] max-h-[50vh] bg-black/5 rounded-2xl overflow-hidden border border-charcoal/10 flex items-center justify-center p-2">
-                  <img 
-                    alt={`Slide preview`} 
-                    className="max-w-full max-h-[48vh] object-contain rounded-lg shadow-sm transition-transform duration-300 hover:scale-[1.01]" 
-                    src={`/api/images/${activePaper.images[slideIndex < activePaper.images.length ? slideIndex : 0]}`} 
+                  <img
+                    alt={`Slide preview`}
+                    className="max-w-full max-h-[48vh] object-contain rounded-lg shadow-sm transition-transform duration-300 hover:scale-[1.01]"
+                    src={`/api/images/${activePaper.images[slideIndex < activePaper.images.length ? slideIndex : 0]}`}
                   />
                   {activePaper.images.length > 1 && (
                     <>
-                      <button 
+                      <button
                         onClick={() => setSlideIndex((prev) => (prev - 1 + activePaper.images.length) % activePaper.images.length)}
                         className="absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-[#FFFDF9]/80 hover:bg-[#FFFDF9] text-charcoal flex items-center justify-center transition-all shadow-md z-20 cursor-pointer"
                       >
                         <span className="material-symbols-outlined text-sm">chevron_left</span>
                       </button>
-                      <button 
+                      <button
                         onClick={() => setSlideIndex((prev) => (prev + 1) % activePaper.images.length)}
                         className="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-[#FFFDF9]/80 hover:bg-[#FFFDF9] text-charcoal flex items-center justify-center transition-all shadow-md z-20 cursor-pointer"
                       >
@@ -1430,14 +1536,13 @@ export default function Home() {
                 {activePaper.images.length > 1 && (
                   <div className="flex gap-2 overflow-x-auto pb-1 justify-start">
                     {activePaper.images.map((img, i) => (
-                      <div 
-                        key={i} 
+                      <div
+                        key={i}
                         onClick={() => setSlideIndex(i)}
-                        className={`w-16 aspect-[16/10] rounded-lg overflow-hidden cursor-pointer transition-all border-2 shrink-0 ${
-                          (slideIndex < activePaper.images.length ? slideIndex : 0) === i 
-                            ? 'border-gold-accent scale-102 opacity-100 shadow-sm' 
-                            : 'border-transparent opacity-60 hover:opacity-100'
-                        }`}
+                        className={`w-16 aspect-[16/10] rounded-lg overflow-hidden cursor-pointer transition-all border-2 shrink-0 ${(slideIndex < activePaper.images.length ? slideIndex : 0) === i
+                          ? 'border-gold-accent scale-102 opacity-100 shadow-sm'
+                          : 'border-transparent opacity-60 hover:opacity-100'
+                          }`}
                       >
                         <img alt={`Thumb ${i + 1}`} className="w-full h-full object-cover" src={`/api/images/${img}`} />
                       </div>
@@ -1471,22 +1576,21 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row gap-4 justify-between items-center mt-8 pt-6 border-t border-charcoal/10">
               <div className="flex flex-wrap gap-4">
                 {(activePaper.paperUrl || activePaper.pdfUrl) && (
-                  <a 
-                    href={activePaper.paperUrl || activePaper.pdfUrl} 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-sans text-xs font-bold uppercase tracking-widest transition-all cursor-pointer text-white ${
-                      activePaper.type === 'published' 
-                        ? 'bg-olive hover:bg-olive-dark shadow-md' 
-                        : 'bg-gold-accent hover:bg-amber-800 shadow-md'
-                    }`}
+                  <a
+                    href={activePaper.paperUrl || activePaper.pdfUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-sans text-xs font-bold uppercase tracking-widest transition-all cursor-pointer text-white ${activePaper.type === 'published'
+                      ? 'bg-olive hover:bg-olive-dark shadow-md'
+                      : 'bg-gold-accent hover:bg-amber-800 shadow-md'
+                      }`}
                   >
-                    Read Publication 
+                    Read Publication
                     <span className="material-symbols-outlined text-sm">north_east</span>
                   </a>
                 )}
               </div>
-              <button 
+              <button
                 onClick={() => setActivePaper(null)}
                 className="w-full sm:w-auto px-6 py-2.5 bg-charcoal/5 hover:bg-charcoal/10 text-charcoal border border-charcoal/10 rounded-full font-sans text-xs font-bold uppercase tracking-widest transition-colors cursor-pointer"
               >
