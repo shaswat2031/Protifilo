@@ -248,8 +248,36 @@ const quotes = [
 ];
 
 export default function Home() {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState({
+    profile: {
+      name: "Jahnvi",
+      title: "Researcher & Writer",
+      tagline: "Exploring Political Ecology, Green Governance & Sustainable Development",
+      bioIntro: "I read in a book two years back that there are two worlds: one is a world shaped by mind-set of the masses symbolic of the ordinary lives of more than 80% of the population and the other world shaped by thinkers, leaving a legacy of intellectual heritage. I decided to be in the latter. With that approach, I started my research journey—where ideas and reflecting on problems were the fuel for igniting changes. It began with my first year of pursuing Masters in Political Science and I found my interests growing in contributing to the formulation of policy solutions for climate crisis.",
+      bioSecondary: "My roots lie in a family of Business minds and Entrepreneurs; I am the first generation Post-graduate, first in my family to earn a Master's degree. It felt like a call to stewardship, heavy yet honourable. My journey into the world of visionaries ignited my intellectual energy and the inherent sustainability of India shaped my horizons. So far, I am playing my part to construct a change academically that could trigger transformations if aligned with our policies on sustainability or “Sarva Saha” in Sanskrit which means a harmonious coexistence between man and its nature.",
+      contact: {
+        email: "jahnvi.ecology@gmail.com",
+        location: "Jaipur, Rajasthan, India",
+        linkedin: "https://linkedin.com",
+        googleScholar: "https://scholar.google.com",
+        researchGate: "https://researchgate.net",
+        orcid: "https://orcid.org"
+      }
+    },
+    researchInterests: [
+      { title: "Political Ecology", description: "Analyzing the intersection of political, economic, and social factors with ecological issues and policies.", iconName: "globe" },
+      { title: "Green Governance", description: "Investigating institutional frameworks and policies for sustainable environmental governance.", iconName: "shieldCheck" },
+      { title: "Sustainable Development", description: "Exploring pathways to balance human developmental needs with planetary boundaries and Sanskrit ecological concepts.", iconName: "leaf" }
+    ],
+    academicBackground: [
+      { period: "2024 - Present", title: "PhD Candidate in Political Science", institution: "University of Jaipur", grade: "NET-JRF Qualified", details: "Research focusing on climate policy frameworks, ecological co-existence (Sarva Saha), and green statecraft.", isHighlight: true }
+    ],
+    papers: [],
+    vistas: [],
+    blogs: [],
+    certificates: []
+  });
+  const [loading, setLoading] = useState(false);
 
   // New premium interactive states
   const [activeBlog, setActiveBlog] = useState(null);
