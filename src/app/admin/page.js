@@ -853,6 +853,98 @@ export default function AdminDashboard() {
                       </div>
                     </div>
 
+                    {/* Core Philosophy & Research Statement Image Upload */}
+                    <div className="space-y-4 md:col-span-2 border-t border-olive/10 pt-6">
+                      <h3 className="font-serif text-sm font-bold text-charcoal uppercase tracking-wider">Core Philosophy & Research Statement</h3>
+                      
+                      <div className="grid gap-4 md:grid-cols-2">
+                        <div className="space-y-1">
+                          <label className="text-2xs font-semibold text-warm-gray">Section Label</label>
+                          <input
+                            type="text"
+                            value={data.profile.corePhilosophy?.sectionLabel || "Core Philosophy"}
+                            onChange={(e) => {
+                              const updatedPhilosophy = {
+                                ...(data.profile.corePhilosophy || {}),
+                                sectionLabel: e.target.value
+                              };
+                              setData({
+                                ...data,
+                                profile: { ...data.profile, corePhilosophy: updatedPhilosophy }
+                              });
+                            }}
+                            className="w-full rounded-lg border border-olive/20 bg-cream px-4 py-2.5 text-sm text-charcoal focus:border-olive focus:outline-none"
+                            placeholder="e.g. Core Philosophy"
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <label className="text-2xs font-semibold text-warm-gray">Section Title</label>
+                          <input
+                            type="text"
+                            value={data.profile.corePhilosophy?.sectionTitle || "My Research Statement"}
+                            onChange={(e) => {
+                              const updatedPhilosophy = {
+                                ...(data.profile.corePhilosophy || {}),
+                                sectionTitle: e.target.value
+                              };
+                              setData({
+                                ...data,
+                                profile: { ...data.profile, corePhilosophy: updatedPhilosophy }
+                              });
+                            }}
+                            className="w-full rounded-lg border border-olive/20 bg-cream px-4 py-2.5 text-sm text-charcoal focus:border-olive focus:outline-none"
+                            placeholder="e.g. My Research Statement"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-2xs font-extrabold uppercase tracking-widest text-warm-gray block mb-2">Research Statement Image</label>
+                        <div className="flex items-center gap-4">
+                          <div className="h-20 w-16 overflow-hidden rounded-xl border border-olive/30 bg-cream shadow-xs">
+                            {data.profile.corePhilosophy?.philosophyImage ? (
+                              <img 
+                                src={data.profile.corePhilosophy.philosophyImage.startsWith('/') || data.profile.corePhilosophy.philosophyImage.startsWith('http') 
+                                  ? data.profile.corePhilosophy.philosophyImage 
+                                  : `/api/images/${data.profile.corePhilosophy.philosophyImage}`} 
+                                alt="Philosophy Preview" 
+                                className="h-full w-full object-cover" 
+                              />
+                            ) : (
+                              <div className="flex h-full w-full items-center justify-center text-warm-gray-light">
+                                <BookOpen className="h-6 w-6" />
+                              </div>
+                            )}
+                          </div>
+                          <div className="relative">
+                            <input
+                              type="file"
+                              accept="image/*"
+                              id="philosophy-image-upload"
+                              className="hidden"
+                              onChange={(e) => handleImageUpload(e, (urlPath) => {
+                                const updatedPhilosophy = {
+                                  ...(data.profile.corePhilosophy || {}),
+                                  philosophyImage: `/api/images/${urlPath}`
+                                };
+                                setData({
+                                  ...data,
+                                  profile: { ...data.profile, corePhilosophy: updatedPhilosophy }
+                                });
+                              })}
+                            />
+                            <label
+                              htmlFor="philosophy-image-upload"
+                              className="flex items-center gap-1.5 rounded-lg border border-olive/30 bg-olive/10 px-4 py-2 text-xs font-semibold text-olive cursor-pointer hover:bg-olive/20"
+                            >
+                              <Upload className="h-3.5 w-3.5" />
+                              {uploadingImage ? "Uploading..." : "Upload Statement Image"}
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                     {/* Contact links */}
                     <div className="space-y-4 md:col-span-2 border-t border-olive/10 pt-6">
                       <h3 className="font-serif text-sm font-bold text-charcoal uppercase tracking-wider">Contact & Social Anchors</h3>
