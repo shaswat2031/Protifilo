@@ -165,9 +165,9 @@ function VistaItem({ vista, idx }) {
   const isEven = idx % 2 === 0;
 
   return (
-    <div className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-center vista-overlap-item ${isEven ? "" : "lg:flex-row-reverse"}`}>
+    <div className={`grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center vista-overlap-item ${isEven ? "" : "md:flex-row-reverse"}`}>
       {/* Vista Image / Carousel */}
-      <div className={`relative rounded-[2.5rem] overflow-hidden h-[400px] md:h-[450px] shadow-lg border border-charcoal/10 group ${!isEven ? "lg:order-2" : ""}`}>
+      <div className={`relative rounded-[2.5rem] overflow-hidden h-[400px] md:h-[450px] shadow-lg border border-charcoal/10 group ${!isEven ? "md:order-2" : ""}`}>
         {images.length > 0 ? (
           <>
             <img
@@ -215,7 +215,7 @@ function VistaItem({ vista, idx }) {
       </div>
 
       {/* Vista Text Description */}
-      <div className={`space-y-4 ${!isEven ? "lg:order-1 lg:pr-8 lg:text-right" : "lg:pl-8"}`}>
+      <div className={`space-y-4 ${!isEven ? "md:order-1 md:pr-8 md:text-right" : "md:pl-8"}`}>
         <span className="text-gold-accent font-serif-italic text-6xl opacity-30 block">{String(idx + 1).padStart(2, '0')}</span>
         <h3 className="font-sans-ultra-bold text-2xl md:text-3xl text-charcoal uppercase leading-tight">{vista.title}</h3>
         <p className="font-sans text-charcoal-light leading-relaxed text-base md:text-lg">{vista.description}</p>
@@ -224,7 +224,7 @@ function VistaItem({ vista, idx }) {
   );
 }
 
-const quotes = [
+const defaultQuotes = [
   {
     word: "Sarva Saha",
     lang: "संस्कृत:",
@@ -247,53 +247,16 @@ const quotes = [
   }
 ];
 
-export default function Home() {
-  const [data, setData] = useState({
-    profile: {
-      name: "Jahnvi",
-      title: "Researcher & Writer",
-      tagline: "Exploring Political Ecology, Green Governance & Sustainable Development",
-      bioIntro: "I read in a book two years back that there are two worlds: one is a world shaped by mind-set of the masses symbolic of the ordinary lives of more than 80% of the population and the other world shaped by thinkers, leaving a legacy of intellectual heritage. I decided to be in the latter. With that approach, I started my research journey—where ideas and reflecting on problems were the fuel for igniting changes. It began with my first year of pursuing Masters in Political Science and I found my interests growing in contributing to the formulation of policy solutions for climate crisis.",
-      bioSecondary: "My roots lie in a family of Business minds and Entrepreneurs; I am the first generation Post-graduate, first in my family to earn a Master's degree. It felt like a call to stewardship, heavy yet honourable. My journey into the world of visionaries ignited my intellectual energy and the inherent sustainability of India shaped my horizons. So far, I am playing my part to construct a change academically that could trigger transformations if aligned with our policies on sustainability or “Sarva Saha” in Sanskrit which means a harmonious coexistence between man and its nature.",
-      contact: {
-        email: "jahnvi.ecology@gmail.com",
-        location: "Jaipur, Rajasthan, India",
-        linkedin: "https://linkedin.com",
-        googleScholar: "https://scholar.google.com",
-        researchGate: "https://researchgate.net",
-        orcid: "https://orcid.org"
-      }
-    },
-    researchInterests: [
-      { title: "Political Ecology", description: "Analyzing the intersection of political, economic, and social factors with ecological issues and policies.", iconName: "globe" },
-      { title: "Green Governance", description: "Investigating institutional frameworks and policies for sustainable environmental governance.", iconName: "shieldCheck" },
-      { title: "Sustainable Development", description: "Exploring pathways to balance human developmental needs with planetary boundaries and Sanskrit ecological concepts.", iconName: "leaf" }
-    ],
-    academicBackground: [
-      { period: "2024 - Present", title: "PhD Candidate in Political Science", institution: "University of Jaipur", grade: "NET-JRF Qualified", details: "Research focusing on climate policy frameworks, ecological co-existence (Sarva Saha), and green statecraft.", isHighlight: true }
-    ],
-    papers: [],
-    vistas: [],
-    blogs: [],
-    certificates: []
-  });
-  const [loading, setLoading] = useState(false);
-
-  // New premium interactive states
-  const [activeBlog, setActiveBlog] = useState(null);
-  const [activePaper, setActivePaper] = useState(null);
-  const [activePaperSlides, setActivePaperSlides] = useState(null);
-  const [slideIndex, setSlideIndex] = useState(0);
-  const [activeCertificate, setActiveCertificate] = useState(null);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+// Sub-component for Typewriter Quote to isolate high-frequency state updates
+function TypewriterQuote({ quotes }) {
+  const activeQuotes = quotes && quotes.length > 0 ? quotes : defaultQuotes;
   const [activeQuoteIdx, setActiveQuoteIdx] = useState(0);
   const [displayedText, setDisplayedText] = useState("");
   const [isTyping, setIsTyping] = useState(true);
 
-  // Elite device-adaptive Typewriter State Machine (Type forward -> Rest -> Backspace snappy -> Pause gap -> Rotate)
   useEffect(() => {
     const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
-    const currentText = quotes[activeQuoteIdx].text;
+    const currentText = activeQuotes[activeQuoteIdx].text;
 
     // Configurable timing profiles based on device capacity
     const typeSpeed = isMobile ? 30 : 18;
@@ -339,7 +302,7 @@ export default function Home() {
         }
       } else if (mode === "paused") {
         // Increment index - triggers useEffect cleanup and restarts cycle
-        setActiveQuoteIdx((prev) => (prev + 1) % quotes.length);
+        setActiveQuoteIdx((prev) => (prev + 1) % activeQuotes.length);
       }
     };
 
@@ -350,6 +313,64 @@ export default function Home() {
       if (timer) clearTimeout(timer);
     };
   }, [activeQuoteIdx]);
+
+  return (
+    <div id="statement-quote" className="w-full">
+      <div className="glassmorphism-premium bg-gradient-to-br from-pastel-purple/25 via-white/70 to-pastel-blue/20 border border-olive/15 rounded-[2.5rem] p-8 md:p-10 relative overflow-hidden shadow-md group hover:shadow-xl transition-all duration-500 text-center md:text-left">
+        {/* Ambient glowing circles */}
+        <div className="absolute -left-16 -top-16 w-52 h-52 bg-pastel-pink/20 rounded-full blur-3xl opacity-60 pointer-events-none"></div>
+        <div className="absolute -right-16 -bottom-16 w-52 h-52 bg-pastel-mint/20 rounded-full blur-3xl opacity-60 pointer-events-none"></div>
+
+        <span className="absolute left-6 top-4 text-6xl md:text-7xl text-olive/10 font-serif-italic select-none pointer-events-none">“</span>
+
+        <p className="font-serif-italic text-xl md:text-2xl text-olive leading-relaxed relative z-10 min-h-[140px] sm:min-h-[100px] md:min-h-[80px]">
+          '{activeQuotes[activeQuoteIdx]?.word}' — <span className="text-gold-accent font-sans-ultra-bold font-normal not-italic tracking-wider px-2 py-0.5 bg-gold-accent/5 rounded-lg border border-gold-accent/10">{activeQuotes[activeQuoteIdx]?.lang}</span> {displayedText}
+          <span className="inline-block w-[3px] h-5 ml-1 bg-olive/70 animate-pulse align-middle"></span>
+        </p>
+      </div>
+    </div>
+  );
+}
+
+export default function Home() {
+  const [data, setData] = useState({
+    profile: {
+      name: "Jahnvi",
+      title: "Researcher & Writer",
+      tagline: "Exploring Political Ecology, Green Governance & Sustainable Development",
+      bioIntro: "I read in a book two years back that there are two worlds: one is a world shaped by mind-set of the masses symbolic of the ordinary lives of more than 80% of the population and the other world shaped by thinkers, leaving a legacy of intellectual heritage. I decided to be in the latter. With that approach, I started my research journey—where ideas and reflecting on problems were the fuel for igniting changes. It began with my first year of pursuing Masters in Political Science and I found my interests growing in contributing to the formulation of policy solutions for climate crisis.",
+      bioSecondary: "My roots lie in a family of Business minds and Entrepreneurs; I am the first generation Post-graduate, first in my family to earn a Master's degree. It felt like a call to stewardship, heavy yet honourable. My journey into the world of visionaries ignited my intellectual energy and the inherent sustainability of India shaped my horizons. So far, I am playing my part to construct a change academically that could trigger transformations if aligned with our policies on sustainability or “Sarva Saha” in Sanskrit which means a harmonious coexistence between man and its nature.",
+      contact: {
+        email: "jahnvi.ecology@gmail.com",
+        location: "Jaipur, Rajasthan, India",
+        linkedin: "https://linkedin.com",
+        googleScholar: "https://scholar.google.com",
+        researchGate: "https://researchgate.net",
+        orcid: "https://orcid.org"
+      }
+    },
+    researchInterests: [
+      { title: "Political Ecology", description: "Analyzing the intersection of political, economic, and social factors with ecological issues and policies.", iconName: "globe" },
+      { title: "Green Governance", description: "Investigating institutional frameworks and policies for sustainable environmental governance.", iconName: "shieldCheck" },
+      { title: "Sustainable Development", description: "Exploring pathways to balance human developmental needs with planetary boundaries and Sanskrit ecological concepts.", iconName: "leaf" }
+    ],
+    academicBackground: [
+      { period: "2024 - Present", title: "PhD Candidate in Political Science", institution: "University of Jaipur", grade: "NET-JRF Qualified", details: "Research focusing on climate policy frameworks, ecological co-existence (Sarva Saha), and green statecraft.", isHighlight: true }
+    ],
+    papers: [],
+    vistas: [],
+    blogs: [],
+    certificates: []
+  });
+  const [loading, setLoading] = useState(false);
+
+  // New premium interactive states
+  const [activeBlog, setActiveBlog] = useState(null);
+  const [activePaper, setActivePaper] = useState(null);
+  const [activePaperSlides, setActivePaperSlides] = useState(null);
+  const [slideIndex, setSlideIndex] = useState(0);
+  const [activeCertificate, setActiveCertificate] = useState(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // References for light effect
   const containerRef = useRef();
@@ -594,6 +615,11 @@ export default function Home() {
 
   // Dynamic mapping logic
   const profile = data?.profile || {};
+  const corePhilosophy = profile?.corePhilosophy || {};
+  const philosophySectionLabel = corePhilosophy.sectionLabel || "Core Philosophy";
+  const philosophySectionTitle = corePhilosophy.sectionTitle || "My Research Statement";
+  const philosophyImage = corePhilosophy.philosophyImage || "/philosophy_image.jpeg";
+  const philosophyQuotes = corePhilosophy.quotes && corePhilosophy.quotes.length > 0 ? corePhilosophy.quotes : defaultQuotes;
   const researchInterests = data?.researchInterests || [];
   const timelineEvents = data?.academicBackground || [];
   const researchPapers = data?.papers || [];
@@ -708,7 +734,7 @@ export default function Home() {
         </div>
 
         {/* Centered Image - Positioned at Bottom Center */}
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[220px] sm:max-w-[280px] md:max-w-[360px] lg:max-w-[420px] xl:max-w-[520px] 2xl:max-w-[600px] z-10 pointer-events-none flex items-end mb-[12.5rem] sm:mb-[13.5rem] md:mb-[14.5rem] lg:mb-0" id="portrait-wrapper">
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[220px] sm:max-w-[280px] md:max-w-[360px] lg:max-w-[420px] xl:max-w-[520px] 2xl:max-w-[600px] z-10 pointer-events-none flex items-end mb-[16rem] sm:mb-[17rem] md:mb-0" id="portrait-wrapper">
           <img
             alt="Profile"
             className="w-full h-auto object-contain object-bottom pointer-events-auto transition-transform duration-700 hover:scale-[1.02]"
@@ -722,11 +748,11 @@ export default function Home() {
         <div className="flex-grow pointer-events-none"></div>
 
         {/* Bottom stylized typography */}
-        <div className="w-full max-w-[95rem] mx-auto px-6 md:px-8 xl:px-12 flex flex-col lg:flex-row justify-between items-center lg:items-end gap-4 lg:gap-4 z-50 select-none pb-4 md:pb-6 relative pointer-events-none mt-auto">
-          <h1 className="hero-bottom-title font-sans-ultra-bold text-3xl sm:text-4xl md:text-5xl lg:text-[5.5rem] xl:text-[6.5rem] 2xl:text-[7.5rem] uppercase leading-[0.85] text-charcoal text-center lg:text-left tracking-tighter whitespace-normal lg:whitespace-nowrap relative pointer-events-auto w-full lg:w-auto">
+        <div className="w-full max-w-[95rem] mx-auto px-6 md:px-8 xl:px-12 flex flex-col md:flex-row justify-between items-center md:items-end gap-4 md:gap-4 z-50 select-none pb-4 md:pb-6 relative pointer-events-none mt-auto">
+          <h1 className="hero-bottom-title font-sans-ultra-bold text-3xl sm:text-4xl md:text-[3.5rem] lg:text-[5.5rem] xl:text-[6.5rem] 2xl:text-[7.5rem] uppercase leading-[0.85] text-charcoal text-center md:text-left tracking-tighter whitespace-normal md:whitespace-nowrap relative pointer-events-auto w-full md:w-auto">
             I AM <span className="block">{profile?.name || "JAHNVI"}</span>
           </h1>
-          <h2 className="hero-bottom-title font-sans-ultra-bold text-xl sm:text-2xl md:text-3xl lg:text-[3.2rem] xl:text-[4.2rem] 2xl:text-[5rem] uppercase leading-[0.85] text-charcoal text-center lg:text-right tracking-tighter whitespace-normal lg:whitespace-nowrap relative pointer-events-auto w-full lg:w-auto mt-2 lg:mt-0">
+          <h2 className="hero-bottom-title font-sans-ultra-bold text-xl sm:text-2xl md:text-[2rem] lg:text-[3.2rem] xl:text-[4.2rem] 2xl:text-[5rem] uppercase leading-[0.85] text-charcoal text-center md:text-right tracking-tighter whitespace-normal md:whitespace-nowrap relative pointer-events-auto w-full md:w-auto mt-2 md:mt-0">
             RESEARCHER <span className="block">AND WRITER</span>
           </h2>
         </div>
@@ -741,42 +767,41 @@ export default function Home() {
         <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop relative z-10">
           {/* Centered Header */}
           <div className="max-w-3xl mx-auto text-center mb-16" id="statement-heading">
-            <span className="font-label-md text-gold-accent uppercase tracking-widest text-xs font-bold block mb-3">Core Philosophy</span>
-            <h2 className="font-headline-lg text-4xl md:text-5xl text-charcoal font-extrabold leading-tight uppercase tracking-wider">My Research Statement</h2>
+            <span className="font-label-md text-gold-accent uppercase tracking-widest text-xs font-bold block mb-3">{philosophySectionLabel}</span>
+            <h2 className="font-headline-lg text-4xl md:text-5xl text-charcoal font-extrabold leading-tight uppercase tracking-wider">{philosophySectionTitle}</h2>
             <div className="w-24 h-1 bg-gradient-to-r from-olive/20 via-olive to-olive/20 mx-auto mt-6 rounded-full"></div>
           </div>
 
           {/* Two-column layout: Image on Left, Details on Right */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center mb-20">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-16 items-center mb-20">
             {/* Left Column: Image */}
-            <div className="lg:col-span-5 relative group w-full max-w-md mx-auto lg:max-w-none">
-              <div className="relative rounded-[2.5rem] overflow-hidden aspect-[4/5] border border-charcoal/10 shadow-lg bg-white/50">
+            <div className="md:col-span-5 relative group w-full max-w-md mx-auto md:max-w-none">
+              {/* Back offset decorative card */}
+              <div className="absolute inset-0 border border-olive/30 rounded-[2.5rem] translate-x-3 translate-y-3 transition-transform duration-500 group-hover:translate-x-1.5 group-hover:translate-y-1.5 pointer-events-none z-0"></div>
+              
+              {/* Soft decorative glow */}
+              <div className="absolute -inset-1 bg-gradient-to-tr from-gold-accent/10 to-olive/10 rounded-[2.6rem] blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-0"></div>
+              
+              <div className="relative rounded-[2.5rem] overflow-hidden aspect-[4/5] border border-charcoal/10 shadow-lg bg-white/50 z-10">
                 <img
-                  alt="Sarva Saha Philosophy"
+                  alt={philosophySectionTitle}
                   className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-103"
-                  src="/philosophy_image.png"
+                  src={philosophyImage.startsWith('/') || philosophyImage.startsWith('http') ? philosophyImage : `/api/images/${philosophyImage}`}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-charcoal/30 via-transparent to-transparent pointer-events-none"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-charcoal/40 via-transparent to-transparent pointer-events-none"></div>
+                
+                {/* Micro-badge overlay */}
+                <div className="absolute top-6 left-6 px-4 py-1.5 bg-[#FFFDF9]/90 border border-charcoal/5 rounded-full shadow-md z-20 backdrop-blur-xs flex items-center gap-1.5 transform -translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+                  <span className="w-1.5 h-1.5 rounded-full bg-olive animate-pulse"></span>
+                  <span className="font-sans font-bold text-[9px] uppercase tracking-widest text-charcoal">JAHNVI'S STATEMENT</span>
+                </div>
               </div>
             </div>
 
             {/* Right Column: Content */}
-            <div className="lg:col-span-7 space-y-8 text-left w-full">
+            <div className="md:col-span-7 space-y-8 text-left w-full">
               {/* Highlighted Quote centerpiece */}
-              <div id="statement-quote" className="w-full">
-                <div className="glassmorphism-premium bg-gradient-to-br from-pastel-purple/25 via-white/70 to-pastel-blue/20 border border-olive/15 rounded-[2.5rem] p-8 md:p-10 relative overflow-hidden shadow-md group hover:shadow-xl transition-all duration-500 text-center md:text-left">
-                  {/* Ambient glowing circles */}
-                  <div className="absolute -left-16 -top-16 w-52 h-52 bg-pastel-pink/20 rounded-full blur-3xl opacity-60 pointer-events-none"></div>
-                  <div className="absolute -right-16 -bottom-16 w-52 h-52 bg-pastel-mint/20 rounded-full blur-3xl opacity-60 pointer-events-none"></div>
-
-                  <span className="absolute left-6 top-4 text-6xl md:text-7xl text-olive/10 font-serif-italic select-none pointer-events-none">“</span>
-
-                  <p className="font-serif-italic text-xl md:text-2xl text-olive leading-relaxed relative z-10 min-h-[140px] sm:min-h-[100px] md:min-h-[80px]">
-                    '{quotes[activeQuoteIdx]?.word}' — <span className="text-gold-accent font-sans-ultra-bold font-normal not-italic tracking-wider px-2 py-0.5 bg-gold-accent/5 rounded-lg border border-gold-accent/10">{quotes[activeQuoteIdx]?.lang}</span> {displayedText}
-                    <span className="inline-block w-[3px] h-5 ml-1 bg-olive/70 animate-pulse align-middle"></span>
-                  </p>
-                </div>
-              </div>
+              <TypewriterQuote quotes={philosophyQuotes} />
 
               {/* Editorial-style Bio Grid */}
               <div id="statement-bio" className="space-y-6 font-sans text-base md:text-lg text-charcoal-light leading-relaxed text-justify">

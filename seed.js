@@ -24,6 +24,16 @@ const ProfileSchema = new mongoose.Schema({
     github: { type: String, default: "" },
     orcid: { type: String, default: "" },
     googleScholar: { type: String, default: "" }
+  },
+  corePhilosophy: {
+    sectionLabel: { type: String, default: "Core Philosophy" },
+    sectionTitle: { type: String, default: "My Research Statement" },
+    philosophyImage: { type: String, default: "" },
+    quotes: [{
+      word: { type: String, required: true },
+      lang: { type: String, default: "\u0938\u0902\u0938\u094d\u0915\u0943\u0924:" },
+      text: { type: String, required: true }
+    }]
   }
 });
 
@@ -173,6 +183,33 @@ async function seed() {
       github: "https://github.com/jahnvi-ecology",
       orcid: "https://orcid.org/0000-0002-XXXX-XXXX",
       googleScholar: "https://scholar.google.com/citations?user=jahnvi"
+    },
+    corePhilosophy: {
+      sectionLabel: "Core Philosophy",
+      sectionTitle: "My Research Statement",
+      philosophyImage: "philosophy_image.jpeg",
+      quotes: [
+        {
+          word: "Sarva Saha",
+          lang: "\u0938\u0902\u0938\u094d\u0915\u0943\u0924:",
+          text: "A harmonious, organic equilibrium and co-existence between humanity, green policies, and our biospheric boundaries."
+        },
+        {
+          word: "Samskara",
+          lang: "\u0938\u0902\u0938\u094d\u0915\u0943\u0924:",
+          text: "Sowing ethical values in the strategies of states and supply chains, elevating India's role from balancing agent to global builder."
+        },
+        {
+          word: "Manthan",
+          lang: "\u0938\u0902\u0938\u094d\u0915\u0943\u0924:",
+          text: "The democratic churning of ideas\u2014evolving our loktantra from simple voting (matdaan) to deep deliberation (manthan)."
+        },
+        {
+          word: "Sutradhar",
+          lang: "\u0938\u0902\u0938\u094d\u0915\u0943\u0924:",
+          text: "The thread-bearer of intellectual heritage, bridging academic ideas with actionable transformations for sustainable green governance."
+        }
+      ]
     }
   });
 

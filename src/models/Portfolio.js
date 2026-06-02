@@ -16,7 +16,23 @@ const ProfileSchema = new mongoose.Schema({
     github: { type: String, default: "" },
     orcid: { type: String, default: "" },
     googleScholar: { type: String, default: "" },
-    researchGate: { type: String, default: "" }
+    researchGate: { type: String, default: "" },
+    preTitle: { type: String, default: "Deliberation & Discourse" },
+    title: { type: String, default: "Get In Touch" },
+    description: { type: String, default: "Have questions regarding political ecology, academic collaborations, or green governance? Let us start a dialogue (*Manthan*) to explore sustainable solutions." },
+    focusLabel: { type: String, default: "Affiliated Focus" },
+    focusValue: { type: String, default: "Political Ecology & Sustainable Development" },
+    quote: { type: String, default: `"Sarva Saha" — An organic, harmonious coexistence between humanity, climate policy, and biospheric boundaries. Let us formulate actions for a resilient green future.` }
+  },
+  corePhilosophy: {
+    sectionLabel: { type: String, default: "Core Philosophy" },
+    sectionTitle: { type: String, default: "My Research Statement" },
+    philosophyImage: { type: String, default: "" },
+    quotes: [{
+      word: { type: String, required: true },
+      lang: { type: String, default: "संस्कृत:" },
+      text: { type: String, required: true }
+    }]
   }
 }, { timestamps: true });
 

@@ -180,10 +180,19 @@ export default function ContactPage() {
     linkedin: "https://linkedin.com",
     googleScholar: "https://scholar.google.com",
     researchGate: "https://researchgate.net",
-    orcid: "https://orcid.org"
+    orcid: "https://orcid.org",
+    preTitle: "Deliberation & Discourse",
+    title: "Get In Touch",
+    description: "Have questions regarding political ecology, academic collaborations, or green governance? Let us start a dialogue (*Manthan*) to explore sustainable solutions.",
+    focusLabel: "Affiliated Focus",
+    focusValue: "Political Ecology & Sustainable Development",
+    quote: `"Sarva Saha" — An organic, harmonious coexistence between humanity, climate policy, and biospheric boundaries. Let us formulate actions for a resilient green future.`
   };
 
-  const contactInfo = profile?.contact || defaultContact;
+  const contactInfo = {
+    ...defaultContact,
+    ...(profile?.contact || {})
+  };
 
   if (loading) {
     return (
@@ -229,13 +238,13 @@ export default function ContactPage() {
         
         {/* Page Headings */}
         <div className="text-center space-y-4 mb-16 max-w-3xl mx-auto">
-          <span className="font-label-md text-gold-accent uppercase tracking-widest text-xs font-bold block mb-1">Deliberation & Discourse</span>
+          <span className="font-label-md text-gold-accent uppercase tracking-widest text-xs font-bold block mb-1">{contactInfo.preTitle}</span>
           <h1 className="font-serif-italic text-4xl font-extrabold tracking-tight text-charcoal md:text-5xl uppercase leading-tight">
-            Get In Touch
+            {contactInfo.title}
           </h1>
           <div className="w-20 h-1 bg-gradient-to-r from-olive/20 via-olive to-olive/20 mx-auto rounded-full my-4"></div>
           <p className="text-charcoal-light text-base md:text-lg leading-relaxed max-w-xl mx-auto">
-            Have questions regarding political ecology, academic collaborations, or green governance? Let us start a dialogue (*Manthan*) to explore sustainable solutions.
+            {contactInfo.description}
           </p>
         </div>
 
@@ -290,8 +299,8 @@ export default function ContactPage() {
                       <Building className="h-4.5 w-4.5" />
                     </div>
                     <div className="space-y-0.5">
-                      <span className="text-[9px] uppercase font-sans font-bold tracking-widest text-charcoal/40 block">Affiliated Focus</span>
-                      <span className="font-sans text-xs md:text-sm font-semibold text-charcoal">Political Ecology & Sustainable Development</span>
+                      <span className="text-[9px] uppercase font-sans font-bold tracking-widest text-charcoal/40 block">{contactInfo.focusLabel}</span>
+                      <span className="font-sans text-xs md:text-sm font-semibold text-charcoal">{contactInfo.focusValue}</span>
                     </div>
                   </div>
                 </div>
@@ -301,7 +310,7 @@ export default function ContactPage() {
               <div className="mt-8 p-4 rounded-[1.5rem] border border-olive/10 bg-olive/5 relative overflow-hidden flex-shrink-0">
                 <span className="absolute -left-4 -top-8 text-8xl text-olive/5 font-serif-italic select-none pointer-events-none font-bold">“</span>
                 <p className="font-serif-italic text-xs md:text-sm text-olive leading-relaxed relative z-10 pl-2">
-                  "Sarva Saha" — An organic, harmonious coexistence between humanity, climate policy, and biospheric boundaries. Let us formulate actions for a resilient green future.
+                  {contactInfo.quote}
                 </p>
               </div>
             </div>

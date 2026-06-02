@@ -28,7 +28,8 @@ import {
   Link2,
   Table as TableIcon,
   Undo,
-  Redo
+  Redo,
+  Mail
 } from "lucide-react";
 
 // Client-side MS Word paste converter to dynamic Markdown structure
@@ -36,20 +37,20 @@ function convertHtmlToMarkdown(html) {
   if (!html) return "";
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, "text/html");
-  
+
   // A helper function to walk the DOM tree recursively
   function walk(node) {
     let text = "";
     if (node.nodeType === Node.TEXT_NODE) {
       return node.nodeValue;
     }
-    
+
     if (node.nodeType !== Node.ELEMENT_NODE) {
       return "";
     }
 
     const tagName = node.tagName.toLowerCase();
-    
+
     // Process children first for inline tags
     let childrenText = "";
     for (const child of node.childNodes) {
@@ -73,11 +74,11 @@ function convertHtmlToMarkdown(html) {
         const isWordList = node.className && node.className.includes("MsoListParagraph");
         const style = node.getAttribute("style") || "";
         const hasMsoList = style.includes("mso-list");
-        
+
         if (isWordList || hasMsoList) {
           let listPrefix = "- ";
           let cleanText = childrenText.trim();
-          
+
           const bulletMatch = cleanText.match(/^([·•o§\-*]|\d+\.)\s*(.*)/);
           if (bulletMatch) {
             const prefix = bulletMatch[1];
@@ -88,12 +89,12 @@ function convertHtmlToMarkdown(html) {
           }
           return `\n${listPrefix}${cleanText}\n`;
         }
-        
+
         return `\n${childrenText.trim()}\n`;
       }
       case "br":
         return "\n";
-        
+
       case "li": {
         const parentTagName = node.parentNode ? node.parentNode.tagName.toLowerCase() : "";
         if (parentTagName === "ol") {
@@ -112,7 +113,7 @@ function convertHtmlToMarkdown(html) {
       case "ul":
       case "ol":
         return `\n${childrenText}\n`;
-        
+
       case "strong":
       case "b": {
         const trimmedStrong = childrenText.trim();
@@ -131,7 +132,7 @@ function convertHtmlToMarkdown(html) {
       case "table": {
         const trs = Array.from(node.querySelectorAll("tr"));
         if (trs.length === 0) return "";
-        
+
         let markdownTable = "\n";
         trs.forEach((tr, rowIdx) => {
           const cells = Array.from(tr.querySelectorAll("th, td"));
@@ -139,9 +140,9 @@ function convertHtmlToMarkdown(html) {
             let txt = cell.textContent || "";
             return txt.replace(/\s+/g, " ").trim().replace(/\|/g, "\\|");
           });
-          
+
           markdownTable += "| " + cellTexts.join(" | ") + " |\n";
-          
+
           if (rowIdx === 0) {
             const separators = cellTexts.map(() => "---");
             markdownTable += "| " + separators.join(" | ") + " |\n";
@@ -155,7 +156,7 @@ function convertHtmlToMarkdown(html) {
       case "thead":
       case "tbody":
         return "";
-        
+
       default: {
         const styleAttr = node.getAttribute("style") || "";
         let wrapped = childrenText;
@@ -171,13 +172,13 @@ function convertHtmlToMarkdown(html) {
   }
 
   let markdown = walk(doc.body);
-  
+
   markdown = markdown
     .replace(/\n{3,}/g, "\n\n")
     .replace(/[ \t]+\n/g, "\n")
     .replace(/\*\*\s*\*\*/g, "")
     .trim();
-    
+
   return markdown;
 }
 
@@ -185,10 +186,10 @@ function convertHtmlToMarkdown(html) {
 function parseAdminInlineFormatting(text) {
   if (!text) return "";
   const tokens = text.split(/(\[.*?\]\(.*?\))|(\*\*.*?\*\*)/g);
-  
+
   return tokens.map((token, idx) => {
     if (!token) return null;
-    
+
     // Link token
     if (token.startsWith("[") && token.includes("](")) {
       const match = token.match(/\[(.*?)\]\((.*?)\)/);
@@ -202,12 +203,12 @@ function parseAdminInlineFormatting(text) {
         );
       }
     }
-    
+
     // Bold token
     if (token.startsWith("**") && token.endsWith("**")) {
       return <strong key={idx} className="font-bold text-charcoal">{token.slice(2, -2)}</strong>;
     }
-    
+
     // Italic token sub-parsing
     const subParts = token.split(/(\*.*?\*)/g);
     return subParts.map((subPart, j) => {
@@ -223,11 +224,11 @@ function renderAdminMarkdown(content) {
   if (!content) return null;
   const lines = content.split("\n");
   const elements = [];
-  
+
   for (let idx = 0; idx < lines.length; idx++) {
     const line = lines[idx];
     const trimmed = line.trim();
-    
+
     if (trimmed.startsWith("# ")) {
       elements.push(<h1 key={idx} className="font-serif text-3xl md:text-4xl text-charcoal font-bold mt-8 mb-4 border-b pb-2">{trimmed.slice(2)}</h1>);
     } else if (trimmed.startsWith("## ")) {
@@ -270,7 +271,12 @@ export default function AdminDashboard() {
   const [data, setData] = useState(null);
   const [loadingData, setLoadingData] = useState(false);
   const [activeTab, setActiveTab] = useState("profile");
-  
+
+  // Inquiries / Messages state
+  const [messages, setMessages] = useState([]);
+  const [loadingMessages, setLoadingMessages] = useState(false);
+  const [selectedMessage, setSelectedMessage] = useState(null);
+
   // Modals / Editors state
   const [editItem, setEditItem] = useState(null);
   const [showModal, setShowModal] = useState(null); // 'milestone' | 'paper' | 'vista' | 'blog' | 'certificate'
@@ -324,7 +330,7 @@ export default function AdminDashboard() {
   const handleInsertTable = () => {
     const rows = parseInt(prompt("Enter number of rows:", "3") || "0");
     const cols = parseInt(prompt("Enter number of columns:", "3") || "0");
-    
+
     if (rows > 0 && cols > 0) {
       let tableHtml = "<table><thead><tr>";
       for (let c = 0; c < cols; c++) {
@@ -339,7 +345,7 @@ export default function AdminDashboard() {
         tableHtml += "</tr>";
       }
       tableHtml += "</tbody></table><p><br></p>";
-      
+
       document.execCommand("insertHTML", false, tableHtml);
       if (editorRef.current) {
         setEditItem(prev => prev ? { ...prev, content: editorRef.current.innerHTML } : null);
@@ -356,6 +362,7 @@ export default function AdminDashboard() {
         if (json.authenticated) {
           setAuthenticated(true);
           fetchContent();
+          fetchMessages();
         }
       } catch (err) {
         console.error("Auth check failed:", err);
@@ -383,6 +390,70 @@ export default function AdminDashboard() {
     }
   }
 
+  // Fetch contact messages
+  async function fetchMessages() {
+    setLoadingMessages(true);
+    try {
+      const res = await fetch("/api/contact");
+      const json = await res.json();
+      if (json.success) {
+        setMessages(json.data || []);
+      }
+    } catch (err) {
+      console.error("Failed to load contact messages:", err);
+      showStatus("error", "Failed to load contact messages");
+    } finally {
+      setLoadingMessages(false);
+    }
+  }
+
+  // Toggle read status of a message
+  const handleToggleRead = async (message) => {
+    try {
+      const res = await fetch("/api/contact", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: message._id, read: !message.read }),
+      });
+      const json = await res.json();
+      if (res.ok && json.success) {
+        setMessages(prev => prev.map(m => m._id === message._id ? { ...m, read: !m.read } : m));
+        if (selectedMessage && selectedMessage._id === message._id) {
+          setSelectedMessage(prev => ({ ...prev, read: !prev.read }));
+        }
+        showStatus("success", `Marked message as ${!message.read ? "read" : "unread"}`);
+      } else {
+        showStatus("error", json.error || "Failed to update status");
+      }
+    } catch (err) {
+      showStatus("error", "Network connection error");
+    }
+  };
+
+  // Delete a contact message
+  const handleDeleteMessage = async (id) => {
+    if (!window.confirm("Are you sure you want to permanently delete this contact inquiry? This cannot be undone.")) {
+      return;
+    }
+    try {
+      const res = await fetch(`/api/contact?id=${id}`, {
+        method: "DELETE",
+      });
+      const json = await res.json();
+      if (res.ok && json.success) {
+        setMessages(prev => prev.filter(m => m._id !== id));
+        if (selectedMessage && selectedMessage._id === id) {
+          setSelectedMessage(null);
+        }
+        showStatus("success", "Message deleted successfully!");
+      } else {
+        showStatus("error", json.error || "Failed to delete message");
+      }
+    } catch (err) {
+      showStatus("error", "Network connection error");
+    }
+  };
+
   // Display toast feedback status
   const showStatus = (type, text) => {
     setStatusMessage({ type, text });
@@ -393,21 +464,22 @@ export default function AdminDashboard() {
   const handleLogin = async (e) => {
     e.preventDefault();
     if (!password) return;
-    
+
     setSubmittingLogin(true);
     setLoginError("");
-    
+
     try {
       const res = await fetch("/api/auth", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password }),
       });
-      
+
       const json = await res.json();
       if (res.ok && json.success) {
         setAuthenticated(true);
         fetchContent();
+        fetchMessages();
       } else {
         setLoginError(json.message || "Login failed");
       }
@@ -440,7 +512,7 @@ export default function AdminDashboard() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action, payload }),
       });
-      
+
       const json = await res.json();
       if (res.ok && json.success) {
         showStatus("success", "Changes saved successfully!");
@@ -460,14 +532,14 @@ export default function AdminDashboard() {
     if (!window.confirm("Are you absolutely sure you want to delete this entry? This action is irreversible.")) {
       return;
     }
-    
+
     try {
       const res = await fetch("/api/content", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action, payload: { id } }),
       });
-      
+
       const json = await res.json();
       if (res.ok && json.success) {
         showStatus("success", "Entry deleted successfully!");
@@ -594,14 +666,13 @@ export default function AdminDashboard() {
   // --- DASHBOARD ACTIVE PANEL ---
   return (
     <div className="min-h-screen bg-cream text-charcoal font-sans pb-24 relative select-text">
-      
+
       {/* Toast Feedback Status Banner */}
       {statusMessage && (
-        <div className={`fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-xl border p-4 shadow-2xl ${
-          statusMessage.type === "success"
+        <div className={`fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-xl border p-4 shadow-2xl ${statusMessage.type === "success"
             ? "bg-olive/15 border-olive text-olive"
             : "bg-red-500/15 border-red-500 text-red-500"
-        }`}>
+          }`}>
           {statusMessage.type === "success" ? <CheckCircle className="h-5 w-5" /> : <AlertCircle className="h-5 w-5" />}
           <span className="text-xs font-semibold">{statusMessage.text}</span>
         </div>
@@ -640,7 +711,7 @@ export default function AdminDashboard() {
 
       {/* DASHBOARD CONTAINER */}
       <main className="mx-auto max-w-7xl px-6 pt-8 md:px-12 grid gap-8 lg:grid-cols-12">
-        
+
         {/* Left Side Tab Controls */}
         <nav className="lg:col-span-3 flex flex-row overflow-x-auto lg:flex-col lg:space-y-2 gap-2 bg-cream-medium/50 p-4 border border-olive/5 rounded-xl h-fit w-full scrollbar-none">
           {[
@@ -649,9 +720,12 @@ export default function AdminDashboard() {
             { id: "paper", label: "Research Papers", icon: BookOpen },
             { id: "vista", label: "Global Vistas", icon: Globe },
             { id: "blog", label: "Philosophy Blogs", icon: FileText },
-            { id: "certificate", label: "Certificates", icon: Award }
+            { id: "certificate", label: "Certificates", icon: Award },
+            { id: "messages", label: "Inquiries Inbox", icon: Mail }
           ].map((tab) => {
             const Icon = tab.icon;
+            const isInbox = tab.id === "messages";
+            const unreadCount = isInbox ? messages.filter(m => !m.read).length : 0;
             return (
               <button
                 key={tab.id}
@@ -660,14 +734,18 @@ export default function AdminDashboard() {
                   setShowModal(null);
                   setEditItem(null);
                 }}
-                className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-semibold tracking-wide transition-all shrink-0 whitespace-nowrap lg:w-full ${
-                  activeTab === tab.id
+                className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-semibold tracking-wide transition-all shrink-0 whitespace-nowrap lg:w-full ${activeTab === tab.id
                     ? "bg-olive text-cream-lightest shadow-lg shadow-olive/15"
                     : "text-charcoal-light hover:bg-olive/10 hover:text-charcoal"
-                }`}
+                  }`}
               >
                 <Icon className="h-4.5 w-4.5 shrink-0" />
-                {tab.label}
+                <span>{tab.label}</span>
+                {isInbox && unreadCount > 0 && (
+                  <span className="ml-auto bg-red-600 text-cream-lightest text-[10px] font-bold px-2 py-0.5 rounded-full animate-pulse shadow-3xs">
+                    {unreadCount}
+                  </span>
+                )}
               </button>
             );
           })}
@@ -887,6 +965,109 @@ export default function AdminDashboard() {
                             placeholder="e.g. https://orcid.org/0000-0002-1825-0097"
                           />
                         </div>
+
+                        {/* Contact Page Custom Text Content */}
+                        <div className="space-y-4 md:col-span-2 border-t border-olive/10 pt-6">
+                          <h4 className="font-serif text-xs font-bold text-charcoal uppercase tracking-wider">Contact Page Custom Content</h4>
+                          <div className="grid gap-4 md:grid-cols-2">
+                            <div className="space-y-1">
+                              <label className="text-2xs font-semibold text-warm-gray">Pre-Title</label>
+                              <input
+                                type="text"
+                                value={data.profile.contact?.preTitle || ""}
+                                onChange={(e) => setData({
+                                  ...data,
+                                  profile: {
+                                    ...data.profile,
+                                    contact: { ...data.profile.contact, preTitle: e.target.value }
+                                  }
+                                })}
+                                className="w-full rounded-lg border border-olive/20 bg-cream px-4 py-2.5 text-sm text-charcoal focus:border-olive focus:outline-none"
+                                placeholder="e.g. Deliberation & Discourse"
+                              />
+                            </div>
+                            <div className="space-y-1">
+                              <label className="text-2xs font-semibold text-warm-gray">Main Title</label>
+                              <input
+                                type="text"
+                                value={data.profile.contact?.title || ""}
+                                onChange={(e) => setData({
+                                  ...data,
+                                  profile: {
+                                    ...data.profile,
+                                    contact: { ...data.profile.contact, title: e.target.value }
+                                  }
+                                })}
+                                className="w-full rounded-lg border border-olive/20 bg-cream px-4 py-2.5 text-sm text-charcoal focus:border-olive focus:outline-none"
+                                placeholder="e.g. Get In Touch"
+                              />
+                            </div>
+                            <div className="space-y-1 md:col-span-2">
+                              <label className="text-2xs font-semibold text-warm-gray">Contact Page Description</label>
+                              <textarea
+                                rows={2}
+                                value={data.profile.contact?.description || ""}
+                                onChange={(e) => setData({
+                                  ...data,
+                                  profile: {
+                                    ...data.profile,
+                                    contact: { ...data.profile.contact, description: e.target.value }
+                                  }
+                                })}
+                                className="w-full rounded-lg border border-olive/20 bg-cream px-4 py-2.5 text-sm text-charcoal focus:border-olive focus:outline-none leading-relaxed"
+                                placeholder="Description of inquiry options..."
+                              />
+                            </div>
+                            <div className="space-y-1">
+                              <label className="text-2xs font-semibold text-warm-gray">Affiliated Focus Label</label>
+                              <input
+                                type="text"
+                                value={data.profile.contact?.focusLabel || ""}
+                                onChange={(e) => setData({
+                                  ...data,
+                                  profile: {
+                                    ...data.profile,
+                                    contact: { ...data.profile.contact, focusLabel: e.target.value }
+                                  }
+                                })}
+                                className="w-full rounded-lg border border-olive/20 bg-cream px-4 py-2.5 text-sm text-charcoal focus:border-olive focus:outline-none"
+                                placeholder="e.g. Affiliated Focus"
+                              />
+                            </div>
+                            <div className="space-y-1">
+                              <label className="text-2xs font-semibold text-warm-gray">Affiliated Focus Value</label>
+                              <input
+                                type="text"
+                                value={data.profile.contact?.focusValue || ""}
+                                onChange={(e) => setData({
+                                  ...data,
+                                  profile: {
+                                    ...data.profile,
+                                    contact: { ...data.profile.contact, focusValue: e.target.value }
+                                  }
+                                })}
+                                className="w-full rounded-lg border border-olive/20 bg-cream px-4 py-2.5 text-sm text-charcoal focus:border-olive focus:outline-none"
+                                placeholder="e.g. Political Ecology & Sustainable Development"
+                              />
+                            </div>
+                            <div className="space-y-1 md:col-span-2">
+                              <label className="text-2xs font-semibold text-warm-gray">Sanskrit Callout Quote / Mantra</label>
+                              <textarea
+                                rows={2}
+                                value={data.profile.contact?.quote || ""}
+                                onChange={(e) => setData({
+                                  ...data,
+                                  profile: {
+                                    ...data.profile,
+                                    contact: { ...data.profile.contact, quote: e.target.value }
+                                  }
+                                })}
+                                className="w-full rounded-lg border border-olive/20 bg-cream px-4 py-2.5 text-sm text-charcoal focus:border-olive focus:outline-none leading-relaxed"
+                                placeholder="Sanskrit Quote and definition..."
+                              />
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
 
@@ -976,9 +1157,8 @@ export default function AdminDashboard() {
                       <div key={item._id} className="glassmorphism shadow-sm p-5 rounded-xl flex items-center justify-between gap-4">
                         <div className="space-y-1.5">
                           <div className="flex flex-wrap items-center gap-2">
-                            <span className={`rounded px-1.5 py-0.5 text-3xs font-extrabold uppercase tracking-widest ${
-                              item.type === "published" ? "bg-olive/10 text-olive border border-olive/20" : "bg-amber-500/10 text-amber-500 border border-amber-500/20"
-                            }`}>
+                            <span className={`rounded px-1.5 py-0.5 text-3xs font-extrabold uppercase tracking-widest ${item.type === "published" ? "bg-olive/10 text-olive border border-olive/20" : "bg-amber-500/10 text-amber-500 border border-amber-500/20"
+                              }`}>
                               {item.type}
                             </span>
                             <h3 className="font-serif text-base font-bold text-charcoal line-clamp-1">{item.title}</h3>
@@ -1178,6 +1358,197 @@ export default function AdminDashboard() {
                   </div>
                 </div>
               )}
+
+              {/* --- TAB CONTENT: INQUIRIES INBOX --- */}
+              {activeTab === "messages" && (
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between bg-cream-medium/50 p-4 border border-olive/5 rounded-xl">
+                    <div>
+                      <h2 className="font-serif text-lg font-bold text-charcoal">Inquiries Inbox</h2>
+                      <p className="text-xs text-warm-gray">Manage and respond to student, academic and speaking inquiries</p>
+                    </div>
+                    <button
+                      onClick={fetchMessages}
+                      disabled={loadingMessages}
+                      className="flex items-center gap-1.5 rounded-lg border border-olive/10 bg-olive/5 px-4 py-2 text-xs font-semibold text-charcoal hover:bg-olive/10"
+                    >
+                      <span className={`material-symbols-outlined text-sm ${loadingMessages ? "animate-spin" : ""}`}>sync</span>
+                      Refresh
+                    </button>
+                  </div>
+
+                  {messages.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center p-12 glassmorphism rounded-xl border border-olive/10 text-center space-y-3">
+                      <div className="w-12 h-12 rounded-full bg-olive/10 flex items-center justify-center text-olive">
+                        <Mail className="h-6 w-6" />
+                      </div>
+                      <h3 className="font-serif text-base font-bold text-charcoal">No Inquiries Found</h3>
+                      <p className="text-xs text-warm-gray max-w-sm">When visitors submit the contact form on your portfolio website, their inquiries will appear here in real-time.</p>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch">
+
+                      {/* Left: Messages List */}
+                      <div className="md:col-span-5 space-y-3 max-h-[600px] overflow-y-auto pr-1">
+                        {messages.map((msg) => {
+                          const isSelected = selectedMessage?._id === msg._id;
+                          const formattedDate = new Date(msg.createdAt).toLocaleDateString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit"
+                          });
+
+                          // Determine type label classes
+                          let typeBadgeClass = "bg-olive/10 text-olive border-olive/20";
+                          if (msg.inquiryType.includes("Speaking")) {
+                            typeBadgeClass = "bg-amber-500/10 text-amber-500 border-amber-500/20";
+                          } else if (msg.inquiryType.includes("Writing")) {
+                            typeBadgeClass = "bg-purple-500/10 text-purple-500 border-purple-500/20";
+                          } else if (msg.inquiryType.includes("General")) {
+                            typeBadgeClass = "bg-charcoal/10 text-charcoal border-charcoal/20";
+                          }
+
+                          return (
+                            <div
+                              key={msg._id}
+                              onClick={() => setSelectedMessage(msg)}
+                              className={`p-4 rounded-xl border transition-all duration-300 cursor-pointer text-left space-y-2.5 relative overflow-hidden ${isSelected
+                                  ? "bg-white border-olive shadow-sm ring-1 ring-olive/20"
+                                  : "glassmorphism hover:bg-white/80 border-olive/10"
+                                } ${!msg.read ? "border-l-4 border-l-olive font-semibold" : ""}`}
+                            >
+                              {!msg.read && (
+                                <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-olive animate-pulse" />
+                              )}
+
+                              <div className="flex items-start justify-between gap-2">
+                                <h4 className="font-serif text-sm font-bold text-charcoal line-clamp-1">{msg.name}</h4>
+                                <span className="text-[10px] text-warm-gray shrink-0 font-normal">{formattedDate}</span>
+                              </div>
+
+                              <div className="space-y-1">
+                                <p className="text-xs text-charcoal-light line-clamp-1 font-medium">{msg.subject}</p>
+                                <p className="text-[11px] text-warm-gray line-clamp-1 font-light">{msg.message}</p>
+                              </div>
+
+                              <div className="flex items-center justify-between gap-2 pt-1 border-t border-charcoal/5">
+                                <span className={`text-[9px] uppercase font-bold tracking-widest px-2 py-0.5 rounded border ${typeBadgeClass}`}>
+                                  {msg.inquiryType.split(" ")[0]}
+                                </span>
+                                {msg.organization && (
+                                  <span className="text-[10px] text-warm-gray max-w-[120px] truncate">{msg.organization}</span>
+                                )}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {/* Right: Selected Message Details Panel */}
+                      <div className="md:col-span-7">
+                        {selectedMessage ? (
+                          <div className="glassmorphism p-6 rounded-2xl border border-olive/10 shadow-xs h-full flex flex-col justify-between space-y-6 text-left">
+                            <div className="space-y-5">
+                              {/* Header Card Info */}
+                              <div className="flex flex-wrap items-start justify-between gap-4 border-b border-olive/10 pb-4">
+                                <div className="space-y-1">
+                                  <div className="flex items-center gap-2 flex-wrap">
+                                    <h3 className="font-serif text-lg font-bold text-charcoal">{selectedMessage.name}</h3>
+                                    {selectedMessage.organization && (
+                                      <span className="rounded bg-olive/5 border border-olive/10 px-2 py-0.5 text-[10px] font-semibold text-olive">
+                                        {selectedMessage.organization}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <a
+                                    href={`mailto:${selectedMessage.email}`}
+                                    className="text-xs text-olive hover:text-olive-dark underline flex items-center gap-1 font-medium transition-colors"
+                                  >
+                                    <span className="material-symbols-outlined text-sm font-bold flex items-center justify-center">mail</span>
+                                    {selectedMessage.email}
+                                  </a>
+                                </div>
+                                <span className="text-xs text-warm-gray">
+                                  {new Date(selectedMessage.createdAt).toLocaleString("en-US", {
+                                    dateStyle: "medium",
+                                    timeStyle: "short"
+                                  })}
+                                </span>
+                              </div>
+
+                              {/* Inquiry Subject & Type */}
+                              <div className="grid grid-cols-2 gap-4 bg-cream/40 p-3.5 rounded-xl border border-olive/5">
+                                <div className="space-y-0.5">
+                                  <span className="text-[9px] uppercase tracking-wider font-extrabold text-warm-gray block">Inquiry Type</span>
+                                  <span className="text-xs font-bold text-charcoal uppercase tracking-wide">{selectedMessage.inquiryType}</span>
+                                </div>
+                                <div className="space-y-0.5">
+                                  <span className="text-[9px] uppercase tracking-wider font-extrabold text-warm-gray block">Status</span>
+                                  <span className={`text-xs font-bold ${selectedMessage.read ? "text-olive" : "text-amber-500 animate-pulse"}`}>
+                                    {selectedMessage.read ? "READ & LOGGED" : "UNREAD / ACTION REQUIRED"}
+                                  </span>
+                                </div>
+                              </div>
+
+                              {/* Inquiry Subject & Description */}
+                              <div className="space-y-2">
+                                <span className="text-[9px] uppercase tracking-wider font-extrabold text-warm-gray block">Subject</span>
+                                <h4 className="font-serif text-base font-bold text-charcoal">{selectedMessage.subject}</h4>
+                                <div className="w-8 h-0.5 bg-olive/20 rounded"></div>
+                              </div>
+
+                              <div className="space-y-2">
+                                <span className="text-[9px] uppercase tracking-wider font-extrabold text-warm-gray block">Message Details</span>
+                                <div className="bg-white/60 border border-charcoal/5 p-4 rounded-2xl max-h-[280px] overflow-y-auto">
+                                  <p className="text-sm text-charcoal leading-relaxed whitespace-pre-wrap select-text">{selectedMessage.message}</p>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Bottom Controls */}
+                            <div className="pt-4 border-t border-olive/10 flex flex-wrap items-center gap-3">
+                              <button
+                                onClick={() => handleToggleRead(selectedMessage)}
+                                className={`flex items-center gap-1.5 rounded-lg px-4 py-2 text-xs font-bold transition-all cursor-pointer ${selectedMessage.read
+                                    ? "bg-cream-dark text-charcoal-light hover:text-charcoal border border-olive/10"
+                                    : "bg-olive text-cream-lightest hover:bg-olive/90 shadow-sm"
+                                  }`}
+                              >
+                                <span className="material-symbols-outlined text-sm font-bold flex items-center justify-center">
+                                  {selectedMessage.read ? "mark_email_unread" : "mark_email_read"}
+                                </span>
+                                {selectedMessage.read ? "Mark as Unread" : "Mark as Read"}
+                              </button>
+                              <a
+                                href={`mailto:${selectedMessage.email}?subject=Re: ${encodeURIComponent(selectedMessage.subject)}`}
+                                className="flex items-center gap-1.5 rounded-lg bg-olive text-cream-lightest hover:bg-olive/90 px-4 py-2 text-xs font-bold shadow-sm transition-all"
+                              >
+                                <span className="material-symbols-outlined text-sm font-bold flex items-center justify-center">reply</span>
+                                Draft Email Response
+                              </a>
+                              <button
+                                onClick={() => handleDeleteMessage(selectedMessage._id)}
+                                className="ml-auto flex items-center gap-1.5 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-charcoal border border-red-500/20 px-4 py-2 text-xs font-bold transition-all cursor-pointer"
+                              >
+                                <Trash2 className="h-3.5 w-3.5" />
+                                Delete
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="flex flex-col items-center justify-center p-12 glassmorphism rounded-2xl border border-olive/10 text-center h-full space-y-2">
+                            <span className="material-symbols-outlined text-4xl text-olive/30">drafts</span>
+                            <h3 className="font-serif text-base font-bold text-charcoal/70">No Message Selected</h3>
+                            <p className="text-xs text-warm-gray max-w-xs">Select an inquiry from the left-side list view to read the details, respond, or manage the log.</p>
+                          </div>
+                        )}
+                      </div>
+
+                    </div>
+                  )}
+                </div>
+              )}
             </>
           )}
         </section>
@@ -1188,7 +1559,7 @@ export default function AdminDashboard() {
       {showModal && editItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-cream/80 backdrop-blur-md select-text">
           <div className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl border border-olive/20 bg-cream-lightest p-6 shadow-2xl focus:outline-none animate-scale-up">
-            
+
             <div className="flex items-center justify-between border-b border-olive/10 pb-4 mb-6">
               <h3 className="font-serif text-lg font-bold text-charcoal">
                 {editItem._id ? "Edit Entry" : "Create New Entry"} ({showModal})
@@ -1492,7 +1863,7 @@ export default function AdminDashboard() {
                       className="w-full rounded-lg border border-olive/20 bg-cream px-4 py-2.5 text-sm focus:border-olive focus:outline-none leading-relaxed"
                     />
                   </div>
-                  
+
                   <div className="flex items-center gap-2 pt-6">
                     <input
                       type="checkbox"
@@ -1670,11 +2041,10 @@ export default function AdminDashboard() {
                         <button
                           type="button"
                           onClick={() => setShowBlogPreview(prev => !prev)}
-                          className={`inline-flex items-center gap-1.5 text-[10px] uppercase font-bold tracking-widest px-3 py-1.5 rounded-full border transition-all cursor-pointer ${
-                            showBlogPreview
+                          className={`inline-flex items-center gap-1.5 text-[10px] uppercase font-bold tracking-widest px-3 py-1.5 rounded-full border transition-all cursor-pointer ${showBlogPreview
                               ? "bg-olive text-cream-lightest border-olive shadow-md"
                               : "bg-cream-medium/60 text-charcoal-light border-olive/20 hover:bg-olive/10 hover:text-olive"
-                          }`}
+                            }`}
                         >
                           <Eye className="h-3 w-3" />
                           {showBlogPreview ? "← Back to Edit" : "Preview"}
@@ -1825,11 +2195,10 @@ export default function AdminDashboard() {
                   <button
                     type="button"
                     onClick={() => setShowBlogPreview(prev => !prev)}
-                    className={`flex items-center justify-center gap-1.5 rounded-lg border px-5 py-2.5 text-sm font-semibold transition-all ${
-                      showBlogPreview
+                    className={`flex items-center justify-center gap-1.5 rounded-lg border px-5 py-2.5 text-sm font-semibold transition-all ${showBlogPreview
                         ? "bg-cream-dark border-olive/30 text-charcoal-light hover:bg-cream-medium"
                         : "bg-olive/10 border-olive/30 text-olive hover:bg-olive/20"
-                    }`}
+                      }`}
                   >
                     <Eye className="h-4 w-4" />
                     {showBlogPreview ? "Back to Editor" : "Preview Article"}

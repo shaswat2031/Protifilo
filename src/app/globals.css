@@ -189,8 +189,10 @@
   opacity: 0
 }
 
-.vista-overlap-item:nth-child(even) {
-  margin-top: -40px
+@media (min-width: 768px) {
+  .vista-overlap-item:nth-child(even) {
+    margin-top: -40px
+  }
 }
 
 .btn-hover-effect {
