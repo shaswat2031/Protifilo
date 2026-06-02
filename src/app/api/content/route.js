@@ -87,6 +87,8 @@ export async function POST(request) {
           profile = new Profile(payload);
         } else {
           Object.assign(profile, payload);
+          profile.markModified("corePhilosophy");
+          profile.markModified("contact");
         }
         await profile.save();
         return NextResponse.json({ success: true, data: profile });
