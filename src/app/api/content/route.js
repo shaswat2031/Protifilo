@@ -95,9 +95,17 @@ export async function POST(request) {
           profile = new Profile(payload);
         } else {
           Object.assign(profile, payload);
-          profile.markModified("corePhilosophy");
+          // Mark all nested paths as modified so Mongoose detects changes
           profile.markModified("contact");
+          profile.markModified("corePhilosophy");
+          profile.markModified("corePhilosophy.quotes");
+          profile.markModified("corePhilosophy.philosophyImage");
+          profile.markModified("corePhilosophy.sectionLabel");
+          profile.markModified("corePhilosophy.sectionTitle");
           profile.markModified("avatarUrl");
+          profile.markModified("bioIntro");
+          profile.markModified("bioSecondary");
+          profile.markModified("cvUrl");
         }
         await profile.save();
         return NextResponse.json({ success: true, data: profile });

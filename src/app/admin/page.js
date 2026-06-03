@@ -824,6 +824,58 @@ export default function AdminDashboard() {
                       />
                     </div>
 
+                    {/* Hero Portrait Image Upload */}
+                    <div className="space-y-1 md:col-span-2 border-t border-olive/10 pt-6">
+                      <label className="text-2xs font-extrabold uppercase tracking-widest text-warm-gray block mb-2">Hero Portrait Image (Homepage)</label>
+                      <div className="flex items-center gap-4">
+                        <div className="h-24 w-20 overflow-hidden rounded-xl border border-olive/30 bg-cream shadow-xs flex items-center justify-center">
+                          {data.profile.avatarUrl ? (
+                            <img
+                              src={data.profile.avatarUrl.startsWith('/') || data.profile.avatarUrl.startsWith('http')
+                                ? data.profile.avatarUrl
+                                : `/api/images/${data.profile.avatarUrl}`}
+                              alt="Hero Portrait Preview"
+                              className="h-full w-full object-cover"
+                            />
+                          ) : (
+                            <div className="flex h-full w-full items-center justify-center text-warm-gray-light">
+                              <User className="h-8 w-8" />
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex flex-col gap-2">
+                          <div className="relative">
+                            <input
+                              type="file"
+                              accept="image/*"
+                              id="avatar-upload"
+                              className="hidden"
+                              onChange={(e) => handleImageUpload(e, (key) => {
+                                setData({ ...data, profile: { ...data.profile, avatarUrl: key } });
+                              })}
+                            />
+                            <label
+                              htmlFor="avatar-upload"
+                              className="flex items-center gap-1.5 rounded-lg border border-olive/30 bg-olive/10 px-4 py-2 text-xs font-semibold text-olive cursor-pointer hover:bg-olive/20"
+                            >
+                              <Upload className="h-3.5 w-3.5" />
+                              {uploadingImage ? "Uploading..." : "Upload New Portrait"}
+                            </label>
+                          </div>
+                          {data.profile.avatarUrl && (
+                            <button
+                              onClick={() => setData({ ...data, profile: { ...data.profile, avatarUrl: "" } })}
+                              className="text-[10px] font-semibold text-red-400 hover:text-red-600 text-left"
+                            >
+                              Remove (revert to default hero1.png)
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                      <p className="text-[10px] text-warm-gray leading-relaxed mt-2">
+                        Upload a portrait PNG/JPG to replace the homepage hero image. Use a transparent-background PNG for best results.
+                      </p>
+                    </div>
 
                     {/* CV Document Upload */}
                     <div className="space-y-1 md:col-span-2 border-t border-olive/10 pt-6">

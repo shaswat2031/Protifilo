@@ -811,10 +811,10 @@ export default function Home() {
             <div className="md:col-span-5 relative group w-full max-w-md mx-auto md:max-w-none">
               {/* Back offset decorative card */}
               <div className="absolute inset-0 border border-olive/30 rounded-[2.5rem] translate-x-3 translate-y-3 transition-transform duration-500 group-hover:translate-x-1.5 group-hover:translate-y-1.5 pointer-events-none z-0"></div>
-              
+
               {/* Soft decorative glow */}
               <div className="absolute -inset-1 bg-gradient-to-tr from-gold-accent/10 to-olive/10 rounded-[2.6rem] blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-0"></div>
-              
+
               <div className="relative rounded-[2.5rem] overflow-hidden aspect-[4/5] border border-charcoal/10 shadow-lg bg-white/50 z-10">
                 <img
                   alt={philosophySectionTitle}
@@ -822,7 +822,7 @@ export default function Home() {
                   src={philosophyImage.startsWith('/') || philosophyImage.startsWith('http') ? philosophyImage : `/api/images/${philosophyImage}`}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-charcoal/40 via-transparent to-transparent pointer-events-none"></div>
-                
+
                 {/* Micro-badge overlay */}
                 <div className="absolute top-6 left-6 px-4 py-1.5 bg-[#FFFDF9]/90 border border-charcoal/5 rounded-full shadow-md z-20 backdrop-blur-xs flex items-center gap-1.5 transform -translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
                   <span className="w-1.5 h-1.5 rounded-full bg-olive animate-pulse"></span>

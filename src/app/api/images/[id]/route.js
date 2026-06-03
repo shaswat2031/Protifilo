@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import dbConnect from "@/lib/db";
 import { AssetImage } from "@/models/Portfolio";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request, { params }) {
   try {
     await dbConnect();
@@ -22,12 +24,16 @@ export async function GET(request, { params }) {
     // Decode Base64 data to Binary Buffer
     const buffer = Buffer.from(img.data, "base64");
 
-    // Return binary response with correct Content-Type and browser caching headers
+    // Return binary response with correct Content-Type and caching headers.
+    // Using must-revalidate + ETag so the browser always picks up new uploads
+    // instead of serving stale cached images from a previous upload.
+    const etag = `"${img._id?.toString() || img.key}"`;
     return new NextResponse(buffer, {
       headers: {
         "Content-Type": img.contentType || "image/jpeg",
         "Content-Length": buffer.length.toString(),
-        "Cache-Control": "public, max-age=31536000, immutable", // Cache for 1 year
+        "Cache-Control": "public, max-age=3600, must-revalidate",
+        "ETag": etag,
       },
     });
   } catch (error) {
