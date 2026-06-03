@@ -855,40 +855,7 @@ export default function Home() {
           </div>
 
           {/* Domain Cards */}
-          {researchInterests.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-6">
-              {researchInterests.map((interest, idx) => {
-                const pastelBgColors = [
-                  "bg-gradient-to-br from-pastel-pink/20 via-white/50 to-pastel-pink/10 hover:from-pastel-pink/25 hover:to-pastel-pink/15 hover:border-pastel-pink/30",
-                  "bg-gradient-to-br from-pastel-blue/20 via-white/50 to-pastel-blue/10 hover:from-pastel-blue/25 hover:to-pastel-blue/15 hover:border-pastel-blue/30",
-                  "bg-gradient-to-br from-pastel-mint/20 via-white/50 to-pastel-mint/10 hover:from-pastel-mint/25 hover:to-pastel-mint/15 hover:border-pastel-mint/30"
-                ];
-                const bgs = pastelBgColors[idx % pastelBgColors.length];
-                return (
-                  <div
-                    key={interest._id || idx}
-                    className={`glassmorphism-premium p-10 rounded-[2.5rem] border border-charcoal/10 hover:-translate-y-2 hover:shadow-xl transition-all duration-500 group flex flex-col justify-between relative overflow-hidden ${bgs}`}
-                  >
-                    {/* Decorative floating card number */}
-                    <span className="absolute right-8 top-8 font-serif-italic text-5xl text-charcoal/5 font-extrabold select-none pointer-events-none group-hover:scale-110 group-hover:text-charcoal/8 transition-all duration-300">
-                      {String(idx + 1).padStart(2, '0')}
-                    </span>
 
-                    <div>
-                      <div className="w-16 h-16 rounded-2xl bg-white/70 border border-charcoal/5 shadow-xs flex items-center justify-center mb-8 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
-                        <span className="material-symbols-outlined text-olive text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>
-                          {getInterestIcon(interest.iconName)}
-                        </span>
-                      </div>
-                      <h3 className="font-sans-ultra-bold text-xl uppercase tracking-tight text-charcoal mb-4">{interest.title}</h3>
-                      <p className="font-sans text-sm text-charcoal-light leading-relaxed">{interest.description}</p>
-                    </div>
-                    <div className="w-12 h-1 bg-gold-accent/20 mt-8 rounded-full group-hover:w-20 group-hover:bg-gold-accent/40 transition-all duration-300"></div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
         </div>
       </section>
 
