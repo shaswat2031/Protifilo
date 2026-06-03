@@ -12,7 +12,8 @@ import {
   Linkedin,
   BookOpen,
   Compass,
-  FileText
+  FileText,
+  Library
 } from "lucide-react";
 import confetti from "canvas-confetti";
 
@@ -73,7 +74,7 @@ export default function ContactPage() {
   useEffect(() => {
     async function fetchProfile() {
       try {
-        const res = await fetch("/api/content");
+        const res = await fetch("/api/content", { cache: "no-store" });
         const json = await res.json();
         if (json.success && json.data?.profile) {
           setProfile(json.data.profile);
@@ -175,11 +176,14 @@ export default function ContactPage() {
 
   // Default Fallbacks
   const defaultContact = {
-    email: "jahnvi.ecology@gmail.com",
+    email: "jahnvikhubani37175@gmail.com",
+    emailSecondary: "jahnvikhubani01@gmail.com",
+    phone: "+91 98765 43210",
     location: "Jaipur, Rajasthan, India",
     linkedin: "https://linkedin.com",
     googleScholar: "https://scholar.google.com",
     researchGate: "https://researchgate.net",
+    jstor: "",
     orcid: "https://orcid.org",
     preTitle: "Deliberation & Discourse",
     title: "Get In Touch",
@@ -264,7 +268,7 @@ export default function ContactPage() {
                 </h3>
 
                 <div className="space-y-4">
-                  {/* Email */}
+                  {/* Email (Primary) */}
                   {contactInfo.email && (
                     <a 
                       href={`mailto:${contactInfo.email}`}
@@ -274,8 +278,24 @@ export default function ContactPage() {
                         <Mail className="h-4.5 w-4.5" />
                       </div>
                       <div className="space-y-0.5">
-                        <span className="text-[9px] uppercase font-sans font-bold tracking-widest text-charcoal/40 block">Research Email</span>
+                        <span className="text-[9px] uppercase font-sans font-bold tracking-widest text-charcoal/40 block">Primary Email</span>
                         <span className="font-sans text-xs md:text-sm font-semibold text-charcoal break-all">{contactInfo.email}</span>
+                      </div>
+                    </a>
+                  )}
+
+                  {/* Email (Secondary) */}
+                  {contactInfo.emailSecondary && (
+                    <a 
+                      href={`mailto:${contactInfo.emailSecondary}`}
+                      className="flex items-start gap-3.5 p-3 rounded-2xl bg-white/40 hover:bg-white/70 border border-charcoal/5 hover:border-olive/15 hover:shadow-xs transition-all duration-300 group"
+                    >
+                      <div className="w-10 h-10 shrink-0 rounded-xl bg-olive/10 border border-olive/20 flex items-center justify-center text-olive group-hover:scale-105 transition-all">
+                        <Mail className="h-4.5 w-4.5" />
+                      </div>
+                      <div className="space-y-0.5">
+                        <span className="text-[9px] uppercase font-sans font-bold tracking-widest text-charcoal/40 block">Alternative Email</span>
+                        <span className="font-sans text-xs md:text-sm font-semibold text-charcoal break-all">{contactInfo.emailSecondary}</span>
                       </div>
                     </a>
                   )}
@@ -363,6 +383,21 @@ export default function ContactPage() {
                       <Compass className="h-4 w-4" />
                     </div>
                     <span className="text-xs font-bold tracking-wider uppercase">ResearchGate</span>
+                  </a>
+                )}
+
+                {/* JSTOR */}
+                {contactInfo.jstor && (
+                  <a 
+                    href={contactInfo.jstor}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 p-3.5 rounded-2xl bg-white/30 hover:bg-[#861f1f]/10 border border-charcoal/5 hover:border-[#861f1f]/20 hover:text-[#861f1f] hover:shadow-2xs transition-all duration-300 group"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-white shadow-3xs flex items-center justify-center group-hover:scale-105 transition-transform text-[#861f1f]">
+                      <Library className="h-4 w-4" />
+                    </div>
+                    <span className="text-xs font-bold tracking-wider uppercase">JSTOR</span>
                   </a>
                 )}
 

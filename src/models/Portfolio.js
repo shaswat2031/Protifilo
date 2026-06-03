@@ -8,6 +8,7 @@ const ProfileSchema = new mongoose.Schema({
   bioIntro: { type: String, default: "" },
   bioSecondary: { type: String, default: "" },
   avatarUrl: { type: String, default: "" },
+  cvUrl: { type: String, default: "" },
   contact: {
     email: { type: String, default: "jahnvi.ecology@gmail.com" },
     phone: { type: String, default: "" },
@@ -17,6 +18,8 @@ const ProfileSchema = new mongoose.Schema({
     orcid: { type: String, default: "" },
     googleScholar: { type: String, default: "" },
     researchGate: { type: String, default: "" },
+    jstor: { type: String, default: "" },
+    emailSecondary: { type: String, default: "" },
     preTitle: { type: String, default: "Deliberation & Discourse" },
     title: { type: String, default: "Get In Touch" },
     description: { type: String, default: "Have questions regarding political ecology, academic collaborations, or green governance? Let us start a dialogue (*Manthan*) to explore sustainable solutions." },
@@ -123,6 +126,23 @@ const ContactMessageSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 
+// --- RESEARCH PROJECT (RESEARCH IN REACH) MODEL ---
+const ResearchProjectSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  description: { type: String, required: true },
+  status: { type: String, default: "In Progress" }, // e.g. In Progress, Active, Ongoing
+  order: { type: Number, default: 0 }
+}, { timestamps: true });
+
+// --- VIP PROJECT (VISION-INNOVATION-PRIORITIES) MODEL ---
+const VipProjectSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  description: { type: String, required: true },
+  status: { type: String, default: "Future Vision" }, // e.g. Future Vision, In Progress, Proposed
+  order: { type: Number, default: 0 },
+  showOnHome: { type: Boolean, default: true }
+}, { timestamps: true });
+
 // Export Mongoose models safely (checking if they are already compiled during Next.js serverless HMR reloads)
 export const Profile = mongoose.models.Profile || mongoose.model("Profile", ProfileSchema);
 export const AcademicMilestone = mongoose.models.AcademicMilestone || mongoose.model("AcademicMilestone", AcademicMilestoneSchema);
@@ -133,3 +153,5 @@ export const Blog = mongoose.models.Blog || mongoose.model("Blog", BlogSchema);
 export const Certificate = mongoose.models.Certificate || mongoose.model("Certificate", CertificateSchema);
 export const AssetImage = mongoose.models.AssetImage || mongoose.model("AssetImage", AssetImageSchema);
 export const ContactMessage = mongoose.models.ContactMessage || mongoose.model("ContactMessage", ContactMessageSchema);
+export const ResearchProject = mongoose.models.ResearchProject || mongoose.model("ResearchProject", ResearchProjectSchema);
+export const VipProject = mongoose.models.VipProject || mongoose.model("VipProject", VipProjectSchema);

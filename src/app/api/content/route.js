@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import dbConnect from "@/lib/db";
+
+export const dynamic = "force-dynamic";
 import {
   Profile,
   AcademicMilestone,
@@ -8,7 +10,9 @@ import {
   ResearchPaper,
   Vista,
   Blog,
-  Certificate
+  Certificate,
+  ResearchProject,
+  VipProject
 } from "@/models/Portfolio";
 
 const AUTH_COOKIE_NAME = "auth_token";
@@ -43,6 +47,8 @@ export async function GET() {
     const vistas = await Vista.find().sort({ order: 1 });
     const blogs = await Blog.find().sort({ date: -1 });
     const certificates = await Certificate.find().sort({ order: 1 });
+    const projects = await ResearchProject.find().sort({ order: 1 });
+    const vipProjects = await VipProject.find().sort({ order: 1 });
 
     return NextResponse.json({
       success: true,
@@ -53,7 +59,9 @@ export async function GET() {
         papers,
         vistas,
         blogs,
-        certificates
+        certificates,
+        projects,
+        vipProjects
       }
     });
   } catch (error) {
@@ -89,6 +97,7 @@ export async function POST(request) {
           Object.assign(profile, payload);
           profile.markModified("corePhilosophy");
           profile.markModified("contact");
+          profile.markModified("avatarUrl");
         }
         await profile.save();
         return NextResponse.json({ success: true, data: profile });
@@ -195,6 +204,38 @@ export async function POST(request) {
       case "delete_certificate": {
         await Certificate.findByIdAndDelete(payload.id);
         return NextResponse.json({ success: true, message: "Certificate deleted" });
+      }
+
+      // --- RESEARCH PROJECT ACTIONS ---
+      case "save_project": {
+        let project;
+        if (payload._id) {
+          project = await ResearchProject.findByIdAndUpdate(payload._id, payload, { new: true });
+        } else {
+          project = new ResearchProject(payload);
+          await project.save();
+        }
+        return NextResponse.json({ success: true, data: project });
+      }
+      case "delete_project": {
+        await ResearchProject.findByIdAndDelete(payload.id);
+        return NextResponse.json({ success: true, message: "Project deleted" });
+      }
+      
+      // --- VIP PROJECT ACTIONS ---
+      case "save_vip": {
+        let vip;
+        if (payload._id) {
+          vip = await VipProject.findByIdAndUpdate(payload._id, payload, { new: true });
+        } else {
+          vip = new VipProject(payload);
+          await vip.save();
+        }
+        return NextResponse.json({ success: true, data: vip });
+      }
+      case "delete_vip": {
+        await VipProject.findByIdAndDelete(payload.id);
+        return NextResponse.json({ success: true, message: "VIP project deleted" });
       }
 
       default:

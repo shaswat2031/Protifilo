@@ -109,7 +109,7 @@ export default function VistasPage() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await fetch("/api/content");
+        const res = await fetch("/api/content", { cache: "no-store" });
         const json = await res.json();
         if (json.success) {
           setVistas(json.data.vistas || []);

@@ -316,16 +316,16 @@ function TypewriterQuote({ quotes }) {
 
   return (
     <div id="statement-quote" className="w-full">
-      <div className="glassmorphism-premium bg-gradient-to-br from-pastel-purple/25 via-white/70 to-pastel-blue/20 border border-olive/15 rounded-[2.5rem] p-8 md:p-10 relative overflow-hidden shadow-md group hover:shadow-xl transition-all duration-500 text-center md:text-left">
+      <div className="glassmorphism-premium bg-gradient-to-br from-pastel-purple/25 via-white/70 to-pastel-blue/20 border border-olive/15 rounded-3xl p-6 md:p-8 relative overflow-hidden shadow-md group hover:shadow-xl transition-all duration-500 text-center md:text-left">
         {/* Ambient glowing circles */}
-        <div className="absolute -left-16 -top-16 w-52 h-52 bg-pastel-pink/20 rounded-full blur-3xl opacity-60 pointer-events-none"></div>
-        <div className="absolute -right-16 -bottom-16 w-52 h-52 bg-pastel-mint/20 rounded-full blur-3xl opacity-60 pointer-events-none"></div>
+        <div className="absolute -left-16 -top-16 w-40 h-40 bg-pastel-pink/20 rounded-full blur-3xl opacity-60 pointer-events-none"></div>
+        <div className="absolute -right-16 -bottom-16 w-40 h-40 bg-pastel-mint/20 rounded-full blur-3xl opacity-60 pointer-events-none"></div>
 
-        <span className="absolute left-6 top-4 text-6xl md:text-7xl text-olive/10 font-serif-italic select-none pointer-events-none">“</span>
+        <span className="absolute left-6 top-3 text-5xl md:text-6xl text-olive/10 font-serif-italic select-none pointer-events-none">“</span>
 
-        <p className="font-serif-italic text-xl md:text-2xl text-olive leading-relaxed relative z-10 min-h-[140px] sm:min-h-[100px] md:min-h-[80px]">
-          '{activeQuotes[activeQuoteIdx]?.word}' — <span className="text-gold-accent font-sans-ultra-bold font-normal not-italic tracking-wider px-2 py-0.5 bg-gold-accent/5 rounded-lg border border-gold-accent/10">{activeQuotes[activeQuoteIdx]?.lang}</span> {displayedText}
-          <span className="inline-block w-[3px] h-5 ml-1 bg-olive/70 animate-pulse align-middle"></span>
+        <p className="font-serif-italic text-base md:text-lg text-olive leading-relaxed relative z-10 min-h-[100px] sm:min-h-[75px] md:min-h-[55px]">
+          '{activeQuotes[activeQuoteIdx]?.word}' — <span className="text-gold-accent font-sans-ultra-bold font-normal not-italic tracking-wider px-1.5 py-0.5 bg-gold-accent/5 rounded-lg border border-gold-accent/10 text-[10px] md:text-xs">{activeQuotes[activeQuoteIdx]?.lang}</span> {displayedText}
+          <span className="inline-block w-[3px] h-4 ml-1 bg-olive/70 animate-pulse align-middle"></span>
         </p>
       </div>
     </div>
@@ -338,29 +338,30 @@ export default function Home() {
       name: "Jahnvi",
       title: "Researcher & Writer",
       tagline: "Exploring Political Ecology, Green Governance & Sustainable Development",
+      cvUrl: "",
       bioIntro: "I read in a book two years back that there are two worlds: one is a world shaped by mind-set of the masses symbolic of the ordinary lives of more than 80% of the population and the other world shaped by thinkers, leaving a legacy of intellectual heritage. I decided to be in the latter. With that approach, I started my research journey—where ideas and reflecting on problems were the fuel for igniting changes. It began with my first year of pursuing Masters in Political Science and I found my interests growing in contributing to the formulation of policy solutions for climate crisis.",
       bioSecondary: "My roots lie in a family of Business minds and Entrepreneurs; I am the first generation Post-graduate, first in my family to earn a Master's degree. It felt like a call to stewardship, heavy yet honourable. My journey into the world of visionaries ignited my intellectual energy and the inherent sustainability of India shaped my horizons. So far, I am playing my part to construct a change academically that could trigger transformations if aligned with our policies on sustainability or “Sarva Saha” in Sanskrit which means a harmonious coexistence between man and its nature.",
       contact: {
-        email: "jahnvi.ecology@gmail.com",
+        email: "jahnvikhubani37175@gmail.com",
+        emailSecondary: "jahnvikhubani01@gmail.com",
         location: "Jaipur, Rajasthan, India",
         linkedin: "https://linkedin.com",
         googleScholar: "https://scholar.google.com",
         researchGate: "https://researchgate.net",
+        jstor: "",
         orcid: "https://orcid.org"
       }
     },
-    researchInterests: [
-      { title: "Political Ecology", description: "Analyzing the intersection of political, economic, and social factors with ecological issues and policies.", iconName: "globe" },
-      { title: "Green Governance", description: "Investigating institutional frameworks and policies for sustainable environmental governance.", iconName: "shieldCheck" },
-      { title: "Sustainable Development", description: "Exploring pathways to balance human developmental needs with planetary boundaries and Sanskrit ecological concepts.", iconName: "leaf" }
-    ],
+    researchInterests: [],
     academicBackground: [
       { period: "2024 - Present", title: "PhD Candidate in Political Science", institution: "University of Jaipur", grade: "NET-JRF Qualified", details: "Research focusing on climate policy frameworks, ecological co-existence (Sarva Saha), and green statecraft.", isHighlight: true }
     ],
     papers: [],
     vistas: [],
     blogs: [],
-    certificates: []
+    certificates: [],
+    projects: [],
+    vipProjects: []
   });
   const [loading, setLoading] = useState(false);
 
@@ -380,7 +381,7 @@ export default function Home() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await fetch("/api/content");
+        const res = await fetch("/api/content", { cache: "no-store" });
         const json = await res.json();
         if (json.success) {
           setData(json.data);
@@ -553,6 +554,36 @@ export default function Home() {
       }
     );
 
+    // Research Projects Cards Fade In
+    gsap.fromTo(".project-card-item",
+      { y: 50, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        stagger: 0.2,
+        duration: 1,
+        scrollTrigger: {
+          trigger: ".project-card-item",
+          start: "top 85%"
+        }
+      }
+    );
+
+    // VIP Projects Cards Fade In
+    gsap.fromTo(".vip-card-item",
+      { y: 50, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        stagger: 0.2,
+        duration: 1,
+        scrollTrigger: {
+          trigger: ".vip-card-item",
+          start: "top 85%"
+        }
+      }
+    );
+
     // Vistas Journey Masonry Feel Reveal
     gsap.utils.toArray('.vista-overlap-item').forEach((item, i) => {
       gsap.fromTo(item,
@@ -627,6 +658,9 @@ export default function Home() {
   const featuredVistas = intellectualVistas.filter(v => v.showOnHome !== false).slice(0, 3);
   const blogs = data?.blogs || [];
   const certificates = data?.certificates || [];
+  const projects = data?.projects || [];
+  const vipProjects = data?.vipProjects || [];
+  const featuredVipProjects = vipProjects.filter(p => p.showOnHome !== false).slice(0, 6);
 
   return (
     <main ref={containerRef} className="relative">
@@ -646,11 +680,10 @@ export default function Home() {
 
               <div className="hidden md:flex items-center bg-charcoal/5 rounded-full p-1 border border-charcoal/5">
                 <a className="px-4 py-1.5 rounded-full font-sans font-medium text-xs tracking-wide text-charcoal hover:bg-white hover:shadow-sm transition-all duration-300" href="#intro">Home</a>
-                <a className="px-4 py-1.5 rounded-full font-sans font-medium text-xs tracking-wide text-charcoal hover:bg-white hover:shadow-sm transition-all duration-300" href="#research">Philosophy</a>
-                <a className="px-4 py-1.5 rounded-full font-sans font-medium text-xs tracking-wide text-charcoal hover:bg-white hover:shadow-sm transition-all duration-300" href="#research-papers">Publications</a>
-                <a className="px-4 py-1.5 rounded-full font-sans font-medium text-xs tracking-wide text-charcoal hover:bg-white hover:shadow-sm transition-all duration-300" href="#background">Journey</a>
-                <a className="px-4 py-1.5 rounded-full font-sans font-medium text-xs tracking-wide text-charcoal hover:bg-white hover:shadow-sm transition-all duration-300" href="#vistas">Vistas</a>
-                <a className="px-4 py-1.5 rounded-full font-sans font-medium text-xs tracking-wide text-charcoal hover:bg-white hover:shadow-sm transition-all duration-300" href="#blogs">Blogs</a>
+                <a className="px-4 py-1.5 rounded-full font-sans font-medium text-xs tracking-wide text-charcoal hover:bg-white hover:shadow-sm transition-all duration-300" href="#research-papers">Research areas</a>
+                <a className="px-4 py-1.5 rounded-full font-sans font-medium text-xs tracking-wide text-charcoal hover:bg-white hover:shadow-sm transition-all duration-300" href="#projects">Projects</a>
+                <a className="px-4 py-1.5 rounded-full font-sans font-medium text-xs tracking-wide text-charcoal hover:bg-white hover:shadow-sm transition-all duration-300" href="#blogs">Blog section</a>
+                <a className="px-4 py-1.5 rounded-full font-sans font-medium text-xs tracking-wide text-charcoal hover:bg-white hover:shadow-sm transition-all duration-300" href="#cv">MY CV</a>
               </div>
 
               <a href="/contact" className="hidden md:inline-block px-6 py-2.5 bg-gradient-to-r from-charcoal to-charcoal-light text-white rounded-full font-sans font-semibold text-xs tracking-wider uppercase hover:shadow-[0_0_20px_rgba(27,28,28,0.2)] hover:scale-105 transition-all duration-300">
@@ -689,28 +722,28 @@ export default function Home() {
                   className="px-4 py-2.5 rounded-2xl font-sans font-medium text-base text-charcoal hover:bg-charcoal/5 transition-all text-center"
                   href="#research-papers"
                 >
-                  Publications
+                  Research areas
                 </a>
                 <a
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="px-4 py-2.5 rounded-2xl font-sans font-medium text-base text-charcoal hover:bg-charcoal/5 transition-all text-center"
-                  href="#background"
+                  href="#projects"
                 >
-                  Journey
-                </a>
-                <a
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="px-4 py-2.5 rounded-2xl font-sans font-medium text-base text-charcoal hover:bg-charcoal/5 transition-all text-center"
-                  href="#vistas"
-                >
-                  Vistas
+                  Projects
                 </a>
                 <a
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="px-4 py-2.5 rounded-2xl font-sans font-medium text-base text-charcoal hover:bg-charcoal/5 transition-all text-center"
                   href="#blogs"
                 >
-                  Blogs
+                  Blog section
+                </a>
+                <a
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="px-4 py-2.5 rounded-2xl font-sans font-medium text-base text-charcoal hover:bg-charcoal/5 transition-all text-center"
+                  href="#cv"
+                >
+                  MY CV
                 </a>
                 <a
                   onClick={() => setIsMobileMenuOpen(false)}
@@ -739,7 +772,7 @@ export default function Home() {
             alt="Profile"
             className="w-full h-auto object-contain object-bottom pointer-events-auto transition-transform duration-700 hover:scale-[1.02]"
             id="hero-image"
-            src="/avatar.png"
+            src="/hero1.png"
             style={{ filter: "drop-shadow(0 10px 25px rgba(0,0,0,0.15))" }}
           />
         </div>
@@ -800,9 +833,6 @@ export default function Home() {
 
             {/* Right Column: Content */}
             <div className="md:col-span-7 space-y-8 text-left w-full">
-              {/* Highlighted Quote centerpiece */}
-              <TypewriterQuote quotes={philosophyQuotes} />
-
               {/* Editorial-style Bio Grid */}
               <div id="statement-bio" className="space-y-6 font-sans text-base md:text-lg text-charcoal-light leading-relaxed text-justify">
                 <div className="relative pl-6">
@@ -818,42 +848,47 @@ export default function Home() {
                   </p>
                 </div>
               </div>
+
+              {/* Highlighted Quote centerpiece */}
+              <TypewriterQuote quotes={philosophyQuotes} />
             </div>
           </div>
 
           {/* Domain Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-6">
-            {researchInterests.map((interest, idx) => {
-              const pastelBgColors = [
-                "bg-gradient-to-br from-pastel-pink/20 via-white/50 to-pastel-pink/10 hover:from-pastel-pink/25 hover:to-pastel-pink/15 hover:border-pastel-pink/30",
-                "bg-gradient-to-br from-pastel-blue/20 via-white/50 to-pastel-blue/10 hover:from-pastel-blue/25 hover:to-pastel-blue/15 hover:border-pastel-blue/30",
-                "bg-gradient-to-br from-pastel-mint/20 via-white/50 to-pastel-mint/10 hover:from-pastel-mint/25 hover:to-pastel-mint/15 hover:border-pastel-mint/30"
-              ];
-              const bgs = pastelBgColors[idx % pastelBgColors.length];
-              return (
-                <div
-                  key={interest._id || idx}
-                  className={`glassmorphism-premium p-10 rounded-[2.5rem] border border-charcoal/10 hover:-translate-y-2 hover:shadow-xl transition-all duration-500 group flex flex-col justify-between relative overflow-hidden ${bgs}`}
-                >
-                  {/* Decorative floating card number */}
-                  <span className="absolute right-8 top-8 font-serif-italic text-5xl text-charcoal/5 font-extrabold select-none pointer-events-none group-hover:scale-110 group-hover:text-charcoal/8 transition-all duration-300">
-                    {String(idx + 1).padStart(2, '0')}
-                  </span>
+          {researchInterests.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-6">
+              {researchInterests.map((interest, idx) => {
+                const pastelBgColors = [
+                  "bg-gradient-to-br from-pastel-pink/20 via-white/50 to-pastel-pink/10 hover:from-pastel-pink/25 hover:to-pastel-pink/15 hover:border-pastel-pink/30",
+                  "bg-gradient-to-br from-pastel-blue/20 via-white/50 to-pastel-blue/10 hover:from-pastel-blue/25 hover:to-pastel-blue/15 hover:border-pastel-blue/30",
+                  "bg-gradient-to-br from-pastel-mint/20 via-white/50 to-pastel-mint/10 hover:from-pastel-mint/25 hover:to-pastel-mint/15 hover:border-pastel-mint/30"
+                ];
+                const bgs = pastelBgColors[idx % pastelBgColors.length];
+                return (
+                  <div
+                    key={interest._id || idx}
+                    className={`glassmorphism-premium p-10 rounded-[2.5rem] border border-charcoal/10 hover:-translate-y-2 hover:shadow-xl transition-all duration-500 group flex flex-col justify-between relative overflow-hidden ${bgs}`}
+                  >
+                    {/* Decorative floating card number */}
+                    <span className="absolute right-8 top-8 font-serif-italic text-5xl text-charcoal/5 font-extrabold select-none pointer-events-none group-hover:scale-110 group-hover:text-charcoal/8 transition-all duration-300">
+                      {String(idx + 1).padStart(2, '0')}
+                    </span>
 
-                  <div>
-                    <div className="w-16 h-16 rounded-2xl bg-white/70 border border-charcoal/5 shadow-xs flex items-center justify-center mb-8 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
-                      <span className="material-symbols-outlined text-olive text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>
-                        {getInterestIcon(interest.iconName)}
-                      </span>
+                    <div>
+                      <div className="w-16 h-16 rounded-2xl bg-white/70 border border-charcoal/5 shadow-xs flex items-center justify-center mb-8 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
+                        <span className="material-symbols-outlined text-olive text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>
+                          {getInterestIcon(interest.iconName)}
+                        </span>
+                      </div>
+                      <h3 className="font-sans-ultra-bold text-xl uppercase tracking-tight text-charcoal mb-4">{interest.title}</h3>
+                      <p className="font-sans text-sm text-charcoal-light leading-relaxed">{interest.description}</p>
                     </div>
-                    <h3 className="font-sans-ultra-bold text-xl uppercase tracking-tight text-charcoal mb-4">{interest.title}</h3>
-                    <p className="font-sans text-sm text-charcoal-light leading-relaxed">{interest.description}</p>
+                    <div className="w-12 h-1 bg-gold-accent/20 mt-8 rounded-full group-hover:w-20 group-hover:bg-gold-accent/40 transition-all duration-300"></div>
                   </div>
-                  <div className="w-12 h-1 bg-gold-accent/20 mt-8 rounded-full group-hover:w-20 group-hover:bg-gold-accent/40 transition-all duration-300"></div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </section>
 
@@ -1103,136 +1138,8 @@ export default function Home() {
         </div>
       </section>
 
-
-      {/* Intellectual Vistas (Summits) */}
-      <section className="section-padding premium-glow-alt-1 relative overflow-hidden" id="vistas">
-
-
-        <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop relative z-10">
-          <div className="text-center mb-20">
-            <span className="font-label-md text-gold-accent uppercase tracking-widest text-xs font-bold block mb-3">Exploring the Summits</span>
-            <h2 className="font-headline-lg text-4xl md:text-5xl text-charcoal font-extrabold uppercase tracking-wider leading-tight">Intellectual Vistas</h2>
-            <p className="font-serif-italic text-lg text-charcoal-light mt-4">Keynotes, discussions, and leadership in ecological discourses</p>
-            <div className="w-16 h-1 bg-olive/45 mx-auto mt-6 rounded-full"></div>
-          </div>
-          <div className="space-y-24">
-            {featuredVistas.map((vista, idx) => (
-              <VistaItem key={vista._id || idx} vista={vista} idx={idx} />
-            ))}
-          </div>
-
-          {/* Show All Vistas / Summits Redirect Button */}
-          {intellectualVistas.length > 3 && (
-            <div className="flex justify-center mt-16" id="view-all-vistas-btn">
-              <a
-                href="/vistas"
-                className="inline-flex items-center gap-2 px-8 py-4 bg-olive hover:bg-olive/90 text-cream-lightest font-sans font-bold text-sm uppercase tracking-widest rounded-full shadow-sm hover:shadow-md transition-all duration-300 group"
-              >
-                Show All Visits
-                <span className="material-symbols-outlined transition-transform duration-300 group-hover:translate-x-1">
-                  arrow_forward
-                </span>
-              </a>
-            </div>
-          )}
-        </div>
-      </section>
-
-
-      {/* Blogs */}
-      <section className="section-padding bg-cream-lightest relative overflow-hidden" id="blogs">
-
-        {/* Centered Header Container */}
-        <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop relative z-10 mb-16">
-          <div className="border-b border-charcoal/5 pb-8">
-            <span className="font-label-md text-gold-accent uppercase tracking-widest text-xs font-bold block mb-3">Wending Writer</span>
-            <h2 className="font-headline-lg text-4xl md:text-5xl text-charcoal font-extrabold uppercase tracking-wider leading-tight">Latest Blogs</h2>
-            <p className="font-serif-italic text-lg text-charcoal-light mt-4">Thoughts, essays, and critiques on green governance</p>
-          </div>
-        </div>
-
-        {/* Edge-to-Edge Marquee Container */}
-        <div className="w-full relative z-10">
-          {blogs.length > 0 ? (
-            <div className="marquee-container">
-              <div className="marquee-wrapper">
-                {[...blogs, ...blogs, ...blogs, ...blogs].map((blog, idx) => {
-                  const uniqueKey = `${blog._id || idx}-marquee-${idx}`;
-                  const cleanContent = blog.content
-                    ? blog.content.replace(/<[^>]*>/g, "").replace(/[#*`>]/g, "").trim().slice(0, 120) + "..."
-                    : "";
-                  return (
-                    <article
-                      key={uniqueKey}
-                      onClick={() => setActiveBlog(blog)}
-                      className="group relative overflow-hidden rounded-[2.5rem] glassmorphism-premium border border-charcoal/10 hover:border-olive/20 hover:shadow-xl transition-all duration-500 marquee-card-landscape"
-                    >
-                      {/* Left: Cover Image */}
-                      <div className="w-[40%] sm:w-[45%] h-full relative overflow-hidden shrink-0">
-                        <img
-                          alt={blog.title}
-                          className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-1000"
-                          src={`/api/images/${blog.coverImage}`}
-                        />
-                        <div className="absolute inset-0 bg-charcoal/10 group-hover:bg-charcoal/0 transition-colors duration-500"></div>
-                      </div>
-
-                      {/* Right: Text Details */}
-                      <div className="w-[60%] sm:w-[55%] p-6 md:p-8 flex flex-col justify-between h-full">
-                        <div className="space-y-3">
-                          <div className="flex gap-2 flex-wrap items-center">
-                            {blog.tags?.slice(0, 2).map((tag, tagIdx) => (
-                              <span
-                                key={tagIdx}
-                                className={`text-[8px] uppercase font-sans font-bold tracking-widest px-2.5 py-0.5 rounded-full ${tagIdx % 2 === 0
-                                  ? 'bg-olive/10 text-olive border border-olive/5'
-                                  : 'bg-gold-accent/10 text-gold-accent border border-gold-accent/5'
-                                  }`}
-                              >
-                                {tag}
-                              </span>
-                            ))}
-                            <span className="text-[8px] uppercase font-sans font-bold tracking-widest text-charcoal-light px-2.5 py-0.5 bg-cream-medium/20 rounded-full">
-                              {blog.date}
-                            </span>
-                          </div>
-
-                          <h3 className="font-sans-ultra-bold text-sm md:text-base text-charcoal uppercase leading-tight group-hover:text-olive transition-colors duration-300 line-clamp-2">
-                            {blog.title}
-                          </h3>
-
-                          <p className="font-sans text-[10px] md:text-xs text-charcoal-light leading-relaxed line-clamp-3">
-                            {cleanContent}
-                          </p>
-                        </div>
-
-                        <div>
-                          <button
-                            onClick={(e) => { e.stopPropagation(); setActiveBlog(blog); }}
-                            className="inline-flex items-center gap-1.5 text-2xs font-sans font-bold uppercase tracking-widest text-olive hover:text-gold-accent transition-all cursor-pointer"
-                          >
-                            Read Narrative
-                            <span className="material-symbols-outlined text-xs transition-transform group-hover:translate-x-1">arrow_forward</span>
-                          </button>
-                        </div>
-                      </div>
-                    </article>
-                  );
-                })}
-              </div>
-            </div>
-          ) : (
-            <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
-              <p className="text-center text-charcoal-light py-8">No blogs published yet.</p>
-            </div>
-          )}
-        </div>
-      </section>
-
-
-      {/* Excellence Badges */}
-      <section className="section-padding bg-gradient-to-b from-cream-lightest to-cream-medium relative overflow-hidden" id="accolades">
-
+      {/* Excellence Badges / Certifications */}
+      <section className="section-padding bg-gradient-to-b from-cream-lightest to-cream-medium relative overflow-hidden" id="certifications">
         <div className="absolute left-0 bottom-0 w-80 h-80 bg-olive/5 rounded-full blur-3xl pointer-events-none"></div>
         <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
@@ -1323,6 +1230,480 @@ export default function Home() {
         </div>
       </section>
 
+      {/* RESEARCH IN REACH (Current Projects) */}
+      {projects && projects.length > 0 && (
+        <section className="section-padding bg-gradient-to-b from-cream-medium to-cream-lightest relative overflow-hidden" id="projects">
+          {/* Ambient background glows */}
+          <div className="absolute right-0 bottom-0 w-80 h-80 bg-gold-accent/5 rounded-full blur-3xl pointer-events-none"></div>
+          <div className="absolute left-10 top-10 w-80 h-80 bg-olive/5 rounded-full blur-3xl pointer-events-none"></div>
+
+          <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop relative z-10">
+            {/* Header */}
+            <div className="max-w-3xl mx-auto text-center mb-16">
+              <span className="font-label-md text-gold-accent uppercase tracking-widest text-xs font-bold block mb-3">Active Investigations</span>
+              <h2 className="font-headline-lg text-4xl md:text-5xl text-charcoal font-extrabold uppercase tracking-wider leading-tight">Research in Reach</h2>
+              <p className="font-serif-italic text-lg text-charcoal-light mt-4">Current projects, ongoing formulations, and policy insights in active progress</p>
+              <div className="w-16 h-1 bg-olive/45 mx-auto mt-6 rounded-full"></div>
+            </div>
+
+            {/* Grid of Projects */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 max-w-5xl mx-auto">
+              {projects.map((project, idx) => {
+                const pastelBgColors = [
+                  "bg-gradient-to-br from-pastel-purple/15 via-white/50 to-pastel-blue/10 hover:from-pastel-purple/20 hover:to-pastel-blue/15 hover:border-pastel-purple/35",
+                  "bg-gradient-to-br from-pastel-peach/15 via-white/50 to-pastel-pink/10 hover:from-pastel-peach/20 hover:to-pastel-pink/15 hover:border-pastel-peach/35"
+                ];
+                const bgs = pastelBgColors[idx % pastelBgColors.length];
+                return (
+                  <div
+                    key={project._id || idx}
+                    className={`glassmorphism-premium p-10 rounded-[2.5rem] border border-charcoal/10 hover:-translate-y-2 hover:shadow-xl transition-all duration-500 project-card-item flex flex-col justify-between relative overflow-hidden group ${bgs}`}
+                  >
+                    {/* Floating background count indicator */}
+                    <span className="absolute right-8 top-8 font-serif-italic text-6xl text-charcoal/5 font-extrabold select-none pointer-events-none group-hover:scale-110 group-hover:text-charcoal/8 transition-all duration-300">
+                      {String(idx + 1).padStart(2, '0')}
+                    </span>
+
+                    <div>
+                      {/* Active Status Badge */}
+                      <div className="mb-6 flex justify-start">
+                        <span className="inline-flex items-center gap-1.5 text-[9px] font-sans font-bold uppercase tracking-widest text-olive px-3.5 py-1 bg-olive/10 rounded-full border border-olive/15">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                          {project.status || "In Progress"}
+                        </span>
+                      </div>
+
+                      {/* Title */}
+                      <h3 className="font-sans-ultra-bold text-xl uppercase tracking-tight text-charcoal leading-snug mb-4 group-hover:text-olive transition-colors duration-300">
+                        {project.title}
+                      </h3>
+
+                      {/* Description */}
+                      <p className="font-sans text-sm text-charcoal-light leading-relaxed text-justify">
+                        {project.description}
+                      </p>
+                    </div>
+
+                    <div className="w-12 h-1 bg-gold-accent/25 mt-8 rounded-full group-hover:w-20 group-hover:bg-gold-accent/40 transition-all duration-300"></div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* VIP – [Vision-Innovation-Priorities] */}
+      {featuredVipProjects && featuredVipProjects.length > 0 && (
+        <section className="section-padding bg-gradient-to-b from-cream-lightest to-cream-medium relative overflow-hidden" id="vip">
+          {/* Ambient background glows */}
+          <div className="absolute left-0 bottom-0 w-80 h-80 bg-pastel-pink/5 rounded-full blur-3xl pointer-events-none"></div>
+          <div className="absolute right-10 top-10 w-80 h-80 bg-pastel-blue/5 rounded-full blur-3xl pointer-events-none"></div>
+
+          <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop relative z-10">
+            {/* Header */}
+            <div className="max-w-3xl mx-auto text-center mb-16">
+              <span className="font-label-md text-gold-accent uppercase tracking-widest text-xs font-bold block mb-3">Future Vistas & Intentions</span>
+              <h2 className="font-headline-lg text-4xl md:text-5xl text-charcoal font-extrabold uppercase tracking-wider leading-tight">VIP – [Vision-Innovation-Priorities]</h2>
+              <p className="font-serif-italic text-lg text-charcoal-light mt-4">Highlighting projects in my vision and aligning my interests and priorities</p>
+              <div className="w-16 h-1 bg-olive/45 mx-auto mt-6 rounded-full"></div>
+            </div>
+
+            {/* Grid of VIP Projects */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+              {featuredVipProjects.map((project, idx) => {
+                const pastelBgColors = [
+                  "bg-gradient-to-br from-pastel-purple/15 via-white/50 to-pastel-blue/10 hover:from-pastel-purple/20 hover:to-pastel-blue/15 hover:border-pastel-purple/35",
+                  "bg-gradient-to-br from-pastel-peach/15 via-white/50 to-pastel-pink/10 hover:from-pastel-peach/20 hover:to-pastel-pink/15 hover:border-pastel-peach/35",
+                  "bg-gradient-to-br from-pastel-mint/15 via-white/50 to-pastel-blue/10 hover:from-pastel-mint/20 hover:to-pastel-blue/15 hover:border-pastel-mint/35"
+                ];
+                const bgs = pastelBgColors[idx % pastelBgColors.length];
+                return (
+                  <div
+                    key={project._id || idx}
+                    className={`glassmorphism-premium p-8 rounded-[2rem] border border-charcoal/10 hover:-translate-y-2 hover:shadow-xl transition-all duration-500 vip-card-item flex flex-col justify-between relative overflow-hidden group ${bgs}`}
+                  >
+                    {/* Floating background count indicator */}
+                    <span className="absolute right-6 top-6 font-serif-italic text-5xl text-charcoal/5 font-extrabold select-none pointer-events-none group-hover:scale-110 group-hover:text-charcoal/8 transition-all duration-300">
+                      {String(idx + 1).padStart(2, '0')}
+                    </span>
+
+                    <div>
+                      {/* Status Badge */}
+                      <div className="mb-5 flex justify-start">
+                        <span className="inline-flex items-center gap-1.5 text-[9px] font-sans font-bold uppercase tracking-widest text-olive px-3 py-0.5 bg-olive/10 rounded-full border border-olive/15">
+                          <span className={`w-1.5 h-1.5 rounded-full ${project.status && project.status.toLowerCase().includes("in progress") ? "bg-emerald-500 animate-pulse" : "bg-gold-accent"}`}></span>
+                          {project.status || "Future Vision"}
+                        </span>
+                      </div>
+
+                      {/* Title */}
+                      <h3 className="font-sans-ultra-bold text-lg uppercase tracking-tight text-charcoal leading-snug mb-3 group-hover:text-olive transition-colors duration-300">
+                        {project.title}
+                      </h3>
+
+                      {/* Description */}
+                      <p className="font-sans text-xs md:text-sm text-charcoal-light leading-relaxed text-justify">
+                        {project.description}
+                      </p>
+                    </div>
+
+                    <div className="w-12 h-1 bg-gold-accent/25 mt-6 rounded-full group-hover:w-20 group-hover:bg-gold-accent/40 transition-all duration-300"></div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Show All VIP Projects Redirect Button */}
+            {vipProjects.length > 6 && (
+              <div className="flex justify-center mt-16" id="view-all-vip-btn">
+                <a
+                  href="/vip"
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-olive hover:bg-olive/90 text-cream-lightest font-sans font-bold text-sm uppercase tracking-widest rounded-full shadow-sm hover:shadow-md transition-all duration-300 group"
+                >
+                  Show All Vision Projects
+                  <span className="material-symbols-outlined transition-transform duration-300 group-hover:translate-x-1">
+                    arrow_forward
+                  </span>
+                </a>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
+      {/* Intellectual Vistas (Summits) */}
+      <section className="section-padding premium-glow-alt-1 relative overflow-hidden" id="vistas">
+
+
+        <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop relative z-10">
+          <div className="text-center mb-20">
+            <span className="font-label-md text-gold-accent uppercase tracking-widest text-xs font-bold block mb-3">Exploring the Summits</span>
+            <h2 className="font-headline-lg text-4xl md:text-5xl text-charcoal font-extrabold uppercase tracking-wider leading-tight">Intellectual Vistas</h2>
+            <p className="font-serif-italic text-lg text-charcoal-light mt-4">Keynotes, discussions, and leadership in ecological discourses</p>
+            <div className="w-16 h-1 bg-olive/45 mx-auto mt-6 rounded-full"></div>
+          </div>
+          <div className="space-y-24">
+            {featuredVistas.map((vista, idx) => (
+              <VistaItem key={vista._id || idx} vista={vista} idx={idx} />
+            ))}
+          </div>
+
+          {/* Show All Vistas / Summits Redirect Button */}
+          {intellectualVistas.length > 3 && (
+            <div className="flex justify-center mt-16" id="view-all-vistas-btn">
+              <a
+                href="/vistas"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-olive hover:bg-olive/90 text-cream-lightest font-sans font-bold text-sm uppercase tracking-widest rounded-full shadow-sm hover:shadow-md transition-all duration-300 group"
+              >
+                Show All Visits
+                <span className="material-symbols-outlined transition-transform duration-300 group-hover:translate-x-1">
+                  arrow_forward
+                </span>
+              </a>
+            </div>
+          )}
+        </div>
+      </section>
+
+
+      {/* Blogs */}
+      <section className="section-padding bg-cream-lightest relative overflow-hidden" id="blogs">
+
+        {/* Centered Header Container */}
+        <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop relative z-10 mb-16">
+          <div className="border-b border-charcoal/5 pb-8">
+            <span className="font-label-md text-gold-accent uppercase tracking-widest text-xs font-bold block mb-3">VICHAR MANTHAN FOR VIKAS</span>
+            <h2 className="font-headline-lg text-4xl md:text-5xl text-charcoal font-extrabold uppercase tracking-wider leading-tight">My Take on this World</h2>
+            <p className="font-sans text-sm text-charcoal-light mt-4 leading-relaxed max-w-4xl">
+              Symbolising the churning of ideas to generate new insights, perspectives, and creative solutions. Bringing clarity on the current dynamics of geopolitics, environmental innovations, policy solutions for climate crises and sustainability, and the increasing relevance of political thinkers and their theories in today’s time of turbulence.
+            </p>
+          </div>
+        </div>
+
+        {/* Edge-to-Edge Marquee Container */}
+        <div className="w-full relative z-10">
+          {blogs.length > 0 ? (
+            <div className="marquee-container">
+              <div className="marquee-wrapper">
+                {[...blogs, ...blogs, ...blogs, ...blogs].map((blog, idx) => {
+                  const uniqueKey = `${blog._id || idx}-marquee-${idx}`;
+                  const cleanContent = blog.content
+                    ? blog.content.replace(/<[^>]*>/g, "").replace(/[#*`>]/g, "").trim().slice(0, 120) + "..."
+                    : "";
+                  return (
+                    <article
+                      key={uniqueKey}
+                      onClick={() => setActiveBlog(blog)}
+                      className="group relative overflow-hidden rounded-[2.5rem] glassmorphism-premium border border-charcoal/10 hover:border-olive/20 hover:shadow-xl transition-all duration-500 marquee-card-landscape"
+                    >
+                      {/* Left: Cover Image */}
+                      <div className="w-[40%] sm:w-[45%] h-full relative overflow-hidden shrink-0">
+                        <img
+                          alt={blog.title}
+                          className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-1000"
+                          src={`/api/images/${blog.coverImage}`}
+                        />
+                        <div className="absolute inset-0 bg-charcoal/10 group-hover:bg-charcoal/0 transition-colors duration-500"></div>
+                      </div>
+
+                      {/* Right: Text Details */}
+                      <div className="w-[60%] sm:w-[55%] p-6 md:p-8 flex flex-col justify-between h-full">
+                        <div className="space-y-3">
+                          <div className="flex gap-2 flex-wrap items-center">
+                            {blog.tags?.slice(0, 2).map((tag, tagIdx) => (
+                              <span
+                                key={tagIdx}
+                                className={`text-[8px] uppercase font-sans font-bold tracking-widest px-2.5 py-0.5 rounded-full ${tagIdx % 2 === 0
+                                  ? 'bg-olive/10 text-olive border border-olive/5'
+                                  : 'bg-gold-accent/10 text-gold-accent border border-gold-accent/5'
+                                  }`}
+                              >
+                                {tag}
+                              </span>
+                            ))}
+                            <span className="text-[8px] uppercase font-sans font-bold tracking-widest text-charcoal-light px-2.5 py-0.5 bg-cream-medium/20 rounded-full">
+                              {blog.date}
+                            </span>
+                          </div>
+
+                          <h3 className="font-sans-ultra-bold text-sm md:text-base text-charcoal uppercase leading-tight group-hover:text-olive transition-colors duration-300 line-clamp-2">
+                            {blog.title}
+                          </h3>
+
+                          <p className="font-sans text-[10px] md:text-xs text-charcoal-light leading-relaxed line-clamp-3">
+                            {cleanContent}
+                          </p>
+                        </div>
+
+                        <div>
+                          <button
+                            onClick={(e) => { e.stopPropagation(); setActiveBlog(blog); }}
+                            className="inline-flex items-center gap-1.5 text-2xs font-sans font-bold uppercase tracking-widest text-olive hover:text-gold-accent transition-all cursor-pointer"
+                          >
+                            Read Narrative
+                            <span className="material-symbols-outlined text-xs transition-transform group-hover:translate-x-1">arrow_forward</span>
+                          </button>
+                        </div>
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
+            </div>
+          ) : (
+            <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+              <p className="text-center text-charcoal-light py-8">No blogs published yet.</p>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* MY CV SECTION */}
+      <section className="section-padding bg-gradient-to-b from-cream-medium to-cream-lightest relative overflow-hidden" id="cv">
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            @media print {
+              body * {
+                visibility: hidden !important;
+              }
+              #academic-cv-sheet, #academic-cv-sheet * {
+                visibility: visible !important;
+              }
+              #academic-cv-sheet {
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 24px !important;
+                border: none !important;
+                box-shadow: none !important;
+                background: white !important;
+                color: black !important;
+              }
+              header, footer, nav, button, #view-all-vistas-btn, .marquee-container {
+                display: none !important;
+              }
+            }
+          `
+        }} />
+        {/* Decorative background glows */}
+        <div className="absolute right-0 bottom-0 w-96 h-96 bg-olive/5 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute left-0 top-0 w-96 h-96 bg-gold-accent/5 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop relative z-10">
+          {/* Header */}
+          <div className="max-w-3xl mx-auto text-center mb-12">
+            <span className="font-label-md text-gold-accent uppercase tracking-widest text-xs font-bold block mb-3">Academic Credentials</span>
+            <h2 className="font-headline-lg text-4xl md:text-5xl text-charcoal font-extrabold uppercase tracking-wider leading-tight">My CV</h2>
+            <p className="font-serif-italic text-lg text-charcoal-light mt-4">A dynamic compilation of academic background, research papers, presentations, and accomplishments</p>
+            <div className="w-16 h-1 bg-olive/45 mx-auto mt-6 rounded-full"></div>
+          </div>
+
+          <div className="max-w-4xl mx-auto">
+            {/* Interactive Download/Print Bar */}
+            <div className="flex justify-end mb-6">
+              {profile.cvUrl ? (
+                <a
+                  href={profile.cvUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-olive hover:bg-olive/90 text-cream-lightest font-sans font-bold text-xs uppercase tracking-widest rounded-full shadow-sm hover:shadow-md transition-all duration-300"
+                >
+                  <span className="material-symbols-outlined text-sm">download</span>
+                  Download CV Document
+                </a>
+              ) : (
+                <button
+                  onClick={() => window.print()}
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-olive hover:bg-olive/90 text-cream-lightest font-sans font-bold text-xs uppercase tracking-widest rounded-full shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer"
+                >
+                  <span className="material-symbols-outlined text-sm">print</span>
+                  Print / Export CV
+                </button>
+              )}
+            </div>
+
+            {/* Dynamic CV Page Preview Card */}
+            <div className="bg-white border border-charcoal/10 rounded-[2rem] shadow-lg p-8 md:p-12 text-charcoal select-text font-sans relative overflow-hidden" id="academic-cv-sheet">
+              {/* CV Sheet Header */}
+              <div className="border-b-2 border-charcoal/20 pb-8 mb-8 text-center md:text-left flex flex-col md:flex-row justify-between items-start gap-6">
+                <div>
+                  <h1 className="font-serif text-3xl md:text-4xl font-bold tracking-tight text-charcoal">{profile.name || "Jahnvi"}</h1>
+                  <p className="font-sans text-sm md:text-base font-semibold text-olive mt-1.5 tracking-wide uppercase">{profile.title || "Researcher & Writer"}</p>
+                  <p className="font-serif-italic text-xs md:text-sm text-charcoal-light mt-1 max-w-xl">{profile.tagline}</p>
+                </div>
+                <div className="flex flex-col items-center md:items-end text-xs text-charcoal-light gap-1.5 shrink-0 self-center md:self-start">
+                  {profile.contact?.location && (
+                    <span className="flex items-center gap-1.5">
+                      <span className="material-symbols-outlined text-sm text-olive">location_on</span>
+                      {profile.contact.location}
+                    </span>
+                  )}
+                  {profile.contact?.email && (
+                    <a href={`mailto:${profile.contact.email}`} className="flex items-center gap-1.5 hover:text-olive transition-colors">
+                      <span className="material-symbols-outlined text-sm text-olive">mail</span>
+                      {profile.contact.email}
+                    </a>
+                  )}
+                  {profile.contact?.emailSecondary && (
+                    <a href={`mailto:${profile.contact.emailSecondary}`} className="flex items-center gap-1.5 hover:text-olive transition-colors">
+                      <span className="material-symbols-outlined text-sm text-olive">mail</span>
+                      {profile.contact.emailSecondary}
+                    </a>
+                  )}
+                  <div className="flex gap-3 mt-2">
+                    {profile.contact?.googleScholar && (
+                      <a href={profile.contact.googleScholar} target="_blank" rel="noopener noreferrer" className="text-olive hover:text-gold-accent font-semibold underline">Scholar</a>
+                    )}
+                    {profile.contact?.researchGate && (
+                      <a href={profile.contact.researchGate} target="_blank" rel="noopener noreferrer" className="text-olive hover:text-gold-accent font-semibold underline">ResearchGate</a>
+                    )}
+                    {profile.contact?.jstor && (
+                      <a href={profile.contact.jstor} target="_blank" rel="noopener noreferrer" className="text-olive hover:text-gold-accent font-semibold underline">JSTOR</a>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* CV Body */}
+              <div className="space-y-8">
+                {/* 1. Academic Background */}
+                {data.academicBackground && data.academicBackground.length > 0 && (
+                  <div className="space-y-3">
+                    <h2 className="font-serif text-lg font-bold border-b border-charcoal/10 pb-1.5 uppercase tracking-wider text-charcoal flex items-center gap-2">
+                      <span className="material-symbols-outlined text-olive">school</span> Education & Timeline
+                    </h2>
+                    <div className="space-y-3.5 pl-1">
+                      {data.academicBackground.map((item, idx) => (
+                        <div key={idx} className="flex justify-between items-start gap-4 text-xs md:text-sm">
+                          <div className="space-y-0.5">
+                            <h3 className="font-bold text-charcoal">{item.title}</h3>
+                            <p className="text-charcoal-light">{item.institution}</p>
+                            {item.details && <p className="text-[11px] text-charcoal-light/80 italic mt-0.5 max-w-2xl">{item.details}</p>}
+                          </div>
+                          <div className="text-right shrink-0">
+                            <span className="font-bold text-olive">{item.period}</span>
+                            {item.grade && <p className="text-[10px] text-gold-accent font-semibold mt-0.5">{item.grade}</p>}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* 2. Fellowships & Certifications */}
+                {data.certificates && data.certificates.length > 0 && (
+                  <div className="space-y-3">
+                    <h2 className="font-serif text-lg font-bold border-b border-charcoal/10 pb-1.5 uppercase tracking-wider text-charcoal flex items-center gap-2">
+                      <span className="material-symbols-outlined text-olive">workspace_premium</span> Fellowships & Certifications
+                    </h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pl-1">
+                      {data.certificates.map((item, idx) => (
+                        <div key={idx} className="text-xs md:text-sm">
+                          <h3 className="font-bold text-charcoal">{item.title}</h3>
+                          <p className="text-charcoal-light text-[11px]">{item.issuer} • <span className="font-semibold text-olive">{item.date}</span></p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* 3. Publications & Conferences */}
+                {data.papers && data.papers.length > 0 && (
+                  <div className="space-y-3">
+                    <h2 className="font-serif text-lg font-bold border-b border-charcoal/10 pb-1.5 uppercase tracking-wider text-charcoal flex items-center gap-2">
+                      <span className="material-symbols-outlined text-olive">book</span> Selected Publications & Conferences
+                    </h2>
+                    <div className="space-y-4 pl-1">
+                      {data.papers.map((paper, idx) => (
+                        <div key={idx} className="text-xs md:text-sm space-y-0.5">
+                          <div className="flex justify-between items-start gap-4">
+                            <h3 className="font-bold text-charcoal">{paper.title}</h3>
+                            <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-olive px-2 py-0.5 bg-olive/5 rounded border border-olive/10 shrink-0">{paper.type}</span>
+                          </div>
+                          <p className="text-charcoal-light text-[11px]">
+                            {paper.authors ? `${paper.authors}. ` : ""}
+                            <span className="italic">{paper.venue}</span> • <span className="font-semibold text-olive">{paper.date}</span>
+                          </p>
+                          {paper.award && (
+                            <p className="text-[10px] text-gold-accent font-semibold flex items-center gap-1"><span className="material-symbols-outlined text-xs">star</span> {paper.award}</p>
+                          )}
+                          {paper.abstract && (
+                            <p className="text-[11px] text-charcoal-light/70 text-justify mt-1 italic max-w-3xl line-clamp-2">Abstract: {paper.abstract}</p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* 4. Global Vistas */}
+                {data.vistas && data.vistas.length > 0 && (
+                  <div className="space-y-3">
+                    <h2 className="font-serif text-lg font-bold border-b border-charcoal/10 pb-1.5 uppercase tracking-wider text-charcoal flex items-center gap-2">
+                      <span className="material-symbols-outlined text-olive">globe</span> Professional Summits & Representation
+                    </h2>
+                    <div className="space-y-3 pl-1">
+                      {data.vistas.map((vista, idx) => (
+                        <div key={idx} className="text-xs md:text-sm flex justify-between items-start gap-4">
+                          <div className="space-y-0.5">
+                            <h3 className="font-bold text-charcoal">{vista.title}</h3>
+                            <p className="text-charcoal-light text-[11px]">{vista.organization}</p>
+                          </div>
+                          <span className="font-semibold text-olive shrink-0">{vista.date}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="bg-charcoal text-cream-lightest w-full relative z-10 overflow-hidden">
         {/* Decorative elements */}
@@ -1359,6 +1740,12 @@ export default function Home() {
                   <span className="block w-0 group-hover:w-full transition-all duration-300 h-0.5 bg-gold-accent absolute -bottom-1 left-0"></span>
                 </a>
               )}
+              {profile.contact?.jstor && (
+                <a className="group relative text-cream-lightest/80 hover:text-gold-accent transition-colors duration-300 font-sans font-bold text-sm uppercase tracking-wider" href={profile.contact.jstor} target="_blank" rel="noopener noreferrer">
+                  JSTOR
+                  <span className="block w-0 group-hover:w-full transition-all duration-300 h-0.5 bg-gold-accent absolute -bottom-1 left-0"></span>
+                </a>
+              )}
               {profile.contact?.github && (
                 <a className="group relative text-cream-lightest/80 hover:text-gold-accent transition-colors duration-300 font-sans font-bold text-sm uppercase tracking-wider" href={profile.contact.github} target="_blank" rel="noopener noreferrer">
                   GitHub
@@ -1373,7 +1760,13 @@ export default function Home() {
               )}
               {profile.contact?.email && (
                 <a className="group relative text-cream-lightest/80 hover:text-gold-accent transition-colors duration-300 font-sans font-bold text-sm uppercase tracking-wider" href={`mailto:${profile.contact.email}`}>
-                  Email
+                  Email (Primary)
+                  <span className="block w-0 group-hover:w-full transition-all duration-300 h-0.5 bg-gold-accent absolute -bottom-1 left-0"></span>
+                </a>
+              )}
+              {profile.contact?.emailSecondary && (
+                <a className="group relative text-cream-lightest/80 hover:text-gold-accent transition-colors duration-300 font-sans font-bold text-sm uppercase tracking-wider" href={`mailto:${profile.contact.emailSecondary}`}>
+                  Email (Secondary)
                   <span className="block w-0 group-hover:w-full transition-all duration-300 h-0.5 bg-gold-accent absolute -bottom-1 left-0"></span>
                 </a>
               )}

@@ -6,6 +6,22 @@ const dns = require("dns");
 // Set Google DNS to bypass SRV query issues
 dns.setServers(['8.8.8.8', '8.8.4.4']);
 
+// Load .env file manually if exists to support standalone execution
+const envPath = path.join(__dirname, ".env");
+if (fs.existsSync(envPath)) {
+  const envContent = fs.readFileSync(envPath, "utf-8");
+  envContent.split("\n").forEach((line) => {
+    const parts = line.split("=");
+    if (parts.length >= 2) {
+      const key = parts[0].trim();
+      const val = parts.slice(1).join("=").trim();
+      if (key && val && !process.env[key]) {
+        process.env[key] = val;
+      }
+    }
+  });
+}
+
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://jhavani:jhavani@cluster0.0tqeuqa.mongodb.net/?appName=Cluster0";
 
 // Define schemas inline in CommonJS so the seeder can run standalone without ESM transpilation issues
@@ -16,6 +32,7 @@ const ProfileSchema = new mongoose.Schema({
   bioIntro: { type: String, default: "" },
   bioSecondary: { type: String, default: "" },
   avatarUrl: { type: String, default: "" },
+  cvUrl: { type: String, default: "" },
   contact: {
     email: { type: String, default: "jahnvi.ecology@gmail.com" },
     phone: { type: String, default: "" },
@@ -23,7 +40,10 @@ const ProfileSchema = new mongoose.Schema({
     linkedin: { type: String, default: "" },
     github: { type: String, default: "" },
     orcid: { type: String, default: "" },
-    googleScholar: { type: String, default: "" }
+    googleScholar: { type: String, default: "" },
+    researchGate: { type: String, default: "" },
+    jstor: { type: String, default: "" },
+    emailSecondary: { type: String, default: "" }
   },
   corePhilosophy: {
     sectionLabel: { type: String, default: "Core Philosophy" },
@@ -103,6 +123,13 @@ const AssetImageSchema = new mongoose.Schema({
   contentType: { type: String, default: "image/jpeg" }
 });
 
+const ResearchProjectSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  description: { type: String, required: true },
+  status: { type: String, default: "In Progress" },
+  order: { type: Number, default: 0 }
+});
+
 const Profile = mongoose.models.Profile || mongoose.model("Profile", ProfileSchema);
 const AcademicMilestone = mongoose.models.AcademicMilestone || mongoose.model("AcademicMilestone", AcademicMilestoneSchema);
 const ResearchInterest = mongoose.models.ResearchInterest || mongoose.model("ResearchInterest", ResearchInterestSchema);
@@ -111,6 +138,17 @@ const Vista = mongoose.models.Vista || mongoose.model("Vista", VistaSchema);
 const Blog = mongoose.models.Blog || mongoose.model("Blog", BlogSchema);
 const Certificate = mongoose.models.Certificate || mongoose.model("Certificate", CertificateSchema);
 const AssetImage = mongoose.models.AssetImage || mongoose.model("AssetImage", AssetImageSchema);
+const ResearchProject = mongoose.models.ResearchProject || mongoose.model("ResearchProject", ResearchProjectSchema);
+
+const VipProjectSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  description: { type: String, required: true },
+  status: { type: String, default: "Future Vision" },
+  order: { type: Number, default: 0 },
+  showOnHome: { type: Boolean, default: true }
+});
+
+const VipProject = mongoose.models.VipProject || mongoose.model("VipProject", VipProjectSchema);
 
 async function seed() {
   console.log("Connecting to database:", MONGODB_URI);
@@ -127,6 +165,8 @@ async function seed() {
   await Blog.deleteMany({});
   await Certificate.deleteMany({});
   await AssetImage.deleteMany({});
+  await ResearchProject.deleteMany({});
+  await VipProject.deleteMany({});
   console.log("Collections cleared successfully.");
 
   // 2. Load and Base64-encode all images from 'images' folder
@@ -134,22 +174,22 @@ async function seed() {
   if (fs.existsSync(imagesDir)) {
     console.log("Reading images directory:", imagesDir);
     const files = fs.readdirSync(imagesDir);
-    
+
     for (const file of files) {
       const filePath = path.join(imagesDir, file);
       const ext = path.extname(file).toLowerCase();
-      
+
       // Seed only image files
       if ([".png", ".jpg", ".jpeg", ".webp", ".gif"].includes(ext)) {
         console.log(`Processing file: ${file}`);
         const fileBuffer = fs.readFileSync(filePath);
         const base64Data = fileBuffer.toString("base64");
-        
+
         let contentType = "image/jpeg";
         if (ext === ".png") contentType = "image/png";
         else if (ext === ".webp") contentType = "image/webp";
         else if (ext === ".gif") contentType = "image/gif";
-        
+
         await AssetImage.create({
           key: file,
           data: base64Data,
@@ -165,7 +205,7 @@ async function seed() {
   // 3. Seed Profile
   console.log("Seeding Profile...");
   const bioIntro = "I read in a book two years back that there are two worlds: one is a world shaped by mind-set of the masses symbolic of the ordinary lives of more than 80% of the population and the other world shaped by thinkers, leaving a legacy of intellectual heritage. I decided to be in the latter. With that approach, I started my research journey—where ideas and reflecting on problems were the fuel for igniting changes. It began with my first year of pursuing Masters in Political Science and I found my interests growing in contributing to the formulation of policy solutions for climate crisis.";
-  
+
   const bioSecondary = "My roots lie in a family of Business minds and Entrepreneurs; I am the first generation Post-graduate, first in my family to earn a Master's degree. It felt like a call to stewardship, heavy yet honourable. My journey into the world of visionaries ignited my intellectual energy and the inherent sustainability of India shaped my horizons. So far, I am playing my part to construct a change academically that could trigger transformations if aligned with our policies on sustainability or “Sarva Saha” in Sanskrit which means a harmonious coexistence between man and its nature.";
 
   const profile = await Profile.create({
@@ -175,14 +215,18 @@ async function seed() {
     bioIntro,
     bioSecondary,
     avatarUrl: "/api/images/17.jpeg", // Default avatar to one of the seeded photos
+    cvUrl: "",
     contact: {
-      email: "jahnvi.ecology@gmail.com",
+      email: "jahnvikhubani37175@gmail.com",
+      emailSecondary: "jahnvikhubani01@gmail.com",
       phone: "+91 98765 43210",
       location: "Jaipur, Rajasthan, India",
       linkedin: "https://linkedin.com/in/jahnvi-researcher",
       github: "https://github.com/jahnvi-ecology",
       orcid: "https://orcid.org/0000-0002-XXXX-XXXX",
-      googleScholar: "https://scholar.google.com/citations?user=jahnvi"
+      googleScholar: "https://scholar.google.com/citations?user=jahnvi",
+      researchGate: "https://www.researchgate.net/profile/Jahnvi-Khubani",
+      jstor: "https://www.jstor.org/action/doBasicSearch?Query=Jahnvi+Khubani"
     },
     corePhilosophy: {
       sectionLabel: "Core Philosophy",
@@ -242,7 +286,7 @@ async function seed() {
       title: "Post-Graduation (MA in Political Science)",
       institution: "IIS University, Jaipur, Rajasthan",
       period: "2024 - 2026",
-      details: "Scholarly focus in political ecology, green governance, and sustainable development. Graduated with honors.",
+      details: "Ignited my Research journey as I attended and analysed research conferences during this period initiated my research orientation, shaping the life of a scholar while broadening horizons through international exposure.",
       order: 4
     },
     {
@@ -257,27 +301,7 @@ async function seed() {
   ]);
 
   // 5. Seed Research Interests
-  console.log("Seeding Research Interests...");
-  await ResearchInterest.create([
-    {
-      title: "Political Ecology",
-      description: "Investigating how political, economic, and social systems shape ecological outcomes and policy structures.",
-      iconName: "Globe",
-      order: 1
-    },
-    {
-      title: "Green Governance",
-      description: "Exploring institutional mechanisms, political stewardship, and administrative strategies to implement ecological targets.",
-      iconName: "ShieldCheck",
-      order: 2
-    },
-    {
-      title: "Sustainable Development ('Sarva Saha')",
-      description: "Pioneering the concept of harmonious coexistence between human actions, economic growth, and the biosphere.",
-      iconName: "Leaf",
-      order: 3
-    }
-  ]);
+  console.log("Research Interests skipped seeding (removed as requested).");
 
   // 6. Seed Research Papers
   console.log("Seeding Research Papers...");
@@ -498,6 +522,70 @@ We must acknowledge that every click, search, and byte has an ecological cost. B
       verificationUrl: "https://ugcnet.nta.nic.in",
       image: "10.png",
       order: 2
+    }
+  ]);
+
+  // 10. Seed Research Projects (RESEARCH IN REACH)
+  console.log("Seeding Research Projects...");
+  await ResearchProject.create([
+    {
+      title: "Decarbonizing Digital Pathways: Policy Frameworks for Benthic Cable Conservation",
+      description: "Formulating regulatory guidelines to minimize deep-sea thermal footprints and benthic disturbances caused by trans-oceanic telecommunication cables, merging digital expansion with bio-conservation.",
+      status: "In Progress",
+      order: 1
+    },
+    {
+      title: "Sarva Saha index: Quantifying Coexistence in Green Governance",
+      description: "Developing a metrics-based evaluation framework to assess local self-governance policy alignments with Sanskrit philosophies of environmental boundaries and harmonious coexistence.",
+      status: "Ongoing",
+      order: 2
+    }
+  ]);
+
+  // 11. Seed VIP Projects
+  console.log("Seeding VIP Projects...");
+  await VipProject.create([
+    {
+      title: "Nyaya4Nature [N4N]",
+      description: "Formulating a legal and philosophical framework for wild-law, eco-centric jurisprudence, and environmental justice to grant rivers and forests legal personhood under Indian constitutional ethics.",
+      status: "Proposed",
+      order: 1,
+      showOnHome: true
+    },
+    {
+      title: "Panchsheel between Purusha and Prakriti [Preamble of Posterity for harmonious coexistence between Man and Mother Earth]",
+      description: "A foundational policy charter establishing five eco-ethical pillars to bridge civilizational consciousness (Purusha) and natural systems (Prakriti) for long-term ecological balance.",
+      status: "Proposed",
+      order: 2,
+      showOnHome: true
+    },
+    {
+      title: "Bharat Bhavishya [Future of India]",
+      description: "An interdisciplinary policy study exploring governance frameworks, green technology integration, and youth participation models to steer India towards sustainable socio-economic development.",
+      status: "Proposed",
+      order: 3,
+      showOnHome: true
+    },
+    {
+      title: "Sustainable Saksharta [Sustainable Literacy to everyone]",
+      description: "An educational framework focused on integrating grass-roots ecological knowledge, climate resilience literacy, and resource conservation habits into formal and informal school curricula.",
+      status: "Proposed",
+      order: 4,
+      showOnHome: true
+    },
+    {
+      title: "Nature Nayak [Pioneer of Change for Nature]",
+      description: "A community-led environmental leadership training framework to empower local youth to champion conservation projects, biodiversity auditing, and green solutions in rural biomes.",
+      status: "Proposed",
+      order: 5,
+      showOnHome: true
+    },
+    {
+      title: "Vichaar Manthan for Vikas [Churning of Ideas and Brainstorming for Building Developed or ViksitBharat even beyond 2047]",
+      description: "A dynamic deliberative platform focusing on foresight research, policy innovation, and strategic roadmaps to ensure sustainable growth for a developed India.",
+      status: "In Progress",
+      order: 6,
+      showOnHome: true
     }
   ]);
 

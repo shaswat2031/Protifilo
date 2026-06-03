@@ -29,7 +29,9 @@ import {
   Table as TableIcon,
   Undo,
   Redo,
-  Mail
+  Mail,
+  ClipboardList,
+  Sparkles
 } from "lucide-react";
 
 // Client-side MS Word paste converter to dynamic Markdown structure
@@ -377,7 +379,7 @@ export default function AdminDashboard() {
   async function fetchContent() {
     setLoadingData(true);
     try {
-      const res = await fetch("/api/content");
+      const res = await fetch("/api/content", { cache: "no-store" });
       const json = await res.json();
       if (json.success) {
         setData(json.data);
@@ -718,6 +720,8 @@ export default function AdminDashboard() {
             { id: "profile", label: "Profile Information", icon: User },
             { id: "milestone", label: "Academic timeline", icon: GraduationCap },
             { id: "paper", label: "Research Papers", icon: BookOpen },
+            { id: "project", label: "Research In Reach", icon: ClipboardList },
+            { id: "vip", label: "VIP (Future Vision)", icon: Sparkles },
             { id: "vista", label: "Global Vistas", icon: Globe },
             { id: "blog", label: "Philosophy Blogs", icon: FileText },
             { id: "certificate", label: "Certificates", icon: Award },
@@ -820,37 +824,64 @@ export default function AdminDashboard() {
                       />
                     </div>
 
-                    {/* Avatar Upload */}
+
+                    {/* CV Document Upload */}
                     <div className="space-y-1 md:col-span-2 border-t border-olive/10 pt-6">
-                      <label className="text-2xs font-extrabold uppercase tracking-widest text-warm-gray block mb-2">Profile Avatar image</label>
-                      <div className="flex items-center gap-4">
-                        <div className="h-16 w-16 overflow-hidden rounded-xl border border-olive/30 bg-cream">
-                          {data.profile.avatarUrl ? (
-                            <img src={data.profile.avatarUrl} alt="Avatar Preview" className="h-full w-full object-cover" />
-                          ) : (
-                            <div className="flex h-full w-full items-center justify-center text-warm-gray-light"><User className="h-6 w-6" /></div>
-                          )}
-                        </div>
-                        <div className="relative">
+                      <label className="text-2xs font-extrabold uppercase tracking-widest text-warm-gray block mb-2">Academic CV Document (PDF)</label>
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                        <input
+                          type="text"
+                          value={data.profile.cvUrl || ""}
+                          onChange={(e) => setData({ ...data, profile: { ...data.profile, cvUrl: e.target.value } })}
+                          placeholder="Link to CV PDF or upload a new one..."
+                          className="flex-grow rounded-lg border border-olive/20 bg-cream px-4 py-2.5 text-sm text-charcoal focus:border-olive focus:outline-none"
+                        />
+                        <div className="relative shrink-0">
                           <input
                             type="file"
-                            accept="image/*"
-                            id="avatar-upload"
+                            accept=".pdf"
+                            id="cv-upload"
                             className="hidden"
-                            onChange={(e) => handleImageUpload(e, (urlPath) => {
-                              // We set avatarUrl equal to served API image route
-                              setData({ ...data, profile: { ...data.profile, avatarUrl: `/api/images/${urlPath}` } });
-                            })}
+                            onChange={async (e) => {
+                              const file = e.target.files[0];
+                              if (!file) return;
+
+                              const formData = new FormData();
+                              formData.append("file", file);
+
+                              setUploadingImage(true);
+                              try {
+                                const res = await fetch("/api/upload", {
+                                  method: "POST",
+                                  body: formData,
+                                });
+
+                                const json = await res.json();
+                                if (res.ok && json.success) {
+                                  showStatus("success", "CV document uploaded successfully!");
+                                  setData({ ...data, profile: { ...data.profile, cvUrl: json.url } });
+                                } else {
+                                  showStatus("error", json.error || "Failed to upload CV");
+                                }
+                              } catch (err) {
+                                showStatus("error", "Upload connection error");
+                              } finally {
+                                setUploadingImage(false);
+                              }
+                            }}
                           />
                           <label
-                            htmlFor="avatar-upload"
-                            className="flex items-center gap-1.5 rounded-lg border border-olive/30 bg-olive/10 px-4 py-2 text-xs font-semibold text-olive cursor-pointer hover:bg-olive/20"
+                            htmlFor="cv-upload"
+                            className="flex items-center justify-center gap-1.5 rounded-lg border border-olive/30 bg-olive/10 px-4 py-2.5 text-xs font-semibold text-olive cursor-pointer hover:bg-olive/20 w-full sm:w-auto"
                           >
                             <Upload className="h-3.5 w-3.5" />
-                            {uploadingImage ? "Uploading..." : "Upload New Photo"}
+                            {uploadingImage ? "Uploading..." : "Upload PDF"}
                           </label>
                         </div>
                       </div>
+                      <p className="text-[10px] text-warm-gray leading-relaxed mt-1">
+                        Upload your CV as a PDF file or link an external PDF document. If no CV URL is specified, the site will automatically generate a dynamic, printable CV sheet from your portfolio entries.
+                      </p>
                     </div>
 
                     {/* Core Philosophy & Research Statement Image Upload */}
@@ -965,6 +996,21 @@ export default function AdminDashboard() {
                           />
                         </div>
                         <div className="space-y-1">
+                          <label className="text-2xs font-semibold text-warm-gray">Secondary Email</label>
+                          <input
+                            type="text"
+                            value={data.profile.contact?.emailSecondary || ""}
+                            onChange={(e) => setData({
+                              ...data,
+                              profile: {
+                                ...data.profile,
+                                contact: { ...data.profile.contact, emailSecondary: e.target.value }
+                              }
+                            })}
+                            className="w-full rounded-lg border border-olive/20 bg-cream px-4 py-2.5 text-sm text-charcoal focus:border-olive focus:outline-none"
+                          />
+                        </div>
+                        <div className="space-y-1">
                           <label className="text-2xs font-semibold text-warm-gray">Office Location</label>
                           <input
                             type="text"
@@ -1007,6 +1053,22 @@ export default function AdminDashboard() {
                               }
                             })}
                             className="w-full rounded-lg border border-olive/20 bg-cream px-4 py-2.5 text-sm text-charcoal focus:border-olive focus:outline-none"
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <label className="text-2xs font-semibold text-warm-gray">JSTOR Profile Link</label>
+                          <input
+                            type="text"
+                            value={data.profile.contact?.jstor || ""}
+                            onChange={(e) => setData({
+                              ...data,
+                              profile: {
+                                ...data.profile,
+                                contact: { ...data.profile.contact, jstor: e.target.value }
+                              }
+                            })}
+                            className="w-full rounded-lg border border-olive/20 bg-cream px-4 py-2.5 text-sm text-charcoal focus:border-olive focus:outline-none"
+                            placeholder="e.g. https://www.jstor.org/..."
                           />
                         </div>
                         <div className="space-y-1">
@@ -1275,6 +1337,117 @@ export default function AdminDashboard() {
                           </button>
                           <button
                             onClick={() => handleDelete("delete_paper", item._id)}
+                            className="p-2 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-charcoal border border-red-500/20 transition-all"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* --- TAB CONTENT: RESEARCH IN REACH --- */}
+              {activeTab === "project" && (
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between bg-cream-medium/50 p-4 border border-olive/5 rounded-xl">
+                    <div>
+                      <h2 className="font-serif text-lg font-bold text-charcoal">Research In Reach</h2>
+                      <p className="text-xs text-warm-gray">Manage current/ongoing projects you are working on</p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setEditItem({ title: "", description: "", status: "In Progress", order: data?.projects?.length || 0 });
+                        setShowModal("project");
+                      }}
+                      className="flex items-center gap-1.5 rounded-lg bg-olive px-4 py-2 text-xs font-bold text-cream-lightest hover:bg-olive/90"
+                    >
+                      <Plus className="h-4 w-4" />
+                      Add Project
+                    </button>
+                  </div>
+
+                  <div className="space-y-4">
+                    {data?.projects?.map((item) => (
+                      <div key={item._id} className="glassmorphism shadow-sm p-5 rounded-xl flex items-center justify-between gap-4">
+                        <div className="space-y-1">
+                          <h3 className="font-serif text-base font-bold text-charcoal">{item.title}</h3>
+                          <p className="text-xs text-warm-gray font-semibold">Status: <span className="text-olive font-bold">{item.status}</span></p>
+                          <p className="text-xs text-charcoal-light line-clamp-2">{item.description}</p>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => {
+                              setEditItem({ ...item });
+                              setShowModal("project");
+                            }}
+                            className="p-2 rounded-lg bg-cream-dark text-charcoal-light hover:text-charcoal border border-olive/5"
+                          >
+                            <Edit2 className="h-3.5 w-3.5" />
+                          </button>
+                          <button
+                            onClick={() => handleDelete("delete_project", item._id)}
+                            className="p-2 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-charcoal border border-red-500/20 transition-all"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* --- TAB CONTENT: VIP PROJECTS --- */}
+              {activeTab === "vip" && (
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between bg-cream-medium/50 p-4 border border-olive/5 rounded-xl">
+                    <div>
+                      <h2 className="font-serif text-lg font-bold text-charcoal">VIP – [Vision-Innovation-Priorities]</h2>
+                      <p className="text-xs text-warm-gray">Manage future projects in your vision aligning interests and priorities</p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setEditItem({ title: "", description: "", status: "Future Vision", order: data?.vipProjects?.length || 0, showOnHome: true });
+                        setShowModal("vip");
+                      }}
+                      className="flex items-center gap-1.5 rounded-lg bg-olive px-4 py-2 text-xs font-bold text-cream-lightest hover:bg-olive/90"
+                    >
+                      <Plus className="h-4 w-4" />
+                      Add VIP Project
+                    </button>
+                  </div>
+
+                  <div className="space-y-4">
+                    {data?.vipProjects?.map((item) => (
+                      <div key={item._id} className="glassmorphism shadow-sm p-5 rounded-xl flex items-center justify-between gap-4">
+                        <div className="space-y-1">
+                          <h3 className="font-serif text-base font-bold text-charcoal">{item.title}</h3>
+                          <p className="text-xs text-warm-gray font-semibold">Status: <span className="text-olive font-bold">{item.status}</span></p>
+                          <p className="text-xs text-charcoal-light line-clamp-2">{item.description}</p>
+                          <div className="flex flex-wrap items-center gap-2 mt-1">
+                            {item.showOnHome !== false ? (
+                              <span className="rounded bg-gold-accent/10 border border-gold-accent/25 px-1.5 py-0.5 text-3xs font-extrabold uppercase tracking-widest text-gold-accent">Top 6 / Home</span>
+                            ) : (
+                              <span className="rounded bg-warm-gray/10 border border-warm-gray/20 px-1.5 py-0.5 text-3xs font-extrabold uppercase tracking-widest text-warm-gray">New Page Only</span>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => {
+                              setEditItem({ ...item });
+                              setShowModal("vip");
+                            }}
+                            className="p-2 rounded-lg bg-cream-dark text-charcoal-light hover:text-charcoal border border-olive/5"
+                          >
+                            <Edit2 className="h-3.5 w-3.5" />
+                          </button>
+                          <button
+                            onClick={() => handleDelete("delete_vip", item._id)}
                             className="p-2 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-charcoal border border-red-500/20 transition-all"
                           >
                             <Trash2 className="h-3.5 w-3.5" />
@@ -2027,6 +2200,124 @@ export default function AdminDashboard() {
                 >
                   <Save className="h-4 w-4" />
                   Save Event Details
+                </button>
+              </div>
+            )}
+
+            {/* --- MODAL FORM: RESEARCH PROJECT --- */}
+            {showModal === "project" && (
+              <div className="space-y-4">
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-1 md:col-span-2">
+                    <label className="text-2xs font-semibold text-warm-gray">Project Title</label>
+                    <input
+                      type="text"
+                      value={editItem.title}
+                      onChange={(e) => setEditItem({ ...editItem, title: e.target.value })}
+                      className="w-full rounded-lg border border-olive/20 bg-cream px-4 py-2.5 text-sm focus:border-olive focus:outline-none"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-2xs font-semibold text-warm-gray">Project Status</label>
+                    <input
+                      type="text"
+                      value={editItem.status}
+                      onChange={(e) => setEditItem({ ...editItem, status: e.target.value })}
+                      placeholder="e.g. In Progress, Ongoing, Planning"
+                      className="w-full rounded-lg border border-olive/20 bg-cream px-4 py-2.5 text-sm focus:border-olive focus:outline-none"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-2xs font-semibold text-warm-gray">Display Order</label>
+                    <input
+                      type="number"
+                      value={editItem.order}
+                      onChange={(e) => setEditItem({ ...editItem, order: parseInt(e.target.value) || 0 })}
+                      className="w-full rounded-lg border border-olive/20 bg-cream px-4 py-2.5 text-sm focus:border-olive focus:outline-none"
+                    />
+                  </div>
+                  <div className="space-y-1 md:col-span-2">
+                    <label className="text-2xs font-semibold text-warm-gray">Project Description</label>
+                    <textarea
+                      rows={4}
+                      value={editItem.description}
+                      onChange={(e) => setEditItem({ ...editItem, description: e.target.value })}
+                      className="w-full rounded-lg border border-olive/20 bg-cream px-4 py-2.5 text-sm focus:border-olive focus:outline-none leading-relaxed"
+                    />
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => handleSave("save_project", editItem)}
+                  className="w-full flex items-center justify-center gap-1.5 rounded-lg bg-olive px-4 py-2.5 text-sm font-semibold text-cream-lightest hover:bg-olive/90 mt-4"
+                >
+                  <Save className="h-4 w-4" />
+                  Save Project Details
+                </button>
+              </div>
+            )}
+
+            {/* --- MODAL FORM: VIP PROJECT --- */}
+            {showModal === "vip" && (
+              <div className="space-y-4">
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-1 md:col-span-2">
+                    <label className="text-2xs font-semibold text-warm-gray">Project Title</label>
+                    <input
+                      type="text"
+                      value={editItem.title}
+                      onChange={(e) => setEditItem({ ...editItem, title: e.target.value })}
+                      className="w-full rounded-lg border border-olive/20 bg-cream px-4 py-2.5 text-sm focus:border-olive focus:outline-none"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-2xs font-semibold text-warm-gray">Project Status</label>
+                    <input
+                      type="text"
+                      value={editItem.status}
+                      onChange={(e) => setEditItem({ ...editItem, status: e.target.value })}
+                      placeholder="e.g. Future Vision, In Progress, Proposed"
+                      className="w-full rounded-lg border border-olive/20 bg-cream px-4 py-2.5 text-sm focus:border-olive focus:outline-none"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-2xs font-semibold text-warm-gray">Display Order</label>
+                    <input
+                      type="number"
+                      value={editItem.order}
+                      onChange={(e) => setEditItem({ ...editItem, order: parseInt(e.target.value) || 0 })}
+                      className="w-full rounded-lg border border-olive/20 bg-cream px-4 py-2.5 text-sm focus:border-olive focus:outline-none"
+                    />
+                  </div>
+                  <div className="space-y-1 md:col-span-2">
+                    <label className="text-2xs font-semibold text-warm-gray">Project Description</label>
+                    <textarea
+                      rows={4}
+                      value={editItem.description}
+                      onChange={(e) => setEditItem({ ...editItem, description: e.target.value })}
+                      className="w-full rounded-lg border border-olive/20 bg-cream px-4 py-2.5 text-sm focus:border-olive focus:outline-none leading-relaxed"
+                    />
+                  </div>
+                  <div className="flex items-center gap-2 pt-2 md:col-span-2">
+                    <input
+                      type="checkbox"
+                      id="vip-showonhome-checkbox"
+                      checked={editItem.showOnHome !== false}
+                      onChange={(e) => setEditItem({ ...editItem, showOnHome: e.target.checked })}
+                      className="h-4 w-4 rounded bg-cream border-olive/25 focus:ring-olive text-olive"
+                    />
+                    <label htmlFor="vip-showonhome-checkbox" className="text-xs font-semibold text-charcoal-light cursor-pointer">
+                      Show on Homepage (Featured Top 6)
+                    </label>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => handleSave("save_vip", editItem)}
+                  className="w-full flex items-center justify-center gap-1.5 rounded-lg bg-olive px-4 py-2.5 text-sm font-semibold text-cream-lightest hover:bg-olive/90 mt-4"
+                >
+                  <Save className="h-4 w-4" />
+                  Save Future Project Details
                 </button>
               </div>
             )}
