@@ -683,10 +683,10 @@ export default function Home() {
               <div className="hidden md:flex items-center bg-charcoal/5 rounded-full p-1 border border-charcoal/5">
                 <a className="px-4 py-1.5 rounded-full font-sans font-medium text-xs tracking-wide text-charcoal hover:bg-white hover:shadow-sm transition-all duration-300" href="#intro">Home</a>
                 <a className="px-4 py-1.5 rounded-full font-sans font-medium text-xs tracking-wide text-charcoal hover:bg-white hover:shadow-sm transition-all duration-300" href="#research-papers">Research areas</a>
-                <a className="px-4 py-1.5 rounded-full font-sans font-medium text-xs tracking-wide text-charcoal hover:bg-white hover:shadow-sm transition-all duration-300" href="#projects">Projects</a>
+                <a className="px-4 py-1.5 rounded-full font-sans font-medium text-xs tracking-wide text-charcoal hover:bg-white hover:shadow-sm transition-all duration-300" href="#projects">Research In Reach</a>
                 <a className="px-4 py-1.5 rounded-full font-sans font-medium text-xs tracking-wide text-charcoal hover:bg-white hover:shadow-sm transition-all duration-300" href="#blogs">Blog section</a>
-                <a 
-                  className="px-4 py-1.5 rounded-full font-sans font-medium text-xs tracking-wide text-charcoal hover:bg-white hover:shadow-sm transition-all duration-300" 
+                <a
+                  className="px-4 py-1.5 rounded-full font-sans font-medium text-xs tracking-wide text-charcoal hover:bg-white hover:shadow-sm transition-all duration-300"
                   href={profile?.cvUrl || "https://docs.google.com/document/d/1KaQPTU1Un-yBvLUSL6aB9jXQElhMcwiF/edit?usp=sharing&ouid=113200782979309737341&rtpof=true&sd=true"}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -738,7 +738,7 @@ export default function Home() {
                   className="px-4 py-2.5 rounded-2xl font-sans font-medium text-base text-charcoal hover:bg-charcoal/5 transition-all text-center"
                   href="#projects"
                 >
-                  Projects
+                  Research In Reach
                 </a>
                 <a
                   onClick={() => setIsMobileMenuOpen(false)}
@@ -980,7 +980,7 @@ export default function Home() {
             </a>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 md:gap-8">
             {researchPapers
               .filter((paper) => paper.showOnHome !== false)
               .slice(0, 6)
@@ -994,7 +994,7 @@ export default function Home() {
                 return (
                   <div
                     key={paper._id || idx}
-                    className={`glassmorphism-premium p-10 rounded-[2.5rem] hover:-translate-y-2 hover:border-olive/20 hover:shadow-xl transition-all duration-500 paper-card-item flex flex-col justify-between group border border-charcoal/10 h-full ${bgs}`}
+                    className={`glassmorphism-premium p-4 sm:p-6 md:p-10 rounded-2xl sm:rounded-[2.5rem] hover:-translate-y-2 hover:border-olive/20 hover:shadow-xl transition-all duration-500 paper-card-item flex flex-col justify-between group border border-charcoal/10 h-full ${bgs}`}
                   >
                     <div>
                       {paper.images && paper.images.length > 0 && (
@@ -1008,7 +1008,7 @@ export default function Home() {
                               setSlideIndex(0);
                             }
                           }}
-                          className="w-full h-48 rounded-2xl overflow-hidden mb-6 relative group/img cursor-pointer border border-charcoal/5 shadow-xs bg-white/50"
+                          className="w-full h-24 sm:h-36 md:h-48 rounded-xl sm:rounded-2xl overflow-hidden mb-3 sm:mb-6 relative group/img cursor-pointer border border-charcoal/5 shadow-xs bg-white/50"
                         >
                           <img
                             alt={paper.title}
@@ -1016,92 +1016,92 @@ export default function Home() {
                             className="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-105"
                           />
                           <div className="absolute inset-0 bg-charcoal/20 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                            <span className="bg-[#FFFDF9]/95 text-charcoal font-sans font-bold text-[10px] uppercase tracking-widest px-3.5 py-2 rounded-full shadow-md flex items-center gap-1.5 backdrop-blur-xs transform translate-y-2 group-hover/img:translate-y-0 transition-all duration-300">
-                              <span className="material-symbols-outlined text-xs">
+                            <span className="bg-[#FFFDF9]/95 text-charcoal font-sans font-bold text-[8px] sm:text-[10px] uppercase tracking-widest px-2 sm:px-3.5 py-1 sm:py-2 rounded-full shadow-md flex items-center gap-1 sm:gap-1.5 backdrop-blur-xs transform translate-y-2 group-hover/img:translate-y-0 transition-all duration-300">
+                              <span className="material-symbols-outlined text-[10px] sm:text-xs">
                                 {paper.type === 'published' ? 'open_in_new' : 'zoom_in'}
                               </span>
-                              {paper.type === 'published' ? 'Read Publication' : 'Expand Slides'}
+                              {paper.type === 'published' ? 'Read' : 'Expand'}
                             </span>
                           </div>
                           {paper.images.length > 1 && (
-                            <div className="absolute bottom-3 right-3 bg-charcoal/75 backdrop-blur-xs text-white text-[9px] font-sans font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border border-white/10 flex items-center gap-1 shadow-sm">
-                              <span className="material-symbols-outlined text-[10px]" style={{ fontVariationSettings: "'FILL' 1" }}>filter</span>
+                            <div className="absolute bottom-1.5 right-1.5 sm:bottom-3 sm:right-3 bg-charcoal/75 backdrop-blur-xs text-white text-[7px] sm:text-[9px] font-sans font-bold uppercase tracking-wider px-1.5 py-0.5 sm:px-2.5 sm:py-1 rounded-full border border-white/10 flex items-center gap-0.5 sm:gap-1 shadow-sm">
+                              <span className="material-symbols-outlined text-[8px] sm:text-[10px]" style={{ fontVariationSettings: "'FILL' 1" }}>filter</span>
                               {paper.images.length} Slides
                             </div>
                           )}
                         </div>
                       )}
 
-                      <div className="flex justify-between items-start mb-6">
-                        <span className={`px-4 py-1.5 text-[10px] font-sans font-bold uppercase rounded-full tracking-wider ${paper.type === 'published'
+                      <div className="flex justify-between items-start mb-3 sm:mb-6">
+                        <span className={`px-2 py-1 sm:px-4 sm:py-1.5 text-[8px] sm:text-[10px] font-sans font-bold uppercase rounded-full tracking-wider ${paper.type === 'published'
                           ? 'bg-olive/10 text-olive border border-olive/10'
                           : 'bg-gold-accent/10 text-gold-accent border border-gold-accent/10'
                           }`}>
                           {paper.type} • {paper.date}
                         </span>
-                        <span className={`material-symbols-outlined text-warm-gray-light transition-colors text-2xl ${paper.type === 'published' ? 'group-hover:text-olive' : 'group-hover:text-gold-accent'
+                        <span className={`material-symbols-outlined text-warm-gray-light transition-colors text-lg sm:text-2xl ${paper.type === 'published' ? 'group-hover:text-olive' : 'group-hover:text-gold-accent'
                           }`}>
                           {paper.type === 'published' ? 'article' : 'present_to_all'}
                         </span>
                       </div>
 
-                      <div className="min-h-[5.5rem] lg:min-h-[5rem] flex flex-col justify-center mb-4">
-                        <h3 className="font-sans-ultra-bold text-lg md:text-xl leading-snug text-charcoal uppercase group-hover:text-olive transition-colors duration-300 line-clamp-3">
+                      <div className="min-h-[3.5rem] sm:min-h-[5.5rem] lg:min-h-[5rem] flex flex-col justify-center mb-2 sm:mb-4">
+                        <h3 className="font-sans-ultra-bold text-[11px] sm:text-base md:text-xl leading-snug text-charcoal uppercase group-hover:text-olive transition-colors duration-300 line-clamp-3">
                           {paper.title}
                         </h3>
                       </div>
 
-                      <div className="h-6 flex items-center mb-4">
+                      <div className="h-4 sm:h-6 flex items-center mb-2 sm:mb-4">
                         {paper.award ? (
-                          <div className="flex items-center gap-1.5 text-[10px] font-sans font-bold text-gold-accent uppercase tracking-widest">
-                            <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>emoji_events</span>
-                            {paper.award}
+                          <div className="flex items-center gap-1 sm:gap-1.5 text-[8px] sm:text-[10px] font-sans font-bold text-gold-accent uppercase tracking-widest">
+                            <span className="material-symbols-outlined text-xs sm:text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>emoji_events</span>
+                            <span className="truncate">{paper.award}</span>
                           </div>
                         ) : (
-                          <span className="block h-6" />
+                          <span className="block h-4 sm:h-6" />
                         )}
                       </div>
 
-                      <div className="h-20 mb-2 overflow-hidden">
-                        <p className="font-sans text-sm text-charcoal-light leading-relaxed line-clamp-3">
+                      <div className="h-12 sm:h-20 mb-2 overflow-hidden">
+                        <p className="font-sans text-[10px] sm:text-sm text-charcoal-light leading-normal sm:leading-relaxed line-clamp-3">
                           {paper.abstract || paper.description}
                         </p>
                       </div>
 
-                      <div className="h-6 mb-6 flex items-center">
+                      <div className="h-4 sm:h-6 mb-3 sm:mb-6 flex items-center">
                         {(paper.abstract || paper.description || '').length > 120 ? (
                           <button
                             onClick={() => setActivePaper(paper)}
-                            className="text-xs font-semibold text-olive hover:text-gold-accent transition-colors duration-300 flex items-center gap-1 cursor-pointer"
+                            className="text-[9px] sm:text-xs font-semibold text-olive hover:text-gold-accent transition-colors duration-300 flex items-center gap-0.5 sm:gap-1 cursor-pointer"
                           >
                             Read More
-                            <span className="material-symbols-outlined text-xs">arrow_right</span>
+                            <span className="material-symbols-outlined text-2xs sm:text-xs">arrow_right</span>
                           </button>
                         ) : (
-                          <span className="block h-6" />
+                          <span className="block h-4 sm:h-6" />
                         )}
                       </div>
                     </div>
 
-                    <div className="space-y-3 pt-6 border-t border-charcoal/5">
+                    <div className="space-y-2 sm:space-y-3 pt-3 sm:pt-6 border-t border-charcoal/5">
                       {(paper.paperUrl || paper.pdfUrl) && (
                         <a
                           href={paper.paperUrl || paper.pdfUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className={`inline-flex items-center gap-2 text-xs font-sans font-bold uppercase tracking-wider transition-all cursor-pointer ${paper.type === 'published' ? 'text-olive hover:text-gold-accent' : 'text-gold-accent hover:text-olive'
+                          className={`inline-flex items-center gap-1 sm:gap-2 text-[9px] sm:text-xs font-sans font-bold uppercase tracking-wider transition-all cursor-pointer ${paper.type === 'published' ? 'text-olive hover:text-gold-accent' : 'text-gold-accent hover:text-olive'
                             }`}
                         >
                           Read Publication
-                          <span className="material-symbols-outlined text-[16px] transition-transform group-hover:translate-x-1">arrow_forward</span>
+                          <span className="material-symbols-outlined text-[12px] sm:text-[16px] transition-transform group-hover:translate-x-1">arrow_forward</span>
                         </a>
                       )}
                       {paper.type === 'presented' && paper.images && paper.images.length > 0 && (
                         <button
                           onClick={() => { setActivePaperSlides(paper); setSlideIndex(0); }}
-                          className="flex items-center gap-2 text-xs font-sans font-bold uppercase tracking-wider text-gold-accent hover:text-olive transition-colors cursor-pointer w-full text-left"
+                          className="flex items-center gap-1 sm:gap-2 text-[9px] sm:text-xs font-sans font-bold uppercase tracking-wider text-gold-accent hover:text-olive transition-colors cursor-pointer w-full text-left"
                         >
-                          <span className="material-symbols-outlined text-[18px]">slideshow</span>
+                          <span className="material-symbols-outlined text-[14px] sm:text-[18px]">slideshow</span>
                           View Slides &amp; Media ({paper.images.length})
                         </button>
                       )}
@@ -1135,14 +1135,14 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
 
             {/* Left Column: Interactive Luxury Credentials Cards */}
-            <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-8 lg:order-1 order-2">
+            <div className="lg:col-span-7 grid grid-cols-2 gap-3 sm:gap-8 lg:order-1 order-2">
               {certificates.map((cert, idx) => {
                 const bgs = idx % 2 === 0 ? "bg-pastel-purple/15 hover:bg-pastel-purple/25" : "bg-pastel-peach/15 hover:bg-pastel-peach/25";
                 return (
                   <div
                     key={cert._id || idx}
                     onClick={() => setActiveCertificate(cert)}
-                    className={`glassmorphism-premium border border-charcoal/10 rounded-[2.5rem] p-8 md:p-10 relative overflow-hidden flex flex-col justify-between group cursor-pointer hover:shadow-xl hover:-translate-y-2 transition-all duration-500 ${bgs}`}
+                    className={`glassmorphism-premium border border-charcoal/10 rounded-2xl sm:rounded-[2.5rem] p-4 sm:p-6 md:p-10 relative overflow-hidden flex flex-col justify-between group cursor-pointer hover:shadow-xl hover:-translate-y-2 transition-all duration-500 ${bgs}`}
                   >
                     {/* Subtle Security Radial Gradient Background */}
                     <div className="absolute -right-20 -top-20 w-48 h-48 rounded-full bg-gold-accent/5 group-hover:bg-gold-accent/10 transition-colors duration-500 blur-2xl pointer-events-none"></div>
@@ -1150,52 +1150,53 @@ export default function Home() {
                     <div>
                       {/* Certificate Image Preview */}
                       {cert.image && (
-                        <div className="w-full h-44 rounded-2xl overflow-hidden mb-6 relative group/img border border-charcoal/5 shadow-inner bg-white/95 p-1.5 flex items-center justify-center">
+                        <div className="w-full h-20 sm:h-36 md:h-44 rounded-xl sm:rounded-2xl overflow-hidden mb-3 sm:mb-6 relative group/img border border-charcoal/5 shadow-inner bg-white/95 p-1.5 flex items-center justify-center">
                           <img
                             alt={cert.title}
                             src={`/api/images/${cert.image}`}
                             className="max-w-full max-h-full object-contain rounded-lg transition-transform duration-700 group-hover/img:scale-103"
                           />
                           <div className="absolute inset-0 bg-charcoal/10 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center rounded-lg">
-                            <span className="bg-[#FFFDF9]/95 text-charcoal font-sans font-bold text-[10px] uppercase tracking-widest px-3.5 py-2 rounded-full shadow-md flex items-center gap-1.5 backdrop-blur-xs transform translate-y-2 group-hover/img:translate-y-0 transition-all duration-300">
-                              <span className="material-symbols-outlined text-xs">zoom_in</span>
-                              Expand Certificate
+                            <span className="bg-[#FFFDF9]/95 text-charcoal font-sans font-bold text-[8px] sm:text-[10px] uppercase tracking-widest px-2 sm:px-3.5 py-1 sm:py-2 rounded-full shadow-md flex items-center gap-1.5 backdrop-blur-xs transform translate-y-2 group-hover/img:translate-y-0 transition-all duration-300">
+                              <span className="material-symbols-outlined text-[10px] sm:text-xs">zoom_in</span>
+                              <span className="hidden sm:inline">Expand Certificate</span>
+                              <span className="sm:hidden">Expand</span>
                             </span>
                           </div>
                         </div>
                       )}
 
                       {/* Golden Emblem badge and Issuer Info */}
-                      <div className="flex items-center gap-4 mb-4">
-                        <div className="w-10 h-10 shrink-0 rounded-xl bg-gold-accent/10 border border-gold-accent/20 flex items-center justify-center shadow-xs group-hover:scale-105 group-hover:rotate-6 transition-all duration-500">
-                          <span className="material-symbols-outlined text-gold-accent text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>
+                      <div className="flex items-center gap-2 sm:gap-4 mb-2 sm:mb-4">
+                        <div className="w-6 h-6 sm:w-10 sm:h-10 shrink-0 rounded-lg sm:rounded-xl bg-gold-accent/10 border border-gold-accent/20 flex items-center justify-center shadow-xs group-hover:scale-105 group-hover:rotate-6 transition-all duration-500">
+                          <span className="material-symbols-outlined text-gold-accent text-sm sm:text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>
                             {idx === 0 ? 'verified' : 'verified_user'}
                           </span>
                         </div>
                         <div>
                           {/* Official Subtitle */}
-                          <span className="text-[9px] text-gold-accent font-sans font-bold uppercase tracking-widest block">{cert.issuer || "UGC / NTA"}</span>
+                          <span className="text-[7px] sm:text-[9px] text-gold-accent font-sans font-bold uppercase tracking-widest block">{cert.issuer || "UGC / NTA"}</span>
                         </div>
                       </div>
 
                       {/* Title */}
-                      <h3 className="font-sans-ultra-bold text-lg text-charcoal uppercase leading-tight mb-4 min-h-[3.5rem] group-hover:text-olive transition-colors duration-300">
+                      <h3 className="font-sans-ultra-bold text-xs sm:text-lg text-charcoal uppercase leading-tight mb-2 sm:mb-4 min-h-[2.5rem] sm:min-h-[3.5rem] group-hover:text-olive transition-colors duration-300">
                         {cert.title}
                       </h3>
                     </div>
 
                     {/* Verification Capsules and Actions */}
-                    <div className="pt-6 border-t border-charcoal/5 space-y-4">
+                    <div className="pt-3 sm:pt-6 border-t border-charcoal/5 space-y-2 sm:space-y-4">
                       <div className="flex justify-between items-center">
-                        <span className="bg-emerald-900/5 text-emerald-800 border border-emerald-600/10 text-[9px] uppercase font-sans font-bold tracking-widest px-3 py-1 rounded-full inline-flex items-center gap-1">
-                          <span className="material-symbols-outlined text-xs">check_circle</span> VERIFIED
+                        <span className="bg-emerald-900/5 text-emerald-800 border border-emerald-600/10 text-[7px] sm:text-[9px] uppercase font-sans font-bold tracking-widest px-1.5 py-0.5 sm:px-3 sm:py-1 rounded-full inline-flex items-center gap-0.5 sm:gap-1">
+                          <span className="material-symbols-outlined text-[10px] sm:text-xs">check_circle</span> VERIFIED
                         </span>
-                        <span className="text-[10px] text-charcoal-light font-bold uppercase tracking-wider">{cert.date || "2026"}</span>
+                        <span className="text-[8px] sm:text-[10px] text-charcoal-light font-bold uppercase tracking-wider">{cert.date || "2026"}</span>
                       </div>
 
-                      <button className="flex items-center gap-2 text-xs font-sans font-bold uppercase tracking-widest text-olive group-hover:text-gold-accent transition-colors duration-300 w-full text-left">
+                      <button className="flex items-center gap-1 sm:gap-2 text-[9px] sm:text-xs font-sans font-bold uppercase tracking-widest text-olive group-hover:text-gold-accent transition-colors duration-300 w-full text-left">
                         View Certificate
-                        <span className="material-symbols-outlined text-sm transition-transform group-hover:translate-x-1">arrow_forward</span>
+                        <span className="material-symbols-outlined text-xs sm:text-sm transition-transform group-hover:translate-x-1">arrow_forward</span>
                       </button>
                     </div>
                   </div>
@@ -1300,7 +1301,7 @@ export default function Home() {
             </div>
 
             {/* Grid of VIP Projects */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 md:gap-8 max-w-7xl mx-auto">
               {featuredVipProjects.map((project, idx) => {
                 const pastelBgColors = [
                   "bg-gradient-to-br from-pastel-purple/15 via-white/50 to-pastel-blue/10 hover:from-pastel-purple/20 hover:to-pastel-blue/15 hover:border-pastel-purple/35",
@@ -1311,34 +1312,34 @@ export default function Home() {
                 return (
                   <div
                     key={project._id || idx}
-                    className={`glassmorphism-premium p-8 rounded-[2rem] border border-charcoal/10 hover:-translate-y-2 hover:shadow-xl transition-all duration-500 vip-card-item flex flex-col justify-between relative overflow-hidden group ${bgs}`}
+                    className={`glassmorphism-premium p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-[2rem] border border-charcoal/10 hover:-translate-y-2 hover:shadow-xl transition-all duration-500 vip-card-item flex flex-col justify-between relative overflow-hidden group ${bgs}`}
                   >
                     {/* Floating background count indicator */}
-                    <span className="absolute right-6 top-6 font-serif-italic text-5xl text-charcoal/5 font-extrabold select-none pointer-events-none group-hover:scale-110 group-hover:text-charcoal/8 transition-all duration-300">
+                    <span className="absolute right-3 top-3 sm:right-6 sm:top-6 font-serif-italic text-3xl sm:text-5xl text-charcoal/5 font-extrabold select-none pointer-events-none group-hover:scale-110 group-hover:text-charcoal/8 transition-all duration-300">
                       {String(idx + 1).padStart(2, '0')}
                     </span>
 
                     <div>
                       {/* Status Badge */}
-                      <div className="mb-5 flex justify-start">
-                        <span className="inline-flex items-center gap-1.5 text-[9px] font-sans font-bold uppercase tracking-widest text-olive px-3 py-0.5 bg-olive/10 rounded-full border border-olive/15">
-                          <span className={`w-1.5 h-1.5 rounded-full ${project.status && project.status.toLowerCase().includes("in progress") ? "bg-emerald-500 animate-pulse" : "bg-gold-accent"}`}></span>
+                      <div className="mb-3 sm:mb-5 flex justify-start">
+                        <span className="inline-flex items-center gap-1 sm:gap-1.5 text-[7px] sm:text-[9px] font-sans font-bold uppercase tracking-widest text-olive px-2 sm:px-3 py-0.5 bg-olive/10 rounded-full border border-olive/15">
+                          <span className={`w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full ${project.status && project.status.toLowerCase().includes("in progress") ? "bg-emerald-500 animate-pulse" : "bg-gold-accent"}`}></span>
                           {project.status || "Future Vision"}
                         </span>
                       </div>
 
                       {/* Title */}
-                      <h3 className="font-sans-ultra-bold text-lg uppercase tracking-tight text-charcoal leading-snug mb-3 group-hover:text-olive transition-colors duration-300">
+                      <h3 className="font-sans-ultra-bold text-xs sm:text-lg uppercase tracking-tight text-charcoal leading-snug mb-2 sm:mb-3 group-hover:text-olive transition-colors duration-300 line-clamp-3">
                         {project.title}
                       </h3>
 
                       {/* Description */}
-                      <p className="font-sans text-xs md:text-sm text-charcoal-light leading-relaxed text-justify">
+                      <p className="font-sans text-[10px] sm:text-xs md:text-sm text-charcoal-light leading-relaxed text-justify line-clamp-4">
                         {project.description}
                       </p>
                     </div>
 
-                    <div className="w-12 h-1 bg-gold-accent/25 mt-6 rounded-full group-hover:w-20 group-hover:bg-gold-accent/40 transition-all duration-300"></div>
+                    <div className="w-8 sm:w-12 h-1 bg-gold-accent/25 mt-4 sm:mt-6 rounded-full group-hover:w-20 group-hover:bg-gold-accent/40 transition-all duration-300"></div>
                   </div>
                 );
               })}
@@ -1428,7 +1429,7 @@ export default function Home() {
                       className="group relative overflow-hidden rounded-[2.5rem] glassmorphism-premium border border-charcoal/10 hover:border-olive/20 hover:shadow-xl transition-all duration-500 marquee-card-landscape"
                     >
                       {/* Left: Cover Image */}
-                      <div className="w-[40%] sm:w-[45%] h-full relative overflow-hidden shrink-0">
+                      <div className="w-full sm:w-[40%] md:w-[45%] h-40 sm:h-full relative overflow-hidden shrink-0">
                         <img
                           alt={blog.title}
                           className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-1000"
@@ -1438,13 +1439,13 @@ export default function Home() {
                       </div>
 
                       {/* Right: Text Details */}
-                      <div className="w-[60%] sm:w-[55%] p-6 md:p-8 flex flex-col justify-between h-full">
+                      <div className="w-full sm:w-[60%] md:w-[55%] p-4 sm:p-6 md:p-8 flex flex-col justify-between h-full min-h-0 flex-1">
                         <div className="space-y-3">
-                          <div className="flex gap-2 flex-wrap items-center">
+                          <div className="flex gap-1.5 sm:gap-2 flex-wrap items-center">
                             {blog.tags?.slice(0, 2).map((tag, tagIdx) => (
                               <span
                                 key={tagIdx}
-                                className={`text-[8px] uppercase font-sans font-bold tracking-widest px-2.5 py-0.5 rounded-full ${tagIdx % 2 === 0
+                                className={`text-[7px] sm:text-[8px] uppercase font-sans font-bold tracking-widest px-1.5 py-0.5 sm:px-2.5 sm:py-0.5 rounded-full ${tagIdx % 2 === 0
                                   ? 'bg-olive/10 text-olive border border-olive/5'
                                   : 'bg-gold-accent/10 text-gold-accent border border-gold-accent/5'
                                   }`}
@@ -1452,16 +1453,16 @@ export default function Home() {
                                 {tag}
                               </span>
                             ))}
-                            <span className="text-[8px] uppercase font-sans font-bold tracking-widest text-charcoal-light px-2.5 py-0.5 bg-cream-medium/20 rounded-full">
+                            <span className="text-[7px] sm:text-[8px] uppercase font-sans font-bold tracking-widest text-charcoal-light px-1.5 py-0.5 sm:px-2.5 sm:py-0.5 bg-cream-medium/20 rounded-full">
                               {blog.date}
                             </span>
                           </div>
 
-                          <h3 className="font-sans-ultra-bold text-sm md:text-base text-charcoal uppercase leading-tight group-hover:text-olive transition-colors duration-300 line-clamp-2">
+                          <h3 className="font-sans-ultra-bold text-xs sm:text-sm md:text-base text-charcoal uppercase leading-tight group-hover:text-olive transition-colors duration-300 line-clamp-2">
                             {blog.title}
                           </h3>
 
-                          <p className="font-sans text-[10px] md:text-xs text-charcoal-light leading-relaxed line-clamp-3">
+                          <p className="font-sans text-[9px] sm:text-[10px] md:text-xs text-charcoal-light leading-relaxed line-clamp-3">
                             {cleanContent}
                           </p>
                         </div>
@@ -1469,10 +1470,10 @@ export default function Home() {
                         <div>
                           <button
                             onClick={(e) => { e.stopPropagation(); setActiveBlog(blog); }}
-                            className="inline-flex items-center gap-1.5 text-2xs font-sans font-bold uppercase tracking-widest text-olive hover:text-gold-accent transition-all cursor-pointer"
+                            className="inline-flex items-center gap-1 sm:gap-1.5 text-[8px] sm:text-2xs font-sans font-bold uppercase tracking-widest text-olive hover:text-gold-accent transition-all cursor-pointer"
                           >
                             Read Narrative
-                            <span className="material-symbols-outlined text-xs transition-transform group-hover:translate-x-1">arrow_forward</span>
+                            <span className="material-symbols-outlined text-[10px] sm:text-xs transition-transform group-hover:translate-x-1">arrow_forward</span>
                           </button>
                         </div>
                       </div>

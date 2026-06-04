@@ -20,40 +20,40 @@ function VIPCard({ project, idx }) {
 
   return (
     <div
-      className={`glassmorphism-premium p-8 rounded-[2rem] border border-charcoal/10 hover:-translate-y-2 hover:shadow-xl transition-all duration-500 flex flex-col justify-between relative overflow-hidden group ${bgs}`}
+      className={`glassmorphism-premium p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-[2rem] border border-charcoal/10 hover:-translate-y-2 hover:shadow-xl transition-all duration-500 flex flex-col justify-between relative overflow-hidden group ${bgs}`}
     >
       {/* Floating background count indicator */}
-      <span className="absolute right-6 top-6 font-serif-italic text-5xl text-charcoal/5 font-extrabold select-none pointer-events-none group-hover:scale-110 group-hover:text-charcoal/8 transition-all duration-300">
+      <span className="absolute right-3 top-3 sm:right-6 sm:top-6 font-serif-italic text-3xl sm:text-5xl text-charcoal/5 font-extrabold select-none pointer-events-none group-hover:scale-110 group-hover:text-charcoal/8 transition-all duration-300">
         {String(idx + 1).padStart(2, '0')}
       </span>
 
       <div>
         {/* Status Badge & Home Badge */}
-        <div className="mb-5 flex flex-wrap items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 text-[9px] font-sans font-bold uppercase tracking-widest text-olive px-3 py-0.5 bg-olive/10 rounded-full border border-olive/15">
-            <span className={`w-1.5 h-1.5 rounded-full ${project.status && project.status.toLowerCase().includes("in progress") ? "bg-emerald-500 animate-pulse" : "bg-gold-accent"}`}></span>
+        <div className="mb-3 sm:mb-5 flex flex-wrap items-center gap-1 sm:gap-2">
+          <span className="inline-flex items-center gap-1 sm:gap-1.5 text-[7px] sm:text-[9px] font-sans font-bold uppercase tracking-widest text-olive px-2 sm:px-3 py-0.5 bg-olive/10 rounded-full border border-olive/15">
+            <span className={`w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full ${project.status && project.status.toLowerCase().includes("in progress") ? "bg-emerald-500 animate-pulse" : "bg-gold-accent"}`}></span>
             {project.status || "Future Vision"}
           </span>
 
           {project.showOnHome !== false && (
-            <span className="rounded bg-gold-accent/10 border border-gold-accent/25 px-2 py-0.5 text-[9px] font-sans font-bold uppercase tracking-widest text-gold-accent">
-              Featured on Home
+            <span className="rounded bg-gold-accent/10 border border-gold-accent/25 px-1.5 py-0.5 text-[7px] sm:text-[9px] font-sans font-bold uppercase tracking-widest text-gold-accent">
+              Featured
             </span>
           )}
         </div>
 
         {/* Title */}
-        <h3 className="font-sans font-black text-lg uppercase tracking-tight text-charcoal leading-snug mb-3 group-hover:text-olive transition-colors duration-300">
+        <h3 className="font-sans font-black text-xs sm:text-lg uppercase tracking-tight text-charcoal leading-snug mb-2 sm:mb-3 group-hover:text-olive transition-colors duration-300 line-clamp-3">
           {project.title}
         </h3>
 
         {/* Description */}
-        <p className="font-sans text-xs md:text-sm text-charcoal-light leading-relaxed text-justify">
+        <p className="font-sans text-[10px] sm:text-xs md:text-sm text-charcoal-light leading-relaxed text-justify line-clamp-4">
           {project.description}
         </p>
       </div>
 
-      <div className="w-12 h-1 bg-gold-accent/25 mt-6 rounded-full group-hover:w-20 group-hover:bg-gold-accent/40 transition-all duration-300"></div>
+      <div className="w-8 sm:w-12 h-1 bg-gold-accent/25 mt-4 sm:mt-6 rounded-full group-hover:w-20 group-hover:bg-gold-accent/40 transition-all duration-300"></div>
     </div>
   );
 }
@@ -255,7 +255,7 @@ export default function VIPPage() {
 
         {/* Grid of VIP Projects */}
         {filteredProjects.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 md:gap-8">
             {filteredProjects.map((project, idx) => (
               <VIPCard key={project._id || idx} project={project} idx={idx} />
             ))}

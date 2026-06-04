@@ -208,16 +208,16 @@ export default function PapersPage() {
 
         {/* Papers Grid */}
         {filteredPapers.length > 0 ? (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
             {filteredPapers.map((paper, idx) => (
               <div
                 key={paper._id || idx}
-                className={`glassmorphism-card p-6 rounded-xl flex flex-col justify-between h-full relative ${
+                className={`glassmorphism-card p-3 sm:p-6 rounded-xl flex flex-col justify-between h-full relative ${
                   paper.award ? "border-terra/20 bg-terra-glow" : ""
                 }`}
               >
                 {/* Card Header */}
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   {paper.images && paper.images.length > 0 && (
                     <div 
                       onClick={() => {
@@ -233,7 +233,7 @@ export default function PapersPage() {
                           setVistaImageIndex(0);
                         }
                       }}
-                      className="w-full h-40 rounded-lg overflow-hidden relative group/img cursor-pointer border border-olive/10 shadow-sm bg-cream-medium"
+                      className="w-full h-20 sm:h-40 rounded-lg overflow-hidden relative group/img cursor-pointer border border-olive/10 shadow-sm bg-cream-medium"
                     >
                       <img 
                         alt={paper.title} 
@@ -241,16 +241,16 @@ export default function PapersPage() {
                         className="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-105"
                       />
                       <div className="absolute inset-0 bg-charcoal/20 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                        <span className="bg-cream-lightest/95 text-charcoal font-sans font-bold text-[10px] uppercase tracking-widest px-3 py-1.5 rounded-full shadow-md flex items-center gap-1 backdrop-blur-xs transform translate-y-1 group-hover/img:translate-y-0 transition-all duration-300">
-                          {paper.type === 'published' ? 'Read Publication' : 'View Slides'}
+                        <span className="bg-cream-lightest/95 text-charcoal font-sans font-bold text-[8px] sm:text-[10px] uppercase tracking-widest px-2 sm:px-3 py-1 sm:py-1.5 rounded-full shadow-md flex items-center gap-1 backdrop-blur-xs transform translate-y-1 group-hover/img:translate-y-0 transition-all duration-300">
+                          {paper.type === 'published' ? 'Read' : 'Slides'}
                         </span>
                       </div>
                     </div>
                   )}
 
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between text-[10px] sm:text-xs">
                     <span
-                      className={`rounded-md px-2.5 py-1 text-2xs font-bold uppercase tracking-wider ${
+                      className={`rounded-md px-1.5 py-0.5 sm:px-2.5 sm:py-1 text-[8px] sm:text-2xs font-bold uppercase tracking-wider ${
                         paper.type === "published"
                           ? "bg-olive/10 border border-olive/20 text-olive"
                           : "bg-terra/10 border border-terra/20 text-terra"
@@ -258,26 +258,26 @@ export default function PapersPage() {
                     >
                       {paper.type}
                     </span>
-                    <span className="text-xs font-bold text-warm-gray">{paper.date}</span>
+                    <span className="text-[10px] sm:text-xs font-bold text-warm-gray">{paper.date}</span>
                   </div>
 
                   {paper.award && (
-                    <div className="inline-flex items-center gap-1 rounded bg-terra/10 border border-terra/25 px-2 py-0.5 text-2xs font-bold text-terra uppercase">
-                      <Award className="h-3 w-3 animate-pulse" />
-                      {paper.award}
+                    <div className="inline-flex items-center gap-0.5 sm:gap-1 rounded bg-terra/10 border border-terra/25 px-1.5 py-0.5 text-[8px] sm:text-2xs font-bold text-terra uppercase">
+                      <Award className="h-2.5 w-2.5 sm:h-3 sm:w-3 animate-pulse" />
+                      <span className="truncate">{paper.award}</span>
                     </div>
                   )}
 
-                  <h3 className="font-serif text-lg font-bold leading-snug text-charcoal hover:text-olive transition-colors">
+                  <h3 className="font-serif text-xs sm:text-lg font-bold leading-snug text-charcoal hover:text-olive transition-colors">
                     {paper.title}
                   </h3>
 
-                  <div className="text-xs font-semibold text-warm-gray">
+                  <div className="text-[10px] sm:text-xs font-semibold text-warm-gray">
                     Venue: <span className="text-charcoal-light italic">{paper.venue}</span>
                   </div>
 
                   {/* Paper Abstract / Description with conditional 'Read More' */}
-                  <p className={`text-xs text-warm-gray leading-relaxed font-light ${
+                  <p className={`text-[10px] sm:text-xs text-warm-gray leading-relaxed font-light ${
                     (paper.abstract || paper.description || '').length > 160 ? 'line-clamp-4 mb-2' : ''
                   }`}>
                     {paper.abstract || paper.description}
@@ -285,20 +285,20 @@ export default function PapersPage() {
                   {(paper.abstract || paper.description || '').length > 160 && (
                     <button 
                       onClick={() => { setActivePaper(paper); setSlideIndex(0); }}
-                      className="text-xs font-semibold text-olive hover:text-olive-dark flex items-center gap-1.5 mt-1 cursor-pointer focus:outline-none"
+                      className="text-[10px] sm:text-xs font-semibold text-olive hover:text-olive-dark flex items-center gap-1 mt-1 cursor-pointer focus:outline-none"
                     >
-                      <FileText className="h-3.5 w-3.5" />
+                      <FileText className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                       Read More
                     </button>
                   )}
 
                   {/* Conference Image Grid */}
                   {paper.images && paper.images.length > 0 && (
-                    <div className="mt-4 space-y-2">
-                      <span className="text-2xs font-extrabold uppercase tracking-wider text-warm-gray block">
+                    <div className="mt-3 sm:mt-4 space-y-1.5 sm:space-y-2">
+                      <span className="text-[8px] sm:text-2xs font-extrabold uppercase tracking-wider text-warm-gray block">
                         Conference Slides / Captures:
                       </span>
-                      <div className="grid grid-cols-2 gap-2">
+                      <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
                         {paper.images.map((imgName, imgIdx) => (
                           <div
                             key={imgIdx}
@@ -310,7 +310,7 @@ export default function PapersPage() {
                               });
                               setVistaImageIndex(imgIdx);
                             }}
-                            className="relative h-20 overflow-hidden rounded-lg border border-olive/10 bg-cream-medium cursor-pointer hover:border-olive/30 hover:scale-[1.02] transition-all"
+                            className="relative h-10 sm:h-20 overflow-hidden rounded-lg border border-olive/10 bg-cream-medium cursor-pointer hover:border-olive/30 hover:scale-[1.02] transition-all"
                           >
                             <img
                               src={`/api/images/${imgName}`}
@@ -325,16 +325,16 @@ export default function PapersPage() {
                 </div>
 
                 {/* Card Action footer links */}
-                <div className="mt-6 pt-4 border-t border-olive/8 flex items-center gap-4">
+                <div className="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-olive/8 flex flex-wrap items-center gap-2 sm:gap-4">
                   {paper.paperUrl && (
                     <a
                       href={paper.paperUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="text-xs font-semibold text-warm-gray hover:text-olive flex items-center gap-1"
+                      className="text-[10px] sm:text-xs font-semibold text-warm-gray hover:text-olive flex items-center gap-0.5 sm:gap-1"
                     >
-                      Source Link
-                      <ExternalLink className="h-3.5 w-3.5" />
+                      Source
+                      <ExternalLink className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                     </a>
                   )}
                   {paper.pdfUrl && (
@@ -342,10 +342,10 @@ export default function PapersPage() {
                       href={paper.pdfUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="text-xs font-semibold text-warm-gray hover:text-olive flex items-center gap-1"
+                      className="text-[10px] sm:text-xs font-semibold text-warm-gray hover:text-olive flex items-center gap-0.5 sm:gap-1"
                     >
-                      PDF Document
-                      <FileDown className="h-3.5 w-3.5" />
+                      PDF
+                      <FileDown className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                     </a>
                   )}
                 </div>
