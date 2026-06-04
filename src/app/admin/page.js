@@ -778,6 +778,65 @@ export default function AdminDashboard() {
                   </div>
 
                   <div className="grid gap-6 md:grid-cols-2">
+                    {/* CV Document Upload - Featured Prominently at Top */}
+                    <div className="md:col-span-2 p-6 bg-olive/5 border border-olive/15 rounded-2xl space-y-3 shadow-xs">
+                      <label className="text-xs font-bold uppercase tracking-widest text-olive block">Academic CV Document / Link</label>
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                        <input
+                          type="text"
+                          value={data.profile.cvUrl || ""}
+                          onChange={(e) => setData({ ...data, profile: { ...data.profile, cvUrl: e.target.value } })}
+                          placeholder="Link to CV PDF or upload a new one..."
+                          className="flex-grow rounded-lg border border-olive/20 bg-white px-4 py-2.5 text-sm text-charcoal focus:border-olive focus:outline-none"
+                        />
+                        <div className="relative shrink-0">
+                          <input
+                            type="file"
+                            accept=".pdf"
+                            id="cv-upload"
+                            className="hidden"
+                            onChange={async (e) => {
+                              const file = e.target.files[0];
+                              if (!file) return;
+
+                              const formData = new FormData();
+                              formData.append("file", file);
+
+                              setUploadingImage(true);
+                              try {
+                                const res = await fetch("/api/upload", {
+                                  method: "POST",
+                                  body: formData,
+                                });
+
+                                const json = await res.json();
+                                if (res.ok && json.success) {
+                                  showStatus("success", "CV document uploaded successfully!");
+                                  setData({ ...data, profile: { ...data.profile, cvUrl: json.url } });
+                                } else {
+                                  showStatus("error", json.error || "Failed to upload CV");
+                                }
+                              } catch (err) {
+                                showStatus("error", "Upload connection error");
+                              } finally {
+                                setUploadingImage(false);
+                              }
+                            }}
+                          />
+                          <label
+                            htmlFor="cv-upload"
+                            className="flex items-center justify-center gap-1.5 rounded-lg border border-olive/30 bg-olive text-cream-lightest px-4 py-2.5 text-xs font-semibold hover:bg-olive/90 cursor-pointer w-full sm:w-auto transition-colors"
+                          >
+                            <Upload className="h-3.5 w-3.5" />
+                            {uploadingImage ? "Uploading..." : "Upload PDF"}
+                          </label>
+                        </div>
+                      </div>
+                      <p className="text-[10px] text-warm-gray leading-relaxed">
+                        This link updates the <strong>MY CV</strong> button on the homepage navbar. You can upload a PDF directly, or paste a link to an external document (e.g. Google Docs).
+                      </p>
+                    </div>
+
                     <div className="space-y-1">
                       <label className="text-2xs font-extrabold uppercase tracking-widest text-warm-gray">Full Name</label>
                       <input
@@ -877,64 +936,7 @@ export default function AdminDashboard() {
                       </p>
                     </div>
 
-                    {/* CV Document Upload */}
-                    <div className="space-y-1 md:col-span-2 border-t border-olive/10 pt-6">
-                      <label className="text-2xs font-extrabold uppercase tracking-widest text-warm-gray block mb-2">Academic CV Document (PDF)</label>
-                      <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                        <input
-                          type="text"
-                          value={data.profile.cvUrl || ""}
-                          onChange={(e) => setData({ ...data, profile: { ...data.profile, cvUrl: e.target.value } })}
-                          placeholder="Link to CV PDF or upload a new one..."
-                          className="flex-grow rounded-lg border border-olive/20 bg-cream px-4 py-2.5 text-sm text-charcoal focus:border-olive focus:outline-none"
-                        />
-                        <div className="relative shrink-0">
-                          <input
-                            type="file"
-                            accept=".pdf"
-                            id="cv-upload"
-                            className="hidden"
-                            onChange={async (e) => {
-                              const file = e.target.files[0];
-                              if (!file) return;
 
-                              const formData = new FormData();
-                              formData.append("file", file);
-
-                              setUploadingImage(true);
-                              try {
-                                const res = await fetch("/api/upload", {
-                                  method: "POST",
-                                  body: formData,
-                                });
-
-                                const json = await res.json();
-                                if (res.ok && json.success) {
-                                  showStatus("success", "CV document uploaded successfully!");
-                                  setData({ ...data, profile: { ...data.profile, cvUrl: json.url } });
-                                } else {
-                                  showStatus("error", json.error || "Failed to upload CV");
-                                }
-                              } catch (err) {
-                                showStatus("error", "Upload connection error");
-                              } finally {
-                                setUploadingImage(false);
-                              }
-                            }}
-                          />
-                          <label
-                            htmlFor="cv-upload"
-                            className="flex items-center justify-center gap-1.5 rounded-lg border border-olive/30 bg-olive/10 px-4 py-2.5 text-xs font-semibold text-olive cursor-pointer hover:bg-olive/20 w-full sm:w-auto"
-                          >
-                            <Upload className="h-3.5 w-3.5" />
-                            {uploadingImage ? "Uploading..." : "Upload PDF"}
-                          </label>
-                        </div>
-                      </div>
-                      <p className="text-[10px] text-warm-gray leading-relaxed mt-1">
-                        Upload your CV as a PDF file or link an external PDF document. If no CV URL is specified, the site will automatically generate a dynamic, printable CV sheet from your portfolio entries.
-                      </p>
-                    </div>
 
                     {/* Core Philosophy & Research Statement Image Upload */}
                     <div className="space-y-4 md:col-span-2 border-t border-olive/10 pt-6">

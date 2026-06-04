@@ -215,7 +215,7 @@ async function seed() {
     bioIntro,
     bioSecondary,
     avatarUrl: "/api/images/17.jpeg", // Default avatar to one of the seeded photos
-    cvUrl: "",
+    cvUrl: "https://docs.google.com/document/d/1KaQPTU1Un-yBvLUSL6aB9jXQElhMcwiF/edit?usp=sharing&ouid=113200782979309737341&rtpof=true&sd=true",
     contact: {
       email: "jahnvikhubani37175@gmail.com",
       emailSecondary: "jahnvikhubani01@gmail.com",
