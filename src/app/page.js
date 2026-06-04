@@ -671,11 +671,13 @@ export default function Home() {
         <nav className={`pointer-events-auto w-full max-w-7xl bg-white/50 backdrop-blur-2xl border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.04)] px-6 py-3.5 transition-all duration-500 hover:bg-white/60 hover:shadow-[0_8px_32px_rgba(0,0,0,0.08)] ${isMobileMenuOpen ? 'rounded-[2rem]' : 'rounded-full'}`}>
           <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between w-full">
-              <a href="#intro" className="font-serif-italic text-2xl font-bold tracking-tight text-charcoal flex items-center gap-3 group">
-                <span className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#ffe4e6] to-[#e0f2fe] flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-300 border border-white">
-                  <span className="font-sans font-bold text-sm text-charcoal">J</span>
-                </span>
-                <span>Jahnvi.</span>
+              <a href="#intro" className="font-serif-italic text-2xl font-bold tracking-tight text-charcoal flex items-center gap-2 group">
+                <img
+                  src="/logo2.png"
+                  alt="Jahnvi Logo"
+                  className="h-14 w-auto object-contain group-hover:scale-105 transition-transform duration-300 drop-shadow-md"
+                  style={{ filter: "contrast(1.2) brightness(0.88) saturate(1.1)" }}
+                />
               </a>
 
               <div className="hidden md:flex items-center bg-charcoal/5 rounded-full p-1 border border-charcoal/5">

@@ -21,12 +21,18 @@ export const metadata = {
   description: "Academic research and writing portfolio of Jahnvi, exploring political ecology, green governance, sustainable development, and Sanskrit-inspired ecological co-existence (Sarva Saha).",
   keywords: ["Jahnvi", "Political Ecology", "Green Governance", "Sustainable Development", "Sarva Saha", "UGC NET JRF", "Ecology Researcher"],
   authors: [{ name: "Jahnvi" }],
+  icons: {
+    icon: "/logo2.png",
+    apple: "/logo2.png",
+  },
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning className={`${playfair.variable} ${outfit.variable} h-full antialiased`}>
       <head>
+        <link rel="icon" href="/logo2.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/logo2.png" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
         <script dangerouslySetInnerHTML={{
           __html: `
