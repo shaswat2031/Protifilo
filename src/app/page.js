@@ -226,23 +226,15 @@ function VistaItem({ vista, idx }) {
 
 const defaultQuotes = [
   {
-    word: "Sarva Saha",
-    lang: "संस्कृत:",
     text: "A harmonious, organic equilibrium and co-existence between humanity, green policies, and our biospheric boundaries."
   },
   {
-    word: "Samskara",
-    lang: "संस्कृत:",
     text: "Sowing ethical values in the strategies of states and supply chains, elevating India's role from balancing agent to global builder."
   },
   {
-    word: "Manthan",
-    lang: "संस्कृत:",
     text: "The democratic churning of ideas—evolving our loktantra from simple voting (matdaan) to deep deliberation (manthan)."
   },
   {
-    word: "Sutradhar",
-    lang: "संस्कृत:",
     text: "The thread-bearer of intellectual heritage, bridging academic ideas with actionable transformations for sustainable green governance."
   }
 ];
@@ -324,7 +316,7 @@ function TypewriterQuote({ quotes }) {
         <span className="absolute left-6 top-3 text-5xl md:text-6xl text-olive/10 font-serif-italic select-none pointer-events-none">“</span>
 
         <p className="font-serif-italic text-base md:text-lg text-olive leading-relaxed relative z-10 min-h-[100px] sm:min-h-[75px] md:min-h-[55px]">
-          '{activeQuotes[activeQuoteIdx]?.word}' — <span className="text-gold-accent font-sans-ultra-bold font-normal not-italic tracking-wider px-1.5 py-0.5 bg-gold-accent/5 rounded-lg border border-gold-accent/10 text-[10px] md:text-xs">{activeQuotes[activeQuoteIdx]?.lang}</span> {displayedText}
+          {displayedText}
           <span className="inline-block w-[3px] h-4 ml-1 bg-olive/70 animate-pulse align-middle"></span>
         </p>
       </div>
@@ -799,164 +791,50 @@ export default function Home() {
         </nav>
       </div>
 
-
       {/* Hero Section */}
-      <section
-        id="intro"
-        className="relative w-full overflow-hidden premium-glow-bg"
-        style={{ minHeight: "calc(100vh - 0px)" }}
-      >
-
-        {/* ── DESKTOP: side-by-side grid ── */}
-        <div
-          className="hidden md:grid w-full h-full"
-          style={{ gridTemplateColumns: "42% 1fr", minHeight: "calc(100vh - 0px)" }}
-        >
-
-          {/* LEFT — Portrait */}
-          <div className="relative flex items-end justify-center overflow-hidden bg-[#f5f0e8]">
-            {/* warm glow behind image */}
-            <div className="absolute bottom-0 inset-x-0 h-2/3 bg-gradient-to-t from-[#ede6d6]/60 to-transparent pointer-events-none" />
-            {/* vertical divider */}
-            <div className="absolute right-0 top-[12%] bottom-0 w-px bg-charcoal/[0.07]" />
-
-            <img
-              alt={profile?.name || "Jahnvi"}
-              id="hero-image"
-              className="relative z-10 w-full max-w-[360px] lg:max-w-[420px] h-[80vh] object-cover object-top select-none transition-transform duration-700 hover:scale-[1.015]"
-              src={
-                profile?.avatarUrl
-                  ? (profile.avatarUrl.startsWith('/') || profile.avatarUrl.startsWith('http')
-                    ? profile.avatarUrl
-                    : `/api/images/${profile.avatarUrl}`)
-                  : "/hero1.png"
-              }
-              style={{ filter: "drop-shadow(0 24px 56px rgba(0,0,0,0.10))" }}
-            />
-          </div>
-
-          {/* RIGHT — Identity */}
-          <div className="flex flex-col justify-center px-12 lg:px-16 xl:px-20" style={{ paddingTop: "96px" }}>
-
-            {/* Eyebrow */}
-            <div className="flex items-center gap-3 mb-8">
-              <span className="w-8 h-px bg-gold-accent" />
-              <span className="font-sans text-[9px] font-bold uppercase tracking-[0.44em] text-gold-accent">
-                Portfolio · Political Ecologist
-              </span>
-            </div>
-
-            {/* Name */}
-            <h1 className="font-sans-ultra-bold uppercase text-charcoal leading-[0.88] tracking-[-0.02em] mb-0">
-              <span className="block text-[60px] lg:text-[72px] xl:text-[88px]">
-                {profile?.name?.split(' ')[0] || "Jahnvi"}
-              </span>
-              {profile?.name && profile.name.trim().split(' ').length > 1 && (
-                <span className="block text-[60px] lg:text-[72px] xl:text-[88px] text-olive">
-                  {profile.name.trim().split(' ').slice(1).join(' ')}
-                </span>
-              )}
-            </h1>
-
-            {/* Gold rule */}
-            <div className="mt-7 mb-6 w-12 h-[1.5px] bg-gradient-to-r from-gold-accent to-transparent" />
-
-            {/* Profession */}
-            <p className="font-sans font-extrabold uppercase tracking-[0.28em] text-[10px] lg:text-[11px] text-charcoal/50 leading-[2.4]">
-              {profile?.title || "Researcher & Writer"}
-            </p>
-
-            {/* Tagline */}
-            <p className="mt-3 font-serif-italic text-[15px] lg:text-[17px] text-charcoal/55 leading-[1.8] max-w-[360px]">
-              {profile?.tagline || "Exploring Political Ecology, Green Governance & Sustainable Development"}
-            </p>
-
-            {/* CTA Buttons */}
-            <div className="mt-10 flex items-center gap-3 flex-wrap">
-              <a
-                href="#research"
-                className="inline-flex items-center gap-2 px-7 py-3 bg-charcoal text-[#FFFDF9] rounded-full font-sans font-bold text-[10px] uppercase tracking-[0.22em] hover:bg-charcoal/80 hover:shadow-lg transition-all duration-300 group"
-              >
-                Explore My Work
-                <span className="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_forward</span>
-              </a>
-              <a
-                href={profile?.cvUrl || "#"}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-7 py-3 border border-charcoal/20 text-charcoal/65 rounded-full font-sans font-bold text-[10px] uppercase tracking-[0.22em] hover:border-charcoal/50 hover:text-charcoal transition-all duration-300"
-              >
-                <span className="material-symbols-outlined text-sm">description</span>
-                View CV
-              </a>
-            </div>
-
-            {/* Scroll cue */}
-            <div className="mt-14 flex items-center gap-3 opacity-35">
-              <div className="flex flex-col items-center gap-1">
-                <span className="block w-px h-6 bg-charcoal" />
-                <span className="block w-[5px] h-[5px] rounded-full bg-charcoal animate-bounce" />
-              </div>
-              <span className="font-sans text-[9px] font-bold uppercase tracking-[0.38em] text-charcoal">Scroll</span>
-            </div>
-
-          </div>
+      <section className="relative min-h-[100svh] md:min-h-screen flex flex-col justify-between pt-12 md:pt-28 pb-8 md:pb-12 overflow-hidden premium-glow-bg select-text" id="intro">
+        {/* Background Italic Text "Hey, there" */}
+        <div className="absolute inset-x-0 top-[18%] sm:top-[16%] lg:top-[12%] text-center z-0 pointer-events-none select-none flex flex-row justify-center items-center gap-[22vw] sm:gap-[26vw] md:gap-[30vw] lg:gap-[34vw] xl:gap-[38vw]">
+          <h2 className="hero-bg-text font-serif-italic text-[16vw] sm:text-[14vw] lg:text-[15vw] xl:text-[16vw] font-light text-charcoal leading-none tracking-tight">Hey,</h2>
+          <h2 className="hero-bg-text font-serif-italic text-[16vw] sm:text-[14vw] lg:text-[15vw] xl:text-[16vw] font-light text-charcoal leading-none tracking-tight">there</h2>
         </div>
 
-        {/* ── MOBILE: stacked ── */}
-        <div className="md:hidden flex flex-col" style={{ minHeight: "100svh" }}>
-
-          {/* Text block */}
-          <div className="flex flex-col justify-end px-6 pt-24 pb-8">
-            <div className="flex items-center gap-2 mb-5">
-              <span className="w-6 h-px bg-gold-accent" />
-              <span className="font-sans text-[8px] font-bold uppercase tracking-[0.4em] text-gold-accent">Political Ecologist</span>
-            </div>
-            <h1 className="font-sans-ultra-bold uppercase leading-[0.88] text-charcoal">
-              <span className="block text-[48px] sm:text-[60px]">{profile?.name?.split(' ')[0] || "Jahnvi"}</span>
-              {profile?.name && profile.name.trim().split(' ').length > 1 && (
-                <span className="block text-[48px] sm:text-[60px] text-olive">{profile.name.trim().split(' ').slice(1).join(' ')}</span>
-              )}
-            </h1>
-            <div className="my-5 w-10 h-px bg-gold-accent" />
-            <p className="font-sans font-bold uppercase tracking-[0.24em] text-[9px] text-charcoal/50 leading-loose">
-              {profile?.title || "Researcher & Writer"}
-            </p>
-            <p className="mt-2 font-serif-italic text-sm text-charcoal/55 leading-relaxed max-w-[340px]">
-              {profile?.tagline || "Exploring Political Ecology, Green Governance & Sustainable Development"}
-            </p>
-            <div className="mt-8 flex gap-3 flex-wrap">
-              <a href="#research" className="inline-flex items-center gap-2 px-5 py-2.5 bg-charcoal text-[#FFFDF9] rounded-full font-sans font-bold text-[9px] uppercase tracking-widest hover:bg-charcoal/80 transition-all group">
-                Explore My Work
-                <span className="material-symbols-outlined text-xs group-hover:translate-x-1 transition-transform">arrow_forward</span>
-              </a>
-              <a href={profile?.cvUrl || "#"} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-5 py-2.5 border border-charcoal/20 text-charcoal/65 rounded-full font-sans font-bold text-[9px] uppercase tracking-widest hover:border-charcoal/40 transition-all">
-                <span className="material-symbols-outlined text-xs">description</span>
-                View CV
-              </a>
-            </div>
-          </div>
-
-          {/* Portrait */}
-          <div className="flex-1 flex items-end justify-center overflow-hidden bg-[#f5f0e8]">
-            <img
-              alt={profile?.name || "Jahnvi"}
-              className="w-full max-w-[280px] sm:max-w-[340px] h-auto object-contain object-bottom select-none"
-              src={
-                profile?.avatarUrl
-                  ? (profile.avatarUrl.startsWith('/') || profile.avatarUrl.startsWith('http')
-                    ? profile.avatarUrl
-                    : `/api/images/${profile.avatarUrl}`)
-                  : "/hero1.png"
-              }
-              style={{ filter: "drop-shadow(0 12px 32px rgba(0,0,0,0.11))" }}
-            />
-          </div>
-
+        {/* Centered Image - Positioned at Bottom Center */}
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[220px] sm:max-w-[280px] md:max-w-[360px] lg:max-w-[420px] xl:max-w-[520px] 2xl:max-w-[600px] z-10 pointer-events-none flex items-end mb-[16rem] sm:mb-[17rem] md:mb-0" id="portrait-wrapper">
+          <img
+            alt="Profile"
+            className="w-full h-auto object-contain object-bottom pointer-events-auto transition-transform duration-700 hover:scale-[1.02]"
+            id="hero-image"
+            src={profile?.avatarUrl ? (profile.avatarUrl.startsWith('/') || profile.avatarUrl.startsWith('http') ? profile.avatarUrl : `/api/images/${profile.avatarUrl}`) : "/hero1.png"}
+            style={{ filter: "drop-shadow(0 10px 25px rgba(0,0,0,0.15))" }}
+          />
         </div>
 
+        {/* Spacer to push typography to the bottom on all screen heights */}
+        <div className="flex-grow pointer-events-none"></div>
+
+        {/* Bottom stylized typography */}
+        <div className="w-full max-w-[95rem] mx-auto px-6 md:px-8 xl:px-12 flex flex-col md:flex-row justify-between items-center md:items-end gap-4 md:gap-4 z-50 select-none pb-4 md:pb-6 relative pointer-events-none mt-auto">
+          <h1 className="hero-bottom-title font-sans-ultra-bold text-3xl sm:text-4xl md:text-[3.5rem] lg:text-[5.5rem] xl:text-[6.5rem] 2xl:text-[7.5rem] uppercase leading-[0.85] text-charcoal text-center md:text-left tracking-tighter whitespace-normal md:whitespace-nowrap relative pointer-events-auto w-full md:w-auto">
+            I AM <span className="block">{profile?.name || "JAHNVI"}</span>
+          </h1>
+          <h2 className="hero-bottom-title font-sans-ultra-bold text-xl sm:text-2xl md:text-[2rem] lg:text-[3.2rem] xl:text-[4.2rem] 2xl:text-[5rem] uppercase leading-[0.85] text-charcoal text-center md:text-right tracking-tighter whitespace-normal md:whitespace-nowrap relative pointer-events-auto w-full md:w-auto mt-2 md:mt-0">
+            {profile?.title ? (
+              <>
+                {profile.title.split(/&|\band\b/i).map((part, pIdx) => (
+                  <span key={pIdx} className={pIdx > 0 ? "block" : ""}>
+                    {part.trim().toUpperCase()}
+                  </span>
+                ))}
+              </>
+            ) : (
+              <>
+                RESEARCHER <span className="block">AND WRITER</span>
+              </>
+            )}
+          </h2>
+        </div>
       </section>
-
 
       {/* Research Statement */}
       <section className="section-padding bg-cream-lightest relative overflow-hidden" id="research">

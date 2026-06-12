@@ -32,8 +32,8 @@ const ProfileSchema = new mongoose.Schema({
     sectionTitle: { type: String, default: "My Research Statement" },
     philosophyImage: { type: String, default: "" },
     quotes: [{
-      word: { type: String, required: true },
-      lang: { type: String, default: "संस्कृत:" },
+      word: { type: String },
+      lang: { type: String },
       text: { type: String, required: true }
     }]
   }
