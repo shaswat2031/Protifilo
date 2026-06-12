@@ -436,56 +436,74 @@ export default function Home() {
     });
 
     // Fade and slide left the left badge
-    gsap.fromTo(".hero-badge-left",
-      { x: -40, opacity: 0 },
-      { x: 0, opacity: 1, duration: 1.2, ease: "power3.out", delay: 0.5 }
-    );
+    const heroBadgeLeft = gsap.utils.toArray(".hero-badge-left");
+    if (heroBadgeLeft.length > 0) {
+      gsap.fromTo(heroBadgeLeft,
+        { x: -40, opacity: 0 },
+        { x: 0, opacity: 1, duration: 1.2, ease: "power3.out", delay: 0.5 }
+      );
+    }
 
     // Fade and slide right the right description
-    gsap.fromTo(".hero-desc-right",
-      { x: 40, opacity: 0 },
-      { x: 0, opacity: 1, duration: 1.2, ease: "power3.out", delay: 0.5 }
-    );
+    const heroDescRight = gsap.utils.toArray(".hero-desc-right");
+    if (heroDescRight.length > 0) {
+      gsap.fromTo(heroDescRight,
+        { x: 40, opacity: 0 },
+        { x: 0, opacity: 1, duration: 1.2, ease: "power3.out", delay: 0.5 }
+      );
+    }
 
     // Slide up bottom titles sequentially
-    gsap.fromTo(".hero-bottom-title",
-      { y: 60, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1.4, ease: "power4.out", stagger: 0.18, delay: 0.3 }
-    );
+    const heroBottomTitles = gsap.utils.toArray(".hero-bottom-title");
+    if (heroBottomTitles.length > 0) {
+      gsap.fromTo(heroBottomTitles,
+        { y: 60, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1.4, ease: "power4.out", stagger: 0.18, delay: 0.3 }
+      );
+    }
 
     // Advanced: Fade and translate hero elements on scroll to prevent messy overlaps under the sticky navbar
     // Split into explicit fromTo animations with immediateRender: false to avoid capturing mount states
-    gsap.fromTo([".hero-bottom-title", "#portrait-wrapper"],
-      { opacity: 1, y: 0 },
-      {
-        opacity: 0,
-        y: -60,
-        ease: "power1.inOut",
-        scrollTrigger: {
-          trigger: "#intro",
-          start: "top top",
-          end: "bottom 55%",
-          scrub: true,
-          immediateRender: false
+    const heroScrollTargets = [
+      ...gsap.utils.toArray(".hero-bottom-title"),
+      ...gsap.utils.toArray("#portrait-wrapper")
+    ];
+    if (heroScrollTargets.length > 0) {
+      gsap.fromTo(heroScrollTargets,
+        { opacity: 1, y: 0 },
+        {
+          opacity: 0,
+          y: -60,
+          ease: "power1.inOut",
+          scrollTrigger: {
+            trigger: "#intro",
+            start: "top top",
+            end: "bottom 55%",
+            scrub: true,
+            immediateRender: false
+          }
         }
-      }
-    );
+      );
+    }
 
-    gsap.fromTo(".hero-bg-text",
-      { opacity: 0.12, y: 0 },
-      {
-        opacity: 0,
-        y: -60,
-        ease: "power1.inOut",
-        scrollTrigger: {
-          trigger: "#intro",
-          start: "top top",
-          end: "bottom 55%",
-          scrub: true,
-          immediateRender: false
+    const heroBgTexts = gsap.utils.toArray(".hero-bg-text");
+    if (heroBgTexts.length > 0) {
+      gsap.fromTo(heroBgTexts,
+        { opacity: 0.12, y: 0 },
+        {
+          opacity: 0,
+          y: -60,
+          ease: "power1.inOut",
+          scrollTrigger: {
+            trigger: "#intro",
+            start: "top top",
+            end: "bottom 55%",
+            scrub: true,
+            immediateRender: false
+          }
         }
-      }
-    );
+      );
+    }
 
     // Generic Parallax for BG elements
     document.querySelectorAll('.parallax-bg').forEach(el => {
@@ -540,49 +558,58 @@ export default function Home() {
     });
 
     // Research Paper Cards Fade In
-    gsap.fromTo(".paper-card-item",
-      { y: 50, opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        stagger: 0.2,
-        duration: 1,
-        scrollTrigger: {
-          trigger: ".paper-card-item",
-          start: "top 85%"
+    const paperCards = gsap.utils.toArray(".paper-card-item");
+    if (paperCards.length > 0) {
+      gsap.fromTo(paperCards,
+        { y: 50, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          stagger: 0.2,
+          duration: 1,
+          scrollTrigger: {
+            trigger: paperCards[0],
+            start: "top 85%"
+          }
         }
-      }
-    );
+      );
+    }
 
     // Research Projects Cards Fade In
-    gsap.fromTo(".project-card-item",
-      { y: 50, opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        stagger: 0.2,
-        duration: 1,
-        scrollTrigger: {
-          trigger: ".project-card-item",
-          start: "top 85%"
+    const projectCards = gsap.utils.toArray(".project-card-item");
+    if (projectCards.length > 0) {
+      gsap.fromTo(projectCards,
+        { y: 50, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          stagger: 0.2,
+          duration: 1,
+          scrollTrigger: {
+            trigger: projectCards[0],
+            start: "top 85%"
+          }
         }
-      }
-    );
+      );
+    }
 
     // VIP Projects Cards Fade In
-    gsap.fromTo(".vip-card-item",
-      { y: 50, opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        stagger: 0.2,
-        duration: 1,
-        scrollTrigger: {
-          trigger: ".vip-card-item",
-          start: "top 85%"
+    const vipCards = gsap.utils.toArray(".vip-card-item");
+    if (vipCards.length > 0) {
+      gsap.fromTo(vipCards,
+        { y: 50, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          stagger: 0.2,
+          duration: 1,
+          scrollTrigger: {
+            trigger: vipCards[0],
+            start: "top 85%"
+          }
         }
-      }
-    );
+      );
+    }
 
     // Vistas Journey Masonry Feel Reveal
     gsap.utils.toArray('.vista-overlap-item').forEach((item, i) => {
@@ -602,19 +629,22 @@ export default function Home() {
     });
 
     // Blog Cards
-    gsap.fromTo(".blog-card",
-      { scale: 0.95, opacity: 0 },
-      {
-        scale: 1,
-        opacity: 1,
-        stagger: 0.3,
-        duration: 1.2,
-        scrollTrigger: {
-          trigger: ".blog-card",
-          start: "top 85%"
+    const blogCards = gsap.utils.toArray(".blog-card");
+    if (blogCards.length > 0) {
+      gsap.fromTo(blogCards,
+        { scale: 0.95, opacity: 0 },
+        {
+          scale: 1,
+          opacity: 1,
+          stagger: 0.3,
+          duration: 1.2,
+          scrollTrigger: {
+            trigger: blogCards[0],
+            start: "top 85%"
+          }
         }
-      }
-    );
+      );
+    }
 
     // Navbar Scroll Effect
     const nav = document.querySelector('nav');
@@ -1491,83 +1521,141 @@ export default function Home() {
       </section>
 
 
-      {/* Footer */}
+      {/* ── Footer ── */}
       <footer className="bg-charcoal text-cream-lightest w-full relative z-10 overflow-hidden">
-        {/* Decorative elements */}
-        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gold-accent/50 to-transparent"></div>
-        <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-olive/20 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="absolute -top-40 -left-40 w-96 h-96 bg-gold-accent/10 rounded-full blur-3xl pointer-events-none"></div>
 
-        <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-24 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 items-center border-b border-cream-lightest/10 pb-16 mb-12">
+        {/* Top accent line */}
+        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gold-accent/50 to-transparent" />
+        {/* Subtle ambient glow */}
+        <div className="absolute -bottom-56 -right-56 w-[32rem] h-[32rem] bg-olive/10 rounded-full blur-3xl pointer-events-none" />
 
-            <div className="md:col-span-5 space-y-6 text-center md:text-left">
-              <span className="font-serif-italic text-5xl text-cream-lightest font-bold block drop-shadow-sm">Jahnvi.</span>
-              <p className="font-sans text-base text-cream-lightest/70 max-w-sm leading-relaxed mx-auto md:mx-0">
+        <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop relative z-10">
+
+          {/* ── Main Row ── */}
+          <div className="py-16 md:py-20 flex flex-col md:flex-row md:justify-between gap-12 md:gap-8 border-b border-white/[0.07]">
+
+            {/* Left — Brand */}
+            <div className="flex flex-col items-center md:items-start gap-4 max-w-xs mx-auto md:mx-0">
+              {/* Logo */}
+              <a href="#intro">
+                <img
+                  src="/logo2.png"
+                  alt="Jahnvi Logo"
+                  className="h-12 w-auto object-contain"
+                  style={{ filter: "brightness(2) saturate(0.4) opacity(0.85)" }}
+                />
+              </a>
+
+              {/* Name + N4N */}
+              <div className="text-center md:text-left">
+                <span className="font-serif-italic text-[2.8rem] leading-none text-cream-lightest font-bold drop-shadow-sm block">
+                  Jahnvi.
+                </span>
+                <span className="font-sans text-[9px] font-bold tracking-[0.32em] uppercase text-gold-accent/70 block mt-1">
+                  "N4N" — Nyaya For Nature
+                </span>
+              </div>
+
+              {/* Tagline */}
+              <p className="font-sans text-[13px] text-cream-lightest/45 leading-[1.85] text-center md:text-left">
                 Intellectualism in harmony with nature. Exploring the depths of political ecology and sustainable governance.
               </p>
             </div>
 
-            <div className="md:col-span-7 flex flex-wrap justify-center md:justify-end gap-x-8 gap-y-6">
-              {profile.contact?.linkedin && (
-                <a className="group relative text-cream-lightest/80 hover:text-gold-accent transition-colors duration-300 font-sans font-bold text-sm uppercase tracking-wider" href={profile.contact.linkedin} target="_blank" rel="noopener noreferrer">
-                  LinkedIn
-                  <span className="block w-0 group-hover:w-full transition-all duration-300 h-0.5 bg-gold-accent absolute -bottom-1 left-0"></span>
-                </a>
-              )}
-              {profile.contact?.googleScholar && (
-                <a className="group relative text-cream-lightest/80 hover:text-gold-accent transition-colors duration-300 font-sans font-bold text-sm uppercase tracking-wider" href={profile.contact.googleScholar} target="_blank" rel="noopener noreferrer">
-                  Scholar
-                  <span className="block w-0 group-hover:w-full transition-all duration-300 h-0.5 bg-gold-accent absolute -bottom-1 left-0"></span>
-                </a>
-              )}
-              {profile.contact?.researchGate && (
-                <a className="group relative text-cream-lightest/80 hover:text-gold-accent transition-colors duration-300 font-sans font-bold text-sm uppercase tracking-wider" href={profile.contact.researchGate} target="_blank" rel="noopener noreferrer">
-                  ResearchGate
-                  <span className="block w-0 group-hover:w-full transition-all duration-300 h-0.5 bg-gold-accent absolute -bottom-1 left-0"></span>
-                </a>
-              )}
-              {profile.contact?.jstor && (
-                <a className="group relative text-cream-lightest/80 hover:text-gold-accent transition-colors duration-300 font-sans font-bold text-sm uppercase tracking-wider" href={profile.contact.jstor} target="_blank" rel="noopener noreferrer">
-                  JSTOR
-                  <span className="block w-0 group-hover:w-full transition-all duration-300 h-0.5 bg-gold-accent absolute -bottom-1 left-0"></span>
-                </a>
-              )}
-              {profile.contact?.github && (
-                <a className="group relative text-cream-lightest/80 hover:text-gold-accent transition-colors duration-300 font-sans font-bold text-sm uppercase tracking-wider" href={profile.contact.github} target="_blank" rel="noopener noreferrer">
-                  GitHub
-                  <span className="block w-0 group-hover:w-full transition-all duration-300 h-0.5 bg-gold-accent absolute -bottom-1 left-0"></span>
-                </a>
-              )}
-              {profile.contact?.orcid && (
-                <a className="group relative text-cream-lightest/80 hover:text-gold-accent transition-colors duration-300 font-sans font-bold text-sm uppercase tracking-wider" href={profile.contact.orcid} target="_blank" rel="noopener noreferrer">
-                  ORCID
-                  <span className="block w-0 group-hover:w-full transition-all duration-300 h-0.5 bg-gold-accent absolute -bottom-1 left-0"></span>
-                </a>
-              )}
-              {profile.contact?.email && (
-                <a className="group relative text-cream-lightest/80 hover:text-gold-accent transition-colors duration-300 font-sans font-bold text-sm uppercase tracking-wider" href={`mailto:${profile.contact.email}`}>
-                  Email (Primary)
-                  <span className="block w-0 group-hover:w-full transition-all duration-300 h-0.5 bg-gold-accent absolute -bottom-1 left-0"></span>
-                </a>
-              )}
-              {profile.contact?.emailSecondary && (
-                <a className="group relative text-cream-lightest/80 hover:text-gold-accent transition-colors duration-300 font-sans font-bold text-sm uppercase tracking-wider" href={`mailto:${profile.contact.emailSecondary}`}>
-                  Email (Secondary)
-                  <span className="block w-0 group-hover:w-full transition-all duration-300 h-0.5 bg-gold-accent absolute -bottom-1 left-0"></span>
-                </a>
-              )}
+            {/* Right — Connect links (vertical list) */}
+            <div className="flex flex-col items-center md:items-end gap-4">
+              <p className="font-sans text-[9px] font-bold uppercase tracking-[0.35em] text-cream-lightest/25">
+                Connect
+              </p>
+              <div className="flex flex-col items-center md:items-end gap-3">
+                {profile.contact?.linkedin && (
+                  <a
+                    href={profile.contact.linkedin}
+                    target="_blank" rel="noopener noreferrer"
+                    className="group relative font-sans font-semibold text-[11px] uppercase tracking-widest text-cream-lightest/60 hover:text-gold-accent transition-colors duration-300"
+                  >
+                    LinkedIn
+                    <span className="absolute -bottom-px left-0 w-0 group-hover:w-full h-px bg-gold-accent/70 transition-all duration-300" />
+                  </a>
+                )}
+                {profile.contact?.googleScholar && (
+                  <a
+                    href={profile.contact.googleScholar}
+                    target="_blank" rel="noopener noreferrer"
+                    className="group relative font-sans font-semibold text-[11px] uppercase tracking-widest text-cream-lightest/60 hover:text-gold-accent transition-colors duration-300"
+                  >
+                    Scholar
+                    <span className="absolute -bottom-px left-0 w-0 group-hover:w-full h-px bg-gold-accent/70 transition-all duration-300" />
+                  </a>
+                )}
+                {profile.contact?.researchGate && (
+                  <a
+                    href={profile.contact.researchGate}
+                    target="_blank" rel="noopener noreferrer"
+                    className="group relative font-sans font-semibold text-[11px] uppercase tracking-widest text-cream-lightest/60 hover:text-gold-accent transition-colors duration-300"
+                  >
+                    ResearchGate
+                    <span className="absolute -bottom-px left-0 w-0 group-hover:w-full h-px bg-gold-accent/70 transition-all duration-300" />
+                  </a>
+                )}
+                {profile.contact?.github && (
+                  <a
+                    href={profile.contact.github}
+                    target="_blank" rel="noopener noreferrer"
+                    className="group relative font-sans font-semibold text-[11px] uppercase tracking-widest text-cream-lightest/60 hover:text-gold-accent transition-colors duration-300"
+                  >
+                    GitHub
+                    <span className="absolute -bottom-px left-0 w-0 group-hover:w-full h-px bg-gold-accent/70 transition-all duration-300" />
+                  </a>
+                )}
+                {profile.contact?.orcid && (
+                  <a
+                    href={profile.contact.orcid}
+                    target="_blank" rel="noopener noreferrer"
+                    className="group relative font-sans font-semibold text-[11px] uppercase tracking-widest text-cream-lightest/60 hover:text-gold-accent transition-colors duration-300"
+                  >
+                    ORCID
+                    <span className="absolute -bottom-px left-0 w-0 group-hover:w-full h-px bg-gold-accent/70 transition-all duration-300" />
+                  </a>
+                )}
+                {profile.contact?.jstor && (
+                  <a
+                    href={profile.contact.jstor}
+                    target="_blank" rel="noopener noreferrer"
+                    className="group relative font-sans font-semibold text-[11px] uppercase tracking-widest text-cream-lightest/60 hover:text-gold-accent transition-colors duration-300"
+                  >
+                    JSTOR
+                    <span className="absolute -bottom-px left-0 w-0 group-hover:w-full h-px bg-gold-accent/70 transition-all duration-300" />
+                  </a>
+                )}
+                {profile.contact?.email && (
+                  <a
+                    href={`mailto:${profile.contact.email}`}
+                    className="group relative font-sans font-semibold text-[11px] uppercase tracking-widest text-cream-lightest/60 hover:text-gold-accent transition-colors duration-300"
+                  >
+                    Email (Primary)
+                    <span className="absolute -bottom-px left-0 w-0 group-hover:w-full h-px bg-gold-accent/70 transition-all duration-300" />
+                  </a>
+                )}
+              </div>
+            </div>
+
+          </div>
+
+          {/* ── Bottom bar ── */}
+          <div className="py-5 flex flex-col-reverse md:flex-row items-center justify-between gap-2">
+            <p className="font-sans text-[10px] text-cream-lightest/25 tracking-wider">
+              © 2026 Jahnvi. All rights reserved.
+            </p>
+            <div className="flex items-center gap-2.5">
+              <span className="w-5 h-px bg-gold-accent/35" />
+              <span className="font-sans text-[9px] font-bold uppercase tracking-[0.3em] text-gold-accent/50">
+                Sarva Saha • Equilibrium
+              </span>
+              <span className="w-5 h-px bg-gold-accent/35" />
             </div>
           </div>
 
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-cream-lightest/50 font-sans text-sm">
-            <p className="order-2 md:order-1">© 2026 Jahnvi. All rights reserved.</p>
-            <div className="order-1 md:order-2 flex items-center gap-3">
-              <span className="w-8 h-px bg-gold-accent/30 hidden md:block"></span>
-              <span className="text-xs text-gold-accent font-sans font-bold uppercase tracking-[0.2em]">Sarva Saha • Equilibrium</span>
-              <span className="w-8 h-px bg-gold-accent/30 hidden md:block"></span>
-            </div>
-          </div>
         </div>
       </footer>
 
