@@ -799,50 +799,164 @@ export default function Home() {
         </nav>
       </div>
 
+
       {/* Hero Section */}
-      <section className="relative min-h-[100svh] md:min-h-screen flex flex-col justify-between pt-12 md:pt-28 pb-8 md:pb-12 overflow-hidden premium-glow-bg select-text" id="intro">
-        {/* Background Italic Text "Hey, there" */}
-        <div className="absolute inset-x-0 top-[18%] sm:top-[16%] lg:top-[12%] text-center z-0 pointer-events-none select-none flex flex-row justify-center items-center gap-[22vw] sm:gap-[26vw] md:gap-[30vw] lg:gap-[34vw] xl:gap-[38vw]">
-          <h2 className="hero-bg-text font-serif-italic text-[16vw] sm:text-[14vw] lg:text-[15vw] xl:text-[16vw] font-light text-charcoal leading-none tracking-tight">Hey,</h2>
-          <h2 className="hero-bg-text font-serif-italic text-[16vw] sm:text-[14vw] lg:text-[15vw] xl:text-[16vw] font-light text-charcoal leading-none tracking-tight">there</h2>
+      <section
+        id="intro"
+        className="relative w-full overflow-hidden premium-glow-bg"
+        style={{ minHeight: "calc(100vh - 0px)" }}
+      >
+
+        {/* ── DESKTOP: side-by-side grid ── */}
+        <div
+          className="hidden md:grid w-full h-full"
+          style={{ gridTemplateColumns: "42% 1fr", minHeight: "calc(100vh - 0px)" }}
+        >
+
+          {/* LEFT — Portrait */}
+          <div className="relative flex items-end justify-center overflow-hidden bg-[#f5f0e8]">
+            {/* warm glow behind image */}
+            <div className="absolute bottom-0 inset-x-0 h-2/3 bg-gradient-to-t from-[#ede6d6]/60 to-transparent pointer-events-none" />
+            {/* vertical divider */}
+            <div className="absolute right-0 top-[12%] bottom-0 w-px bg-charcoal/[0.07]" />
+
+            <img
+              alt={profile?.name || "Jahnvi"}
+              id="hero-image"
+              className="relative z-10 w-full max-w-[360px] lg:max-w-[420px] h-[80vh] object-cover object-top select-none transition-transform duration-700 hover:scale-[1.015]"
+              src={
+                profile?.avatarUrl
+                  ? (profile.avatarUrl.startsWith('/') || profile.avatarUrl.startsWith('http')
+                    ? profile.avatarUrl
+                    : `/api/images/${profile.avatarUrl}`)
+                  : "/hero1.png"
+              }
+              style={{ filter: "drop-shadow(0 24px 56px rgba(0,0,0,0.10))" }}
+            />
+          </div>
+
+          {/* RIGHT — Identity */}
+          <div className="flex flex-col justify-center px-12 lg:px-16 xl:px-20" style={{ paddingTop: "96px" }}>
+
+            {/* Eyebrow */}
+            <div className="flex items-center gap-3 mb-8">
+              <span className="w-8 h-px bg-gold-accent" />
+              <span className="font-sans text-[9px] font-bold uppercase tracking-[0.44em] text-gold-accent">
+                Portfolio · Political Ecologist
+              </span>
+            </div>
+
+            {/* Name */}
+            <h1 className="font-sans-ultra-bold uppercase text-charcoal leading-[0.88] tracking-[-0.02em] mb-0">
+              <span className="block text-[60px] lg:text-[72px] xl:text-[88px]">
+                {profile?.name?.split(' ')[0] || "Jahnvi"}
+              </span>
+              {profile?.name && profile.name.trim().split(' ').length > 1 && (
+                <span className="block text-[60px] lg:text-[72px] xl:text-[88px] text-olive">
+                  {profile.name.trim().split(' ').slice(1).join(' ')}
+                </span>
+              )}
+            </h1>
+
+            {/* Gold rule */}
+            <div className="mt-7 mb-6 w-12 h-[1.5px] bg-gradient-to-r from-gold-accent to-transparent" />
+
+            {/* Profession */}
+            <p className="font-sans font-extrabold uppercase tracking-[0.28em] text-[10px] lg:text-[11px] text-charcoal/50 leading-[2.4]">
+              {profile?.title || "Researcher & Writer"}
+            </p>
+
+            {/* Tagline */}
+            <p className="mt-3 font-serif-italic text-[15px] lg:text-[17px] text-charcoal/55 leading-[1.8] max-w-[360px]">
+              {profile?.tagline || "Exploring Political Ecology, Green Governance & Sustainable Development"}
+            </p>
+
+            {/* CTA Buttons */}
+            <div className="mt-10 flex items-center gap-3 flex-wrap">
+              <a
+                href="#research"
+                className="inline-flex items-center gap-2 px-7 py-3 bg-charcoal text-[#FFFDF9] rounded-full font-sans font-bold text-[10px] uppercase tracking-[0.22em] hover:bg-charcoal/80 hover:shadow-lg transition-all duration-300 group"
+              >
+                Explore My Work
+                <span className="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_forward</span>
+              </a>
+              <a
+                href={profile?.cvUrl || "#"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-7 py-3 border border-charcoal/20 text-charcoal/65 rounded-full font-sans font-bold text-[10px] uppercase tracking-[0.22em] hover:border-charcoal/50 hover:text-charcoal transition-all duration-300"
+              >
+                <span className="material-symbols-outlined text-sm">description</span>
+                View CV
+              </a>
+            </div>
+
+            {/* Scroll cue */}
+            <div className="mt-14 flex items-center gap-3 opacity-35">
+              <div className="flex flex-col items-center gap-1">
+                <span className="block w-px h-6 bg-charcoal" />
+                <span className="block w-[5px] h-[5px] rounded-full bg-charcoal animate-bounce" />
+              </div>
+              <span className="font-sans text-[9px] font-bold uppercase tracking-[0.38em] text-charcoal">Scroll</span>
+            </div>
+
+          </div>
         </div>
 
-        {/* Centered Image - Positioned at Bottom Center */}
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[220px] sm:max-w-[280px] md:max-w-[360px] lg:max-w-[420px] xl:max-w-[520px] 2xl:max-w-[600px] z-10 pointer-events-none flex items-end mb-[16rem] sm:mb-[17rem] md:mb-0" id="portrait-wrapper">
-          <img
-            alt="Profile"
-            className="w-full h-auto object-contain object-bottom pointer-events-auto transition-transform duration-700 hover:scale-[1.02]"
-            id="hero-image"
-            src={profile?.avatarUrl ? (profile.avatarUrl.startsWith('/') || profile.avatarUrl.startsWith('http') ? profile.avatarUrl : `/api/images/${profile.avatarUrl}`) : "/hero1.png"}
-            style={{ filter: "drop-shadow(0 10px 25px rgba(0,0,0,0.15))" }}
-          />
+        {/* ── MOBILE: stacked ── */}
+        <div className="md:hidden flex flex-col" style={{ minHeight: "100svh" }}>
+
+          {/* Text block */}
+          <div className="flex flex-col justify-end px-6 pt-24 pb-8">
+            <div className="flex items-center gap-2 mb-5">
+              <span className="w-6 h-px bg-gold-accent" />
+              <span className="font-sans text-[8px] font-bold uppercase tracking-[0.4em] text-gold-accent">Political Ecologist</span>
+            </div>
+            <h1 className="font-sans-ultra-bold uppercase leading-[0.88] text-charcoal">
+              <span className="block text-[48px] sm:text-[60px]">{profile?.name?.split(' ')[0] || "Jahnvi"}</span>
+              {profile?.name && profile.name.trim().split(' ').length > 1 && (
+                <span className="block text-[48px] sm:text-[60px] text-olive">{profile.name.trim().split(' ').slice(1).join(' ')}</span>
+              )}
+            </h1>
+            <div className="my-5 w-10 h-px bg-gold-accent" />
+            <p className="font-sans font-bold uppercase tracking-[0.24em] text-[9px] text-charcoal/50 leading-loose">
+              {profile?.title || "Researcher & Writer"}
+            </p>
+            <p className="mt-2 font-serif-italic text-sm text-charcoal/55 leading-relaxed max-w-[340px]">
+              {profile?.tagline || "Exploring Political Ecology, Green Governance & Sustainable Development"}
+            </p>
+            <div className="mt-8 flex gap-3 flex-wrap">
+              <a href="#research" className="inline-flex items-center gap-2 px-5 py-2.5 bg-charcoal text-[#FFFDF9] rounded-full font-sans font-bold text-[9px] uppercase tracking-widest hover:bg-charcoal/80 transition-all group">
+                Explore My Work
+                <span className="material-symbols-outlined text-xs group-hover:translate-x-1 transition-transform">arrow_forward</span>
+              </a>
+              <a href={profile?.cvUrl || "#"} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-5 py-2.5 border border-charcoal/20 text-charcoal/65 rounded-full font-sans font-bold text-[9px] uppercase tracking-widest hover:border-charcoal/40 transition-all">
+                <span className="material-symbols-outlined text-xs">description</span>
+                View CV
+              </a>
+            </div>
+          </div>
+
+          {/* Portrait */}
+          <div className="flex-1 flex items-end justify-center overflow-hidden bg-[#f5f0e8]">
+            <img
+              alt={profile?.name || "Jahnvi"}
+              className="w-full max-w-[280px] sm:max-w-[340px] h-auto object-contain object-bottom select-none"
+              src={
+                profile?.avatarUrl
+                  ? (profile.avatarUrl.startsWith('/') || profile.avatarUrl.startsWith('http')
+                    ? profile.avatarUrl
+                    : `/api/images/${profile.avatarUrl}`)
+                  : "/hero1.png"
+              }
+              style={{ filter: "drop-shadow(0 12px 32px rgba(0,0,0,0.11))" }}
+            />
+          </div>
+
         </div>
 
-        {/* Spacer to push typography to the bottom on all screen heights */}
-        <div className="flex-grow pointer-events-none"></div>
-
-        {/* Bottom stylized typography */}
-        <div className="w-full max-w-[95rem] mx-auto px-6 md:px-8 xl:px-12 flex flex-col md:flex-row justify-between items-center md:items-end gap-4 md:gap-4 z-50 select-none pb-4 md:pb-6 relative pointer-events-none mt-auto">
-          <h1 className="hero-bottom-title font-sans-ultra-bold text-3xl sm:text-4xl md:text-[3.5rem] lg:text-[5.5rem] xl:text-[6.5rem] 2xl:text-[7.5rem] uppercase leading-[0.85] text-charcoal text-center md:text-left tracking-tighter whitespace-normal md:whitespace-nowrap relative pointer-events-auto w-full md:w-auto">
-            I AM <span className="block">{profile?.name || "JAHNVI"}</span>
-          </h1>
-          <h2 className="hero-bottom-title font-sans-ultra-bold text-xl sm:text-2xl md:text-[2rem] lg:text-[3.2rem] xl:text-[4.2rem] 2xl:text-[5rem] uppercase leading-[0.85] text-charcoal text-center md:text-right tracking-tighter whitespace-normal md:whitespace-nowrap relative pointer-events-auto w-full md:w-auto mt-2 md:mt-0">
-            {profile?.title ? (
-              <>
-                {profile.title.split(/&|\band\b/i).map((part, pIdx) => (
-                  <span key={pIdx} className={pIdx > 0 ? "block" : ""}>
-                    {part.trim().toUpperCase()}
-                  </span>
-                ))}
-              </>
-            ) : (
-              <>
-                RESEARCHER <span className="block">AND WRITER</span>
-              </>
-            )}
-          </h2>
-        </div>
       </section>
+
 
       {/* Research Statement */}
       <section className="section-padding bg-cream-lightest relative overflow-hidden" id="research">
@@ -1524,67 +1638,88 @@ export default function Home() {
       {/* ── Footer ── */}
       <footer className="bg-charcoal text-cream-lightest w-full relative z-10 overflow-hidden">
 
-        {/* Top accent line */}
-        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gold-accent/50 to-transparent" />
-        {/* Subtle ambient glow */}
-        <div className="absolute -bottom-56 -right-56 w-[32rem] h-[32rem] bg-olive/10 rounded-full blur-3xl pointer-events-none" />
+        {/* Top gold accent line */}
+        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gold-accent/60 to-transparent" />
+        {/* Ambient left glow */}
+        <div className="absolute -bottom-40 -left-40 w-[28rem] h-[28rem] bg-olive/8 rounded-full blur-3xl pointer-events-none" />
+        {/* Ambient right glow */}
+        <div className="absolute -bottom-56 -right-56 w-[32rem] h-[32rem] bg-gold-accent/5 rounded-full blur-3xl pointer-events-none" />
 
         <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop relative z-10">
 
-          {/* ── Main Row ── */}
-          <div className="py-16 md:py-20 flex flex-col md:flex-row md:justify-between gap-12 md:gap-8 border-b border-white/[0.07]">
+          {/* ── Main Grid ── */}
+          <div className="pt-16 pb-14 md:pt-20 md:pb-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8 border-b border-white/[0.07]">
 
-            {/* Left — Brand */}
-            <div className="flex flex-col items-center md:items-start gap-4 max-w-xs mx-auto md:mx-0">
+            {/* ── Col 1: Brand (spans 4 cols) ── */}
+            <div className="sm:col-span-2 lg:col-span-4 flex flex-col gap-5">
               {/* Logo */}
-              <a href="#intro">
+              <a href="#intro" className="inline-block w-fit">
                 <img
                   src="/logo2.png"
                   alt="Jahnvi Logo"
-                  className="h-12 w-auto object-contain"
-                  style={{ filter: "brightness(2) saturate(0.4) opacity(0.85)" }}
+                  className="h-11 w-auto object-contain"
+                  style={{ filter: "brightness(2) saturate(0.4) opacity(0.80)" }}
                 />
               </a>
 
-              {/* Name + N4N */}
-              <div className="text-center md:text-left">
-                <span className="font-serif-italic text-[2.8rem] leading-none text-cream-lightest font-bold drop-shadow-sm block">
+              {/* Name + tagline */}
+              <div>
+                <span className="font-serif-italic text-[2.6rem] leading-none text-cream-lightest font-bold block">
                   Jahnvi.
                 </span>
-                <span className="font-sans text-[9px] font-bold tracking-[0.32em] uppercase text-gold-accent/70 block mt-1">
+                <span className="font-sans text-[8px] font-bold tracking-[0.35em] uppercase text-gold-accent/65 block mt-1.5">
                   "N4N" — Nyaya For Nature
                 </span>
               </div>
 
-              {/* Tagline */}
-              <p className="font-sans text-[13px] text-cream-lightest/45 leading-[1.85] text-center md:text-left">
+              {/* Description */}
+              <p className="font-sans text-[12.5px] text-cream-lightest/40 leading-[1.9] max-w-[280px]">
                 Intellectualism in harmony with nature. Exploring the depths of political ecology and sustainable governance.
               </p>
+
+              {/* Decorative rule */}
+              <div className="w-10 h-px bg-gold-accent/30 mt-1" />
             </div>
 
-            {/* Right — Connect links (vertical list) */}
-            <div className="flex flex-col items-center md:items-end gap-4">
-              <p className="font-sans text-[9px] font-bold uppercase tracking-[0.35em] text-cream-lightest/25">
-                Connect
+            {/* ── Col 2: Navigate (spans 2 cols) ── */}
+            <div className="lg:col-span-2 flex flex-col gap-5">
+              <p className="font-sans text-[9px] font-bold uppercase tracking-[0.38em] text-cream-lightest/22 pb-1 border-b border-white/[0.06]">
+                Navigate
               </p>
-              <div className="flex flex-col items-center md:items-end gap-3">
-                {profile.contact?.linkedin && (
+              <nav className="flex flex-col gap-3">
+                {[
+                  { label: "About", href: "#intro" },
+                  { label: "Research", href: "#research" },
+                  { label: "Publications", href: "#publications" },
+                  { label: "Vistas", href: "#vistas" },
+                  { label: "Blog", href: "#blogs" },
+                  { label: "Contact", href: "#contact" },
+                ].map((link) => (
                   <a
-                    href={profile.contact.linkedin}
-                    target="_blank" rel="noopener noreferrer"
-                    className="group relative font-sans font-semibold text-[11px] uppercase tracking-widest text-cream-lightest/60 hover:text-gold-accent transition-colors duration-300"
+                    key={link.label}
+                    href={link.href}
+                    className="group relative w-fit font-sans font-medium text-[11px] uppercase tracking-widest text-cream-lightest/50 hover:text-cream-lightest transition-colors duration-300"
                   >
-                    LinkedIn
-                    <span className="absolute -bottom-px left-0 w-0 group-hover:w-full h-px bg-gold-accent/70 transition-all duration-300" />
+                    {link.label}
+                    <span className="absolute -bottom-px left-0 w-0 group-hover:w-full h-px bg-cream-lightest/40 transition-all duration-300" />
                   </a>
-                )}
+                ))}
+              </nav>
+            </div>
+
+            {/* ── Col 3: Academic (spans 3 cols) ── */}
+            <div className="lg:col-span-3 flex flex-col gap-5">
+              <p className="font-sans text-[9px] font-bold uppercase tracking-[0.38em] text-cream-lightest/22 pb-1 border-b border-white/[0.06]">
+                Academic
+              </p>
+              <div className="flex flex-col gap-3">
                 {profile.contact?.googleScholar && (
                   <a
                     href={profile.contact.googleScholar}
                     target="_blank" rel="noopener noreferrer"
-                    className="group relative font-sans font-semibold text-[11px] uppercase tracking-widest text-cream-lightest/60 hover:text-gold-accent transition-colors duration-300"
+                    className="group relative w-fit font-sans font-medium text-[11px] uppercase tracking-widest text-cream-lightest/50 hover:text-gold-accent transition-colors duration-300"
                   >
-                    Scholar
+                    Google Scholar
                     <span className="absolute -bottom-px left-0 w-0 group-hover:w-full h-px bg-gold-accent/70 transition-all duration-300" />
                   </a>
                 )}
@@ -1592,19 +1727,9 @@ export default function Home() {
                   <a
                     href={profile.contact.researchGate}
                     target="_blank" rel="noopener noreferrer"
-                    className="group relative font-sans font-semibold text-[11px] uppercase tracking-widest text-cream-lightest/60 hover:text-gold-accent transition-colors duration-300"
+                    className="group relative w-fit font-sans font-medium text-[11px] uppercase tracking-widest text-cream-lightest/50 hover:text-gold-accent transition-colors duration-300"
                   >
                     ResearchGate
-                    <span className="absolute -bottom-px left-0 w-0 group-hover:w-full h-px bg-gold-accent/70 transition-all duration-300" />
-                  </a>
-                )}
-                {profile.contact?.github && (
-                  <a
-                    href={profile.contact.github}
-                    target="_blank" rel="noopener noreferrer"
-                    className="group relative font-sans font-semibold text-[11px] uppercase tracking-widest text-cream-lightest/60 hover:text-gold-accent transition-colors duration-300"
-                  >
-                    GitHub
                     <span className="absolute -bottom-px left-0 w-0 group-hover:w-full h-px bg-gold-accent/70 transition-all duration-300" />
                   </a>
                 )}
@@ -1612,7 +1737,7 @@ export default function Home() {
                   <a
                     href={profile.contact.orcid}
                     target="_blank" rel="noopener noreferrer"
-                    className="group relative font-sans font-semibold text-[11px] uppercase tracking-widest text-cream-lightest/60 hover:text-gold-accent transition-colors duration-300"
+                    className="group relative w-fit font-sans font-medium text-[11px] uppercase tracking-widest text-cream-lightest/50 hover:text-gold-accent transition-colors duration-300"
                   >
                     ORCID
                     <span className="absolute -bottom-px left-0 w-0 group-hover:w-full h-px bg-gold-accent/70 transition-all duration-300" />
@@ -1622,38 +1747,86 @@ export default function Home() {
                   <a
                     href={profile.contact.jstor}
                     target="_blank" rel="noopener noreferrer"
-                    className="group relative font-sans font-semibold text-[11px] uppercase tracking-widest text-cream-lightest/60 hover:text-gold-accent transition-colors duration-300"
+                    className="group relative w-fit font-sans font-medium text-[11px] uppercase tracking-widest text-cream-lightest/50 hover:text-gold-accent transition-colors duration-300"
                   >
                     JSTOR
                     <span className="absolute -bottom-px left-0 w-0 group-hover:w-full h-px bg-gold-accent/70 transition-all duration-300" />
                   </a>
                 )}
+                {/* Fallbacks if no fields set */}
+                {!profile.contact?.googleScholar && !profile.contact?.researchGate && !profile.contact?.orcid && !profile.contact?.jstor && (
+                  <span className="font-sans text-[11px] text-cream-lightest/25 italic">No academic profiles linked.</span>
+                )}
+              </div>
+            </div>
+
+            {/* ── Col 4: Connect (spans 3 cols) ── */}
+            <div className="lg:col-span-3 flex flex-col gap-5">
+              <p className="font-sans text-[9px] font-bold uppercase tracking-[0.38em] text-cream-lightest/22 pb-1 border-b border-white/[0.06]">
+                Connect
+              </p>
+              <div className="flex flex-col gap-3">
+                {profile.contact?.linkedin && (
+                  <a
+                    href={profile.contact.linkedin}
+                    target="_blank" rel="noopener noreferrer"
+                    className="group flex items-center gap-2 w-fit font-sans font-medium text-[11px] uppercase tracking-widest text-cream-lightest/50 hover:text-gold-accent transition-colors duration-300"
+                  >
+                    <span className="material-symbols-outlined text-sm opacity-60 group-hover:opacity-100 transition-opacity">link</span>
+                    LinkedIn
+                  </a>
+                )}
+                {profile.contact?.github && (
+                  <a
+                    href={profile.contact.github}
+                    target="_blank" rel="noopener noreferrer"
+                    className="group flex items-center gap-2 w-fit font-sans font-medium text-[11px] uppercase tracking-widest text-cream-lightest/50 hover:text-gold-accent transition-colors duration-300"
+                  >
+                    <span className="material-symbols-outlined text-sm opacity-60 group-hover:opacity-100 transition-opacity">code</span>
+                    GitHub
+                  </a>
+                )}
                 {profile.contact?.email && (
                   <a
                     href={`mailto:${profile.contact.email}`}
-                    className="group relative font-sans font-semibold text-[11px] uppercase tracking-widest text-cream-lightest/60 hover:text-gold-accent transition-colors duration-300"
+                    className="group flex items-center gap-2 w-fit font-sans font-medium text-[11px] uppercase tracking-widest text-cream-lightest/50 hover:text-gold-accent transition-colors duration-300"
                   >
-                    Email (Primary)
-                    <span className="absolute -bottom-px left-0 w-0 group-hover:w-full h-px bg-gold-accent/70 transition-all duration-300" />
+                    <span className="material-symbols-outlined text-sm opacity-60 group-hover:opacity-100 transition-opacity">mail</span>
+                    Email
                   </a>
                 )}
+                {/* Availability badge */}
+                <div className="mt-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-emerald-700/30 bg-emerald-900/20 w-fit">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                  <span className="font-sans text-[9px] font-bold uppercase tracking-widest text-emerald-400/80">
+                    Open to Collaboration
+                  </span>
+                </div>
               </div>
             </div>
 
           </div>
 
-          {/* ── Bottom bar ── */}
-          <div className="py-5 flex flex-col-reverse md:flex-row items-center justify-between gap-2">
-            <p className="font-sans text-[10px] text-cream-lightest/25 tracking-wider">
-              © 2026 Jahnvi. All rights reserved.
+          {/* ── Bottom Bar ── */}
+          <div className="py-5 flex flex-col-reverse sm:flex-row items-center justify-between gap-3">
+
+            {/* Copyright */}
+            <p className="font-sans text-[10px] text-cream-lightest/22 tracking-wider">
+              © {new Date().getFullYear()} Jahnvi. All rights reserved.
             </p>
-            <div className="flex items-center gap-2.5">
-              <span className="w-5 h-px bg-gold-accent/35" />
-              <span className="font-sans text-[9px] font-bold uppercase tracking-[0.3em] text-gold-accent/50">
-                Sarva Saha • Equilibrium
-              </span>
-              <span className="w-5 h-px bg-gold-accent/35" />
-            </div>
+
+            {/* Motto */}
+
+
+            {/* Back to top */}
+            <a
+              href="#intro"
+              className="group flex items-center gap-1.5 font-sans text-[10px] font-bold uppercase tracking-widest text-cream-lightest/30 hover:text-cream-lightest/70 transition-colors duration-300"
+            >
+              Back to top
+              <span className="material-symbols-outlined text-sm transition-transform group-hover:-translate-y-0.5">arrow_upward</span>
+            </a>
+
           </div>
 
         </div>
